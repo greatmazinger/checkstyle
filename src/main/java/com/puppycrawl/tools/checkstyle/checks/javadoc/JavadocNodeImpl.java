@@ -23,12 +23,11 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
-import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
+import com.puppycrawl.tools.checkstyle.utils.JavadocUtil;
 
 /**
  * Implementation of DetailNode interface that is mutable.
  *
- * @author Baratali Izmailov
  *
  */
 public class JavadocNodeImpl implements DetailNode {
@@ -172,7 +171,7 @@ public class JavadocNodeImpl implements DetailNode {
     public String toString() {
         return "JavadocNodeImpl["
                 + "index=" + index
-                + ", type=" + JavadocUtils.getTokenName(type)
+                + ", type=" + JavadocUtil.getTokenName(type)
                 + ", text='" + text + '\''
                 + ", lineNumber=" + lineNumber
                 + ", columnNumber=" + columnNumber

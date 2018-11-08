@@ -23,7 +23,7 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -130,9 +130,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * }
  * </pre>
  *
- * @author Rick Giles
- * @author <a href="mailto:nesterenko-aleksey@list.ru">Aleksey Nesterenko</a>
- * @author <a href="mailto:andreyselkin@gmail.com">Andrei Selkin</a>
  */
 @StatelessCheck
 public class NeedBracesCheck extends AbstractCheck {
@@ -196,7 +193,7 @@ public class NeedBracesCheck extends AbstractCheck {
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override

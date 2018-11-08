@@ -35,7 +35,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * {@code if ("something".equals(x))}.
  * </p>
  *
- * @author Lars K&uuml;hne
  * @noinspection HtmlTagCanBeJavadocTag
  */
 @StatelessCheck
@@ -70,8 +69,7 @@ public class StringLiteralEqualityCheck extends AbstractCheck {
 
         if (firstChild.getType() == TokenTypes.STRING_LITERAL
                 || secondChild.getType() == TokenTypes.STRING_LITERAL) {
-            log(ast.getLineNo(), ast.getColumnNo(),
-                    MSG_KEY, ast.getText());
+            log(ast, MSG_KEY, ast.getText());
         }
     }
 

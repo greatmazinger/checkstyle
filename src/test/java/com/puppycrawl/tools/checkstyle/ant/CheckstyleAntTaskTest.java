@@ -25,16 +25,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -58,7 +53,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
 
-import com.google.common.io.Closeables;
 import com.puppycrawl.tools.checkstyle.AbstractPathTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultLogger;
 import com.puppycrawl.tools.checkstyle.Definitions;
@@ -68,7 +62,7 @@ import com.puppycrawl.tools.checkstyle.internal.testmodules.CheckerStub;
 import com.puppycrawl.tools.checkstyle.internal.testmodules.TestRootModuleChecker;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({CheckstyleAntTask.class, Closeables.class})
+@PrepareForTest(CheckstyleAntTask.class)
 public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
 
     private static final String FLAWLESS_INPUT =
@@ -199,9 +193,9 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
         assertThat("There more files to check then expected",
                 filesToCheck.size(), is(9));
         assertThat("The path of file differs from expected",
-                filesToCheck.get(5).getAbsolutePath(), is(getPath(FLAWLESS_INPUT)));
+                filesToCheck.get(6).getAbsolutePath(), is(getPath(FLAWLESS_INPUT)));
         assertEquals("Amount of logged messages in unexpected",
-                9, antTask.getLoggedMessages().size());
+                8, antTask.getLoggedMessages().size());
     }
 
     @Test
@@ -381,11 +375,11 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
         antTask.addFormatter(formatter);
         antTask.execute();
 
-        final LocalizedMessage auditStartedMessage = new LocalizedMessage(0,
+        final LocalizedMessage auditStartedMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, "DefaultLogger.auditStarted",
                 null, null,
                 getClass(), null);
-        final LocalizedMessage auditFinishedMessage = new LocalizedMessage(0,
+        final LocalizedMessage auditFinishedMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, "DefaultLogger.auditFinished",
                 null, null,
                 getClass(), null);
@@ -471,11 +465,6 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
 
     @Test
     public final void testSetPropertiesFile() throws IOException {
-        //check if input stream finally closed
-        mockStatic(Closeables.class);
-        doNothing().when(Closeables.class);
-        Closeables.closeQuietly(any(InputStream.class));
-
         TestRootModuleChecker.reset();
 
         final CheckstyleAntTask antTask = getCheckstyleAntTask(CUSTOM_ROOT_CONFIG_FILE);
@@ -486,8 +475,6 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
 
         assertEquals("Property is not set",
                 "ignore", TestRootModuleChecker.getProperty());
-        verifyStatic(Closeables.class, times(1));
-        Closeables.closeQuietly(any(InputStream.class));
     }
 
     @Test
@@ -520,7 +507,8 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
         antTask.execute();
 
         final List<String> expected = FileUtils.readLines(
-                new File(getPath("InputCheckstyleAntTaskXmlOutput.xml")), StandardCharsets.UTF_8);
+                new File(getPath("ExpectedCheckstyleAntTaskXmlOutput.xml")),
+                        StandardCharsets.UTF_8);
         final List<String> actual = FileUtils.readLines(outputFile, StandardCharsets.UTF_8);
         for (int i = 0; i < expected.size(); i++) {
             final String line = expected.get(i);
@@ -770,18 +758,17 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
 
         antTask.execute();
 
-        final LocalizedMessage auditStartedMessage = new LocalizedMessage(0,
+        final LocalizedMessage auditStartedMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, "DefaultLogger.auditStarted",
                 null, null,
                 getClass(), null);
-        final LocalizedMessage auditFinishedMessage = new LocalizedMessage(0,
+        final LocalizedMessage auditFinishedMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, "DefaultLogger.auditFinished",
                 null, null,
                 getClass(), null);
 
         final List<MessageLevelPair> expectedList = Arrays.asList(
                 new MessageLevelPair("checkstyle version ", Project.MSG_VERBOSE),
-                new MessageLevelPair("compiled on ", Project.MSG_VERBOSE),
                 new MessageLevelPair("Adding standalone file for audit", Project.MSG_VERBOSE),
                 new MessageLevelPair("To locate the files took 0 ms.", Project.MSG_VERBOSE),
                 new MessageLevelPair("Running Checkstyle ", Project.MSG_INFO),
@@ -809,7 +796,7 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
     /**
      * Non meaningful javadoc just to contain "noinspection" tag.
      * Till https://youtrack.jetbrains.com/issue/IDEA-187210
-     * @noinspection JUnitTestClassNamingConvention
+     * @noinspection JUnitTestCaseWithNoTests
      */
     private static class CheckstyleAntTaskStub extends CheckstyleAntTask {
 
@@ -829,7 +816,7 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
     /**
      * Non meaningful javadoc just to contain "noinspection" tag.
      * Till https://youtrack.jetbrains.com/issue/IDEA-187210
-     * @noinspection JUnitTestClassNamingConvention
+     * @noinspection JUnitTestCaseWithNoTests
      */
     private static class CheckstyleAntTaskLogStub extends CheckstyleAntTask {
 
@@ -854,7 +841,7 @@ public class CheckstyleAntTaskTest extends AbstractPathTestSupport {
     /**
      * Non meaningful javadoc just to contain "noinspection" tag.
      * Till https://youtrack.jetbrains.com/issue/IDEA-187210
-     * @noinspection JUnitTestClassNamingConvention
+     * @noinspection JUnitTestCaseWithNoTests
      */
     private static final class MessageLevelPair {
 

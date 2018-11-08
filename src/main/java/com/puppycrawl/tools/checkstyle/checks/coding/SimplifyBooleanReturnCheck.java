@@ -36,7 +36,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * <pre>
  * &lt;module name="SimplifyBooleanReturn"/&gt;
  * </pre>
- * @author Lars Kühne
  */
 @StatelessCheck
 public class SimplifyBooleanReturnCheck
@@ -84,7 +83,7 @@ public class SimplifyBooleanReturnCheck
 
             if (canReturnOnlyBooleanLiteral(thenStatement)
                 && canReturnOnlyBooleanLiteral(elseStatement)) {
-                log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY);
+                log(ast, MSG_KEY);
             }
         }
     }

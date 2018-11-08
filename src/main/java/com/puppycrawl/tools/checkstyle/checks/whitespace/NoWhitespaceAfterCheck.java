@@ -23,7 +23,7 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -78,10 +78,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * <pre>
  * public void foo(final char @NotNull [] param) {} // No violation
  * </pre>
- * @author Rick Giles
- * @author lkuehne
- * @author <a href="mailto:nesterenko-aleksey@list.ru">Aleksey Nesterenko</a>
- * @author attatrol
  */
 @StatelessCheck
 public class NoWhitespaceAfterCheck extends AbstractCheck {
@@ -134,7 +130,7 @@ public class NoWhitespaceAfterCheck extends AbstractCheck {
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     /**

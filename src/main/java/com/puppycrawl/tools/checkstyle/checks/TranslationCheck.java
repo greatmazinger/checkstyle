@@ -26,13 +26,17 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -40,15 +44,13 @@ import java.util.stream.Collectors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.SetMultimap;
-import com.google.common.io.Closeables;
 import com.puppycrawl.tools.checkstyle.Definitions;
+import com.puppycrawl.tools.checkstyle.GlobalStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractFileSetCheck;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import com.puppycrawl.tools.checkstyle.api.MessageDispatcher;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -97,10 +99,8 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * violation that the language code is incorrect.
  * <br>
  *
- * @author Alexandra Bunge
- * @author lkuehne
- * @author Andrei Selkin
  */
+@GlobalStatefulCheck
 public class TranslationCheck extends AbstractFileSetCheck {
 
     /**
@@ -137,19 +137,19 @@ public class TranslationCheck extends AbstractFileSetCheck {
      * variant suffix. For example, messages_es_ES_UNIX.properties.
      */
     private static final Pattern LANGUAGE_COUNTRY_VARIANT_PATTERN =
-        CommonUtils.createPattern("^.+\\_[a-z]{2}\\_[A-Z]{2}\\_[A-Za-z]+\\..+$");
+        CommonUtil.createPattern("^.+\\_[a-z]{2}\\_[A-Z]{2}\\_[A-Za-z]+\\..+$");
     /**
      * Regexp pattern for bundles names which end with language code, followed by country code
      * suffix. For example, messages_es_ES.properties.
      */
     private static final Pattern LANGUAGE_COUNTRY_PATTERN =
-        CommonUtils.createPattern("^.+\\_[a-z]{2}\\_[A-Z]{2}\\..+$");
+        CommonUtil.createPattern("^.+\\_[a-z]{2}\\_[A-Z]{2}\\..+$");
     /**
      * Regexp pattern for bundles names which end with language code suffix.
      * For example, messages_es.properties.
      */
     private static final Pattern LANGUAGE_PATTERN =
-        CommonUtils.createPattern("^.+\\_[a-z]{2}\\..+$");
+        CommonUtil.createPattern("^.+\\_[a-z]{2}\\..+$");
 
     /** File name format for default translation. */
     private static final String DEFAULT_TRANSLATION_FILE_NAME_FORMATTER = "%s.%s";
@@ -166,7 +166,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
     private final Log log;
 
     /** The files to process. */
-    private final Set<File> filesToProcess = new HashSet<>();
+    private final Set<File> filesToProcess = ConcurrentHashMap.newKeySet();
 
     /** The base name regexp pattern. */
     private Pattern baseName;
@@ -181,7 +181,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
      */
     public TranslationCheck() {
         setFileExtensions("properties");
-        baseName = CommonUtils.createPattern("^messages.*$");
+        baseName = CommonUtil.createPattern("^messages.*$");
         log = LogFactory.getLog(TranslationCheck.class);
     }
 
@@ -209,7 +209,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
     private void validateUserSpecifiedLanguageCodes(Set<String> languageCodes) {
         for (String code : languageCodes) {
             if (!isValidLanguageCode(code)) {
-                final LocalizedMessage msg = new LocalizedMessage(0, TRANSLATION_BUNDLE,
+                final LocalizedMessage msg = new LocalizedMessage(1, TRANSLATION_BUNDLE,
                         WRONG_LANGUAGE_CODE_KEY, new Object[] {code}, getId(), getClass(), null);
                 final String exceptionMessage = String.format(Locale.ROOT,
                         "%s [%s]", msg.getMessage(), TranslationCheck.class.getSimpleName());
@@ -328,7 +328,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
     private void logMissingTranslation(String filePath, String fileName) {
         final MessageDispatcher dispatcher = getMessageDispatcher();
         dispatcher.fireFileStarted(filePath);
-        log(0, MSG_KEY_MISSING_TRANSLATION_FILE, fileName);
+        log(1, MSG_KEY_MISSING_TRANSLATION_FILE, fileName);
         fireErrors(filePath);
         dispatcher.fireFileFinished(filePath);
     }
@@ -348,7 +348,7 @@ public class TranslationCheck extends AbstractFileSetCheck {
             final String baseName = extractBaseName(fileName);
             final Matcher baseNameMatcher = baseNameRegexp.matcher(baseName);
             if (baseNameMatcher.matches()) {
-                final String extension = CommonUtils.getFileExtension(fileName);
+                final String extension = CommonUtil.getFileExtension(fileName);
                 final String path = getPath(currentFile.getAbsolutePath());
                 final ResourceBundle newBundle = new ResourceBundle(baseName, path, extension);
                 final Optional<ResourceBundle> bundle = findBundle(resourceBundles, newBundle);
@@ -438,11 +438,11 @@ public class TranslationCheck extends AbstractFileSetCheck {
         if (filesInBundle.size() >= 2) {
             // build a map from files to the keys they contain
             final Set<String> allTranslationKeys = new HashSet<>();
-            final SetMultimap<File, String> filesAssociatedWithKeys = HashMultimap.create();
+            final Map<File, Set<String>> filesAssociatedWithKeys = new HashMap<>();
             for (File currentFile : filesInBundle) {
                 final Set<String> keysInCurrentFile = getTranslationKeys(currentFile);
                 allTranslationKeys.addAll(keysInCurrentFile);
-                filesAssociatedWithKeys.putAll(currentFile, keysInCurrentFile);
+                filesAssociatedWithKeys.put(currentFile, keysInCurrentFile);
             }
             checkFilesForConsistencyRegardingTheirKeys(filesAssociatedWithKeys, allTranslationKeys);
         }
@@ -454,18 +454,18 @@ public class TranslationCheck extends AbstractFileSetCheck {
      * @param fileKeys a Map from translation files to their key sets.
      * @param keysThatMustExist the set of keys to compare with.
      */
-    private void checkFilesForConsistencyRegardingTheirKeys(SetMultimap<File, String> fileKeys,
+    private void checkFilesForConsistencyRegardingTheirKeys(Map<File, Set<String>> fileKeys,
                                                             Set<String> keysThatMustExist) {
-        for (File currentFile : fileKeys.keySet()) {
+        for (Entry<File, Set<String>> fileKey : fileKeys.entrySet()) {
             final MessageDispatcher dispatcher = getMessageDispatcher();
-            final String path = currentFile.getPath();
+            final String path = fileKey.getKey().getPath();
             dispatcher.fireFileStarted(path);
-            final Set<String> currentFileKeys = fileKeys.get(currentFile);
+            final Set<String> currentFileKeys = fileKey.getValue();
             final Set<String> missingKeys = keysThatMustExist.stream()
-                .filter(e -> !currentFileKeys.contains(e)).collect(Collectors.toSet());
+                .filter(key -> !currentFileKeys.contains(key)).collect(Collectors.toSet());
             if (!missingKeys.isEmpty()) {
                 for (Object key : missingKeys) {
-                    log(0, MSG_KEY, key);
+                    log(1, MSG_KEY, key);
                 }
             }
             fireErrors(path);
@@ -480,18 +480,13 @@ public class TranslationCheck extends AbstractFileSetCheck {
      */
     private Set<String> getTranslationKeys(File file) {
         Set<String> keys = new HashSet<>();
-        InputStream inStream = null;
-        try {
-            inStream = Files.newInputStream(file.toPath());
+        try (InputStream inStream = Files.newInputStream(file.toPath())) {
             final Properties translations = new Properties();
             translations.load(inStream);
             keys = translations.stringPropertyNames();
         }
         catch (final IOException ex) {
             logIoException(ex, file);
-        }
-        finally {
-            Closeables.closeQuietly(inStream);
         }
         return keys;
     }

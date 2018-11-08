@@ -1,11 +1,14 @@
 [![][travis img]][travis]
 [![][appveyor img]][appveyor]
 [![][teamcity img]][teamcity]
-[![][codeship img]][codeship]
 [![][circleci img]][circleci]
 [![][wercker img]][wercker]
 [![][shippable img]][shippable]
 [![][coverage img]][coverage]
+[![][snyk img]][snyk]
+
+[![][codeship img]][codeship]
+[![][buddy img]][buddy]
 
 [![][mavenbadge img]][mavenbadge]
 [![][sonar img]][sonar]
@@ -15,14 +18,17 @@ Contributors chat: [![][gitter_con img]][gitter_con]
 
 ![](https://raw.githubusercontent.com/checkstyle/resources/master/img/checkstyle-logos/checkstyle-logo-260x99.png)
 
-Checkstyle is a tool for
-checking Java source code for adherence to a Code Standard or set of validation rules (best practices).
+Checkstyle is a tool for checking Java source code for adherence to a Code Standard
+or set of validation rules (best practices).
 
-The latest release version can be found at [SourceForge downloads](https://sourceforge.net/projects/checkstyle/files/checkstyle/) or at [Maven repo](http://repo1.maven.org/maven2/com/puppycrawl/tools/checkstyle/).
+The latest release version can be found at
+[GitHub releases](https://github.com/checkstyle/checkstyle/releases/)
+or at [Maven repo](http://repo1.maven.org/maven2/com/puppycrawl/tools/checkstyle/).
 
-Each-commit builds of maven artifacts can be found at [Maven Snapshot repository](https://oss.sonatype.org/content/repositories/snapshots/com/puppycrawl/tools/checkstyle/) .
+Each-commit builds of maven artifacts can be found at
+[Maven Snapshot repository](https://oss.sonatype.org/content/repositories/snapshots/com/puppycrawl/tools/checkstyle/) .
 
-Documentation is available in HTML format, see http://checkstyle.sourceforge.net/checks.html.
+Documentation is available in HTML format, see https://checkstyle.org/checks.html.
 
 Continuous integration and Quality reports
 ======================
@@ -30,7 +36,7 @@ Travis (Linux & MacOS build): [![][travis img]][travis]
 AppVeyor (Windows build): [![][appveyor img]][appveyor]
 [Distelli CI](https://www.distelli.com/checkstyle/builds)
 
-Quality reports: http://checkstyle.sourceforge.net/project-reports.html
+Quality reports: https://checkstyle.org/project-reports.html
 
 JavaScript, CSS and Java source file analysis on Codacy: [![][codacy img]][codacy]
 
@@ -42,6 +48,20 @@ Please send any feedback to https://groups.google.com/forum/?hl=en#!forum/checks
 Questions and Answers from community: [![][stackoverflow img]][stackoverflow]
 
 Bugs and Feature requests (not the questions): https://github.com/checkstyle/checkstyle/issues
+
+
+Support/Sponsor checkstyle
+========
+
+If you want to speed up fixing of issue and want to encourage somebody in
+internet to resolve any issue:
+[![][bountysource img]][bountysource]
+[![][salt.bountysource img]][salt.bountysource]
+[![][flattr img]][flattr]
+[![][liberapay img]][liberapay]
+[![][backers.opencollective img]][backers.opencollective]
+[![][sponsors.opencollective img]][sponsors.opencollective]
+
 
 Licensing
 =========
@@ -57,7 +77,7 @@ are in the file named "RIGHTS.antlr" in this directory.
 This product includes software developed by
 The Apache Software Foundation (http://www.apache.org/).
 
-The software uses the Cli, Logging and Beanutils packages from the
+The software uses the Logging and Beanutils packages from the
 Apache Commons project (http://commons.apache.org/). The license terms
 of these packages are in the file named "LICENSE.apache20" in this
 directory.
@@ -66,6 +86,10 @@ The software uses the Google Guava Libraries
 (https://github.com/google/guava/). The license terms of
 these packages are in the file named "LICENSE.apache20" in this
 directory.
+
+The software uses the Picocli Library
+(https://github.com/remkop/picocli/). Its license terms 
+are in the file named "LICENSE.apache20" in this directory.
 
 [travis]:https://travis-ci.org/checkstyle/checkstyle/builds
 [travis img]:https://travis-ci.org/checkstyle/checkstyle.svg
@@ -112,4 +136,26 @@ directory.
 [shippable]: https://app.shippable.com/projects/577032be3be4f4faa56adb38
 [shippable img]: https://img.shields.io/shippable/577032be3be4f4faa56adb38/master.svg?label=shippable
 
+[buddy]: https://app.buddy.works/ivanovjr/checkstyle/pipelines/pipeline/135806
+[buddy img]: https://app.buddy.works/ivanovjr/checkstyle/pipelines/pipeline/135806/badge.svg?token=240176b1ce495d0a03a141f3f2f77971f43fe892a98de31cbc0e392ce5341f76 "buddy pipeline"
 
+[snyk]: https://snyk.io/test/github/checkstyle/checkstyle:pom.xml?targetFile=pom.xml
+[snyk img]: https://snyk.io/test/github/checkstyle/checkstyle/badge.svg
+
+[flattr]:https://flattr.com/submit/auto?fid=g39d10&amp;url=http%3A%2F%2Fcheckstyle.sourceforge.net
+[flattr img]:https://button.flattr.com/flattr-badge-large.png
+
+[liberapay]:https://liberapay.com/checkstyle/
+[liberapay img]:https://liberapay.com/assets/widgets/donate.svg
+
+[bountysource]:https://www.bountysource.com/teams/checkstyle/issues
+[bountysource img]:https://api.bountysource.com/badge/team?team_id=3568&style=bounties_posted
+
+[salt.bountysource]:https://salt.bountysource.com/teams/checkstyle
+[salt.bountysource img]:https://img.shields.io/bountysource/team/checkstyle/activity.svg?label=salt.bountysource
+
+[backers.opencollective]:https://opencollective.com/checkstyle/
+[backers.opencollective img]:https://opencollective.com/checkstyle/backers/badge.svg
+
+[sponsors.opencollective]:https://opencollective.com/checkstyle/
+[sponsors.opencollective img]:https://opencollective.com/checkstyle/sponsors/badge.svg

@@ -19,9 +19,10 @@
 
 package com.puppycrawl.tools.checkstyle.checks.javadoc;
 
+import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
 import com.puppycrawl.tools.checkstyle.api.JavadocTokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
+import com.puppycrawl.tools.checkstyle.utils.JavadocUtil;
 
 /**
  * Checks that the at-clause tag is followed by description .
@@ -31,9 +32,9 @@ import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
  * &lt;module name=&quot;NonEmptyAtclauseDescription&quot;/&gt;
  * </pre>
  *
- * @author maxvetrenko
  *
  */
+@StatelessCheck
 public class NonEmptyAtclauseDescriptionCheck extends AbstractJavadocCheck {
 
     /**
@@ -67,7 +68,7 @@ public class NonEmptyAtclauseDescriptionCheck extends AbstractJavadocCheck {
      */
     private static boolean isEmptyTag(DetailNode tagNode) {
         final DetailNode tagDescription =
-                JavadocUtils.findFirstToken(tagNode, JavadocTokenTypes.DESCRIPTION);
+                JavadocUtil.findFirstToken(tagNode, JavadocTokenTypes.DESCRIPTION);
         return tagDescription == null;
     }
 

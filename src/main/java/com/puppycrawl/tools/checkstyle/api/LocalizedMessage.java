@@ -20,7 +20,6 @@
 package com.puppycrawl.tools.checkstyle.api;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
@@ -44,8 +43,6 @@ import java.util.ResourceBundle.Control;
  * message.properties files. The underlying implementation uses
  * java.text.MessageFormat.
  *
- * @author Oliver Burn
- * @author lkuehne
  * @noinspection SerializableHasSerializationMethods, ClassWithTooManyConstructors
  */
 public final class LocalizedMessage
@@ -273,7 +270,6 @@ public final class LocalizedMessage
      * @param moduleId the id of the module the message is associated with
      * @param sourceClass the name of the source for the message
      * @param customMessage optional custom message overriding the default
-     * @noinspection ConstructorWithTooManyParameters
      */
     public LocalizedMessage(
         int lineNo,
@@ -494,42 +490,26 @@ public final class LocalizedMessage
      * Custom ResourceBundle.Control implementation which allows explicitly read
      * the properties files as UTF-8.
      * </p>
-     *
-     * @author <a href="mailto:nesterenko-aleksey@list.ru">Aleksey Nesterenko</a>
-     * @noinspection IOResourceOpenedButNotSafelyClosed
      */
     public static class Utf8Control extends Control {
 
         @Override
-        public ResourceBundle newBundle(String aBaseName, Locale aLocale, String aFormat,
-                 ClassLoader aLoader, boolean aReload) throws IOException {
+        public ResourceBundle newBundle(String baseName, Locale locale, String format,
+                 ClassLoader loader, boolean reload) throws IOException {
             // The below is a copy of the default implementation.
-            final String bundleName = toBundleName(aBaseName, aLocale);
+            final String bundleName = toBundleName(baseName, locale);
             final String resourceName = toResourceName(bundleName, "properties");
-            InputStream stream = null;
-            if (aReload) {
-                final URL url = aLoader.getResource(resourceName);
-                if (url != null) {
-                    final URLConnection connection = url.openConnection();
-                    if (connection != null) {
-                        connection.setUseCaches(false);
-                        stream = connection.getInputStream();
-                    }
-                }
-            }
-            else {
-                stream = aLoader.getResourceAsStream(resourceName);
-            }
+            final URL url = loader.getResource(resourceName);
             ResourceBundle resourceBundle = null;
-            if (stream != null) {
-                final Reader streamReader = new InputStreamReader(stream,
-                        StandardCharsets.UTF_8.name());
-                try {
-                    // Only this line is changed to make it to read properties files as UTF-8.
-                    resourceBundle = new PropertyResourceBundle(streamReader);
-                }
-                finally {
-                    stream.close();
+            if (url != null) {
+                final URLConnection connection = url.openConnection();
+                if (connection != null) {
+                    connection.setUseCaches(!reload);
+                    try (Reader streamReader = new InputStreamReader(connection.getInputStream(),
+                            StandardCharsets.UTF_8.name())) {
+                        // Only this line is changed to make it read property files as UTF-8.
+                        resourceBundle = new PropertyResourceBundle(streamReader);
+                    }
                 }
             }
             return resourceBundle;

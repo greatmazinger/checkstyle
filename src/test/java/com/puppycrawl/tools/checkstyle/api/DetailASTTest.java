@@ -46,11 +46,10 @@ import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.JavaParser;
 import com.puppycrawl.tools.checkstyle.checks.TodoCommentCheck;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * TestCase to check DetailAST.
- * @author Oliver Burn
  */
 public class DetailASTTest extends AbstractModuleTestSupport {
 
@@ -252,7 +251,7 @@ public class DetailASTTest extends AbstractModuleTestSupport {
 
         final DefaultConfiguration checkConfig = createModuleConfig(TodoCommentCheck.class);
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(checkConfig, file.getAbsolutePath(), expected);
     }
 

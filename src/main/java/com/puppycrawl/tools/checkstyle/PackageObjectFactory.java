@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
-import com.puppycrawl.tools.checkstyle.utils.ModuleReflectionUtils;
+import com.puppycrawl.tools.checkstyle.utils.ModuleReflectionUtil;
 
 /**
  * A factory for creating objects from package names and names.
@@ -45,8 +45,6 @@ import com.puppycrawl.tools.checkstyle.utils.ModuleReflectionUtils;
  *         that represents Check (with 'Check' suffix).
  *     </li>
  * </ul>
- * @author Rick Giles
- * @author lkuehne
  */
 public class PackageObjectFactory implements ModuleFactory {
 
@@ -204,7 +202,7 @@ public class PackageObjectFactory implements ModuleFactory {
                         + STRING_SEPARATOR + nameCheck + STRING_SEPARATOR
                         + joinPackageNamesWithClassName(nameCheck, packages);
             }
-            final LocalizedMessage exceptionMessage = new LocalizedMessage(0,
+            final LocalizedMessage exceptionMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, UNABLE_TO_INSTANTIATE_EXCEPTION_MESSAGE,
                 new String[] {name, attemptedNames}, null, getClass(), null);
             throw new CheckstyleException(exceptionMessage.getMessage());
@@ -277,7 +275,7 @@ public class PackageObjectFactory implements ModuleFactory {
             final String optionalNames = fullModuleNames.stream()
                     .sorted()
                     .collect(Collectors.joining(STRING_SEPARATOR));
-            final LocalizedMessage exceptionMessage = new LocalizedMessage(0,
+            final LocalizedMessage exceptionMessage = new LocalizedMessage(1,
                     Definitions.CHECKSTYLE_BUNDLE, AMBIGUOUS_MODULE_NAME_EXCEPTION_MESSAGE,
                     new String[] {name, optionalNames}, null, getClass(), null);
             throw new CheckstyleException(exceptionMessage.getMessage());
@@ -295,7 +293,7 @@ public class PackageObjectFactory implements ModuleFactory {
     private Map<String, Set<String>> generateThirdPartyNameToFullModuleName(ClassLoader loader) {
         Map<String, Set<String>> returnValue;
         try {
-            returnValue = ModuleReflectionUtils.getCheckstyleModules(packages, loader).stream()
+            returnValue = ModuleReflectionUtil.getCheckstyleModules(packages, loader).stream()
                     .collect(Collectors.toMap(
                         Class::getSimpleName,
                         cls -> Collections.singleton(cls.getCanonicalName()),
@@ -309,6 +307,24 @@ public class PackageObjectFactory implements ModuleFactory {
             returnValue = new HashMap<>();
         }
         return returnValue;
+    }
+
+    /**
+     * Returns simple check name from full modules names map.
+     * @param fullName name of the class for joining.
+     * @return simple check name.
+     */
+    public static String getShortFromFullModuleNames(String fullName) {
+        String result = fullName;
+        if (NAME_TO_FULL_MODULE_NAME.containsValue(fullName)) {
+            result = NAME_TO_FULL_MODULE_NAME
+                    .entrySet()
+                    .stream()
+                    .filter(entry -> entry.getValue().equals(fullName))
+                    .findFirst().get().getKey();
+        }
+
+        return result;
     }
 
     /**
@@ -652,6 +668,8 @@ public class PackageObjectFactory implements ModuleFactory {
      * Fill short-to-full module names map with Checks from modifier package.
      */
     private static void fillChecksFromModifierPackage() {
+        NAME_TO_FULL_MODULE_NAME.put("InterfaceMemberImpliedModifierCheck",
+            BASE_PACKAGE + ".checks.modifier.InterfaceMemberImpliedModifierCheck");
         NAME_TO_FULL_MODULE_NAME.put("ModifierOrderCheck",
                 BASE_PACKAGE + ".checks.modifier.ModifierOrderCheck");
         NAME_TO_FULL_MODULE_NAME.put("RedundantModifierCheck",
@@ -674,6 +692,8 @@ public class PackageObjectFactory implements ModuleFactory {
                 BASE_PACKAGE + ".checks.naming.ConstantNameCheck");
         NAME_TO_FULL_MODULE_NAME.put("InterfaceTypeParameterNameCheck",
                 BASE_PACKAGE + ".checks.naming.InterfaceTypeParameterNameCheck");
+        NAME_TO_FULL_MODULE_NAME.put("LambdaParameterNameCheck",
+                BASE_PACKAGE + ".checks.naming.LambdaParameterNameCheck");
         NAME_TO_FULL_MODULE_NAME.put("LocalFinalVariableNameCheck",
                 BASE_PACKAGE + ".checks.naming.LocalFinalVariableNameCheck");
         NAME_TO_FULL_MODULE_NAME.put("LocalVariableNameCheck",

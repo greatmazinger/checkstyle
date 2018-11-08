@@ -38,7 +38,6 @@ import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
  * stdout anyway. If there is really a problem this is what XMLLogger is for.
  * It gives structure.
  *
- * @author <a href="mailto:stephane.bailliez@wanadoo.fr">Stephane Bailliez</a>
  * @see XMLLogger
  * @noinspection ClassWithTooManyConstructors
  */
@@ -177,7 +176,13 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
                          OutputStream errorStream,
                          OutputStreamOptions errorStreamOptions,
                          AuditEventFormatter messageFormatter) {
+        if (infoStreamOptions == null) {
+            throw new IllegalArgumentException("Parameter infoStreamOptions can not be null");
+        }
         closeInfo = infoStreamOptions == OutputStreamOptions.CLOSE;
+        if (errorStreamOptions == null) {
+            throw new IllegalArgumentException("Parameter errorStreamOptions can not be null");
+        }
         closeError = errorStreamOptions == OutputStreamOptions.CLOSE;
         final Writer infoStreamWriter = new OutputStreamWriter(infoStream, StandardCharsets.UTF_8);
         infoWriter = new PrintWriter(infoStreamWriter);
@@ -215,7 +220,7 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
     @Override
     public void addException(AuditEvent event, Throwable throwable) {
         synchronized (errorWriter) {
-            final LocalizedMessage addExceptionMessage = new LocalizedMessage(0,
+            final LocalizedMessage addExceptionMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, ADD_EXCEPTION_MESSAGE,
                 new String[] {event.getFileName()}, null,
                 LocalizedMessage.class, null);
@@ -226,7 +231,7 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
 
     @Override
     public void auditStarted(AuditEvent event) {
-        final LocalizedMessage auditStartMessage = new LocalizedMessage(0,
+        final LocalizedMessage auditStartMessage = new LocalizedMessage(1,
             Definitions.CHECKSTYLE_BUNDLE, AUDIT_STARTED_MESSAGE, null, null,
             LocalizedMessage.class, null);
         infoWriter.println(auditStartMessage.getMessage());
@@ -235,7 +240,7 @@ public class DefaultLogger extends AutomaticBean implements AuditListener {
 
     @Override
     public void auditFinished(AuditEvent event) {
-        final LocalizedMessage auditFinishMessage = new LocalizedMessage(0,
+        final LocalizedMessage auditFinishMessage = new LocalizedMessage(1,
             Definitions.CHECKSTYLE_BUNDLE, AUDIT_FINISHED_MESSAGE, null, null,
             LocalizedMessage.class, null);
         infoWriter.println(auditFinishMessage.getMessage());

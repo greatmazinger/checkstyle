@@ -52,8 +52,8 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.internal.utils.BriefUtLogger;
 import com.puppycrawl.tools.checkstyle.internal.utils.CheckUtil;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
-import com.puppycrawl.tools.checkstyle.utils.ModuleReflectionUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
+import com.puppycrawl.tools.checkstyle.utils.ModuleReflectionUtil;
 
 public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport {
 
@@ -71,11 +71,13 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
          * Points that checker will be created as
          * a root of default configuration.
          */
-        IN_CHECKER
+        IN_CHECKER,
 
     }
 
-    private static final Pattern WARN_PATTERN = CommonUtils
+    private static final String ROOT_MODULE_NAME = "root";
+
+    private static final Pattern WARN_PATTERN = CommonUtil
             .createPattern(".*[ ]*//[ ]*warn[ ]*|/[*]\\s?warn\\s?[*]/");
 
     private static final String XML_NAME = "/google_checks.xml";
@@ -106,8 +108,22 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
      * Returns test logger.
      * @return logger test logger
      */
-    public final BriefUtLogger getBriefUtLogger() {
+    protected final BriefUtLogger getBriefUtLogger() {
         return new BriefUtLogger(stream);
+    }
+
+    /**
+     * Returns canonical path for the file with the given file name.
+     * The path is formed base on the non-compilable resources location.
+     * This implementation uses 'src/test/resources-noncompilable/'
+     * as a non-compilable resource location.
+     * @param filename file name.
+     * @return canonical path for the file with the given file name.
+     * @throws IOException if I/O exception occurs while forming the path.
+     */
+    protected final String getNonCompilablePath(String filename) throws IOException {
+        return new File("src/it/resources-noncompilable/" + getPackageLocation() + "/"
+                + filename).getCanonicalPath();
     }
 
     /**
@@ -115,8 +131,8 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
      * @param clazz module class.
      * @return {@link DefaultConfiguration} instance.
      */
-    private static DefaultConfiguration createModuleConfig(Class<?> clazz) {
-        return new DefaultConfiguration(clazz.getName());
+    protected static DefaultConfiguration createModuleConfig(Class<?> clazz) {
+        return new DefaultConfiguration(clazz.getSimpleName());
     }
 
     /**
@@ -125,7 +141,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
      * @return {@link Checker} instance based on the given {@link Configuration} instance.
      * @throws Exception if an exception occurs during checker configuration.
      */
-    public final Checker createChecker(Configuration moduleConfig)
+    protected final Checker createChecker(Configuration moduleConfig)
             throws Exception {
         final String name = moduleConfig.getName();
         ModuleCreationOption moduleCreationOption = ModuleCreationOption.IN_CHECKER;
@@ -133,8 +149,8 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
         for (Class<?> moduleClass : CHECKSTYLE_MODULES) {
             if (moduleClass.getSimpleName().equals(name)
                     || moduleClass.getSimpleName().equals(name + "Check")) {
-                if (ModuleReflectionUtils.isCheckstyleTreeWalkerCheck(moduleClass)
-                        || ModuleReflectionUtils.isTreeWalkerFilterModule(moduleClass)) {
+                if (ModuleReflectionUtil.isCheckstyleTreeWalkerCheck(moduleClass)
+                        || ModuleReflectionUtil.isTreeWalkerFilterModule(moduleClass)) {
                     moduleCreationOption = ModuleCreationOption.IN_TREEWALKER;
                 }
                 break;
@@ -155,10 +171,13 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
     protected final Checker createChecker(Configuration moduleConfig,
                                     ModuleCreationOption moduleCreationOption)
             throws Exception {
-        final DefaultConfiguration dc;
+        final Configuration dc;
 
         if (moduleCreationOption == ModuleCreationOption.IN_TREEWALKER) {
             dc = createTreeWalkerConfig(moduleConfig);
+        }
+        else if (ROOT_MODULE_NAME.equals(moduleConfig.getName())) {
+            dc = moduleConfig;
         }
         else {
             dc = createRootConfig(moduleConfig);
@@ -199,7 +218,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
      * @return {@link DefaultConfiguration} for the given {@link Configuration} instance.
      */
     protected static DefaultConfiguration createRootConfig(Configuration config) {
-        final DefaultConfiguration dc = new DefaultConfiguration("root");
+        final DefaultConfiguration dc = new DefaultConfiguration(ROOT_MODULE_NAME);
         dc.addChild(config);
         return dc;
     }
@@ -247,9 +266,9 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
         final int errs = checker.process(theFiles);
 
         // process each of the lines
-        final ByteArrayInputStream inputStream =
+        try (ByteArrayInputStream inputStream =
                 new ByteArrayInputStream(stream.toByteArray());
-        try (LineNumberReader lnr = new LineNumberReader(
+            LineNumberReader lnr = new LineNumberReader(
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             int previousLineNumber = 0;
             for (int i = 0; i < expected.length; i++) {
@@ -316,7 +335,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
 
     /**
      * Returns {@link Configuration} instance for the given module name.
-     * This implementation uses {@link AbstractModuleTestSupport#getConfiguration()} method inside.
+     * This implementation uses {@link #getModuleConfig(String, String)} method inside.
      * @param moduleName module name.
      * @return {@link Configuration} instance for the given module name.
      */
@@ -326,11 +345,10 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
 
     /**
      * Returns {@link Configuration} instance for the given module name.
-     * This implementation uses {@link AbstractModuleTestSupport#getConfiguration()} method inside.
+     * This implementation uses {@link #getModuleConfig(String)} method inside.
      * @param moduleName module name.
      * @param moduleId module id.
      * @return {@link Configuration} instance for the given module name.
-     * @throws CheckstyleException if exception occurs during configuration loading.
      */
     protected static Configuration getModuleConfig(String moduleName, String moduleId) {
         final Configuration result;
@@ -358,7 +376,6 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
 
     /**
      * Returns a list of all {@link Configuration} instances for the given module name.
-     * This implementation uses {@link AbstractModuleTestSupport#getConfiguration()} method inside.
      * @param moduleName module name.
      * @return {@link Configuration} instance for the given module name.
      */
@@ -411,7 +428,7 @@ public abstract class AbstractModuleTestSupport extends AbstractPathTestSupport 
                 lineNumber++;
             }
         }
-        return result.toArray(new Integer[result.size()]);
+        return result.toArray(new Integer[0]);
     }
 
 }

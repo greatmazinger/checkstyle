@@ -31,6 +31,7 @@ import com.puppycrawl.tools.checkstyle.TreeWalkerTest;
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
 
 public class SuppressElementTest {
@@ -51,7 +52,7 @@ public class SuppressElementTest {
     @Test
     public void testDecideLocalizedMessage() {
         final LocalizedMessage message =
-            new LocalizedMessage(0, 0, "", "", null, null, getClass(), null);
+            new LocalizedMessage(1, 0, "", "", null, null, getClass(), null);
         final AuditEvent ev = new AuditEvent(this, "ATest.java", message);
         //deny because there are matches on file and check names
         assertFalse("Names match", filter.accept(ev));
@@ -60,7 +61,7 @@ public class SuppressElementTest {
     @Test
     public void testDecideByMessage() {
         final LocalizedMessage message =
-            new LocalizedMessage(0, 0, "", "", null, null, getClass(), "Test");
+            new LocalizedMessage(1, 0, "", "", null, null, getClass(), "Test");
         final AuditEvent ev = new AuditEvent(this, "ATest.java", message);
         final SuppressElement filter1 =
                 new SuppressElement(null, null, "Test", null, null, null);
@@ -230,12 +231,13 @@ public class SuppressElementTest {
 
     @Test
     public void testEqualsAndHashCode() {
-        EqualsVerifier.forClass(SuppressElement.class)
+        final EqualsVerifierReport ev = EqualsVerifier.forClass(SuppressElement.class)
                 .usingGetClass()
                 .withIgnoredFields("fileRegexp", "checkRegexp", "messageRegexp", "columnFilter",
                         "lineFilter")
                 .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
+                .report();
+        assertEquals("Error: " + ev.getMessage(), EqualsVerifierReport.SUCCESS, ev);
     }
 
 }

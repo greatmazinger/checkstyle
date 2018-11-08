@@ -26,15 +26,16 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 import com.google.common.base.CharMatcher;
+import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
 import com.puppycrawl.tools.checkstyle.api.JavadocTokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
-import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
+import com.puppycrawl.tools.checkstyle.utils.JavadocUtil;
 
 /**
  * <p>
  * Checks that <a href=
- * "http://www.oracle.com/technetwork/java/javase/documentation/index-137868.html#firstsentence">
+ * "https://www.oracle.com/technetwork/java/javase/documentation/index-137868.html#firstsentence">
  * Javadoc summary sentence</a> does not contain phrases that are not recommended to use.
  * Check also violate javadoc that does not contain first sentence.
  * By default Check validate that first sentence is not empty:</p><br>
@@ -62,9 +63,8 @@ import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
  * </pre>
  *
  *
- * @author max
- * @author <a href="mailto:nesterenko-aleksey@list.ru">Aleksey Nesterenko</a>
  */
+@StatelessCheck
 public class SummaryJavadocCheck extends AbstractJavadocCheck {
 
     /**
@@ -99,7 +99,7 @@ public class SummaryJavadocCheck extends AbstractJavadocCheck {
     );
 
     /** Regular expression for forbidden summary fragments. */
-    private Pattern forbiddenSummaryFragments = CommonUtils.createPattern("^$");
+    private Pattern forbiddenSummaryFragments = CommonUtil.createPattern("^$");
 
     /** Period symbol at the end of first javadoc sentence. */
     private String period = PERIOD;
@@ -169,7 +169,7 @@ public class SummaryJavadocCheck extends AbstractJavadocCheck {
                 found = true;
             }
             else if (child.getType() != JavadocTokenTypes.LEADING_ASTERISK
-                    && !CommonUtils.isBlank(child.getText())) {
+                    && !CommonUtil.isBlank(child.getText())) {
                 break;
             }
         }
@@ -190,7 +190,7 @@ public class SummaryJavadocCheck extends AbstractJavadocCheck {
                 result.append(child.getText());
             }
             else if (child.getType() == JavadocTokenTypes.HTML_ELEMENT
-                    && CommonUtils.isBlank(result.toString().trim())) {
+                    && CommonUtil.isBlank(result.toString().trim())) {
                 result.append(getStringInsideTag(result.toString(),
                         child.getChildren()[0].getChildren()[0]));
             }
@@ -217,7 +217,7 @@ public class SummaryJavadocCheck extends AbstractJavadocCheck {
             if (tempNode.getType() == JavadocTokenTypes.TEXT) {
                 contents.append(tempNode.getText());
             }
-            tempNode = JavadocUtils.getNextSibling(tempNode);
+            tempNode = JavadocUtil.getNextSibling(tempNode);
         }
         return contents.toString();
     }
@@ -241,7 +241,7 @@ public class SummaryJavadocCheck extends AbstractJavadocCheck {
 
             if (child.getType() != JavadocTokenTypes.JAVADOC_INLINE_TAG
                 && text.contains(periodSuffix)) {
-                result.append(text.substring(0, text.indexOf(periodSuffix) + 1));
+                result.append(text, 0, text.indexOf(periodSuffix) + 1);
                 break;
             }
             else {

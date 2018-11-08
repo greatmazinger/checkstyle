@@ -26,7 +26,7 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Checks for redundant modifiers in interface and annotation definitions,
@@ -110,10 +110,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * }
  * </pre>
  *
- * @author lkuehne
- * @author <a href="mailto:piotr.listkiewicz@gmail.com">liscju</a>
- * @author <a href="mailto:andreyselkin@gmail.com">Andrei Selkin</a>
- * @author Vladislav Lisetskiy
  */
 @StatelessCheck
 public class RedundantModifierCheck
@@ -140,7 +136,7 @@ public class RedundantModifierCheck
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -199,8 +195,7 @@ public class RedundantModifierCheck
             final DetailAST modifier =
                     modifiers.findFirstToken(tokenType);
             if (modifier != null) {
-                log(modifier.getLineNo(), modifier.getColumnNo(),
-                        MSG_KEY, modifier.getText());
+                log(modifier, MSG_KEY, modifier.getText());
             }
         }
     }
@@ -214,8 +209,7 @@ public class RedundantModifierCheck
         final DetailAST modifier = getFirstModifierAst(modifiers);
 
         if (modifier != null) {
-            log(modifier.getLineNo(), modifier.getColumnNo(),
-                    MSG_KEY, modifier.getText());
+            log(modifier, MSG_KEY, modifier.getText());
         }
     }
 
@@ -267,8 +261,7 @@ public class RedundantModifierCheck
                         && ast.getType() != TokenTypes.CLASS_DEF
                 || type == TokenTypes.FINAL
                         && ast.getType() != TokenTypes.CLASS_DEF) {
-                log(modifier.getLineNo(), modifier.getColumnNo(),
-                        MSG_KEY, modifier.getText());
+                log(modifier, MSG_KEY, modifier.getText());
                 break;
             }
 
@@ -361,8 +354,7 @@ public class RedundantModifierCheck
         DetailAST astModifier = astModifiers.getFirstChild();
         while (astModifier != null) {
             if (astModifier.getType() == modifierType) {
-                log(astModifier.getLineNo(), astModifier.getColumnNo(),
-                        MSG_KEY, astModifier.getText());
+                log(astModifier, MSG_KEY, astModifier.getText());
             }
 
             astModifier = astModifier.getNextSibling();

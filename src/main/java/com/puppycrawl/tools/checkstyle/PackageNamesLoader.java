@@ -26,8 +26,10 @@ import java.net.URL;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,13 +38,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.google.common.io.Closeables;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Loads a list of package names from a package name XML file.
- * @author Rick Giles
  */
 public final class PackageNamesLoader
     extends XmlLoader {
@@ -50,6 +50,10 @@ public final class PackageNamesLoader
     /** The public ID for the configuration dtd. */
     private static final String DTD_PUBLIC_ID =
         "-//Puppy Crawl//DTD Package Names 1.0//EN";
+
+    /** The new public ID for the configuration dtd. */
+    private static final String DTD_PUBLIC_CS_ID =
+        "-//Checkstyle//DTD Package Names Configuration 1.0//EN";
 
     /** The resource for the configuration dtd. */
     private static final String DTD_RESOURCE_NAME =
@@ -77,7 +81,7 @@ public final class PackageNamesLoader
      */
     private PackageNamesLoader()
             throws ParserConfigurationException, SAXException {
-        super(DTD_PUBLIC_ID, DTD_RESOURCE_NAME);
+        super(createIdToResourceNameMap());
     }
 
     @Override
@@ -102,7 +106,7 @@ public final class PackageNamesLoader
         while (iterator.hasNext()) {
             final String subPackage = iterator.next();
             buf.append(subPackage);
-            if (!CommonUtils.endsWithChar(subPackage, '.') && iterator.hasNext()) {
+            if (!CommonUtil.endsWithChar(subPackage, '.') && iterator.hasNext()) {
                 buf.append('.');
             }
         }
@@ -163,18 +167,24 @@ public final class PackageNamesLoader
      */
     private static void processFile(URL packageFile, PackageNamesLoader namesLoader)
             throws SAXException, CheckstyleException {
-        InputStream stream = null;
-        try {
-            stream = new BufferedInputStream(packageFile.openStream());
+        try (InputStream stream = new BufferedInputStream(packageFile.openStream())) {
             final InputSource source = new InputSource(stream);
             namesLoader.parseInputSource(source);
         }
         catch (IOException ex) {
             throw new CheckstyleException("unable to open " + packageFile, ex);
         }
-        finally {
-            Closeables.closeQuietly(stream);
-        }
+    }
+
+    /**
+     * Creates mapping between local resources and dtd ids.
+     * @return map between local resources and dtd ids.
+     */
+    private static Map<String, String> createIdToResourceNameMap() {
+        final Map<String, String> map = new HashMap<>();
+        map.put(DTD_PUBLIC_ID, DTD_RESOURCE_NAME);
+        map.put(DTD_PUBLIC_CS_ID, DTD_RESOURCE_NAME);
+        return map;
     }
 
 }

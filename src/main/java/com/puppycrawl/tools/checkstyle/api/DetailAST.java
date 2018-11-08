@@ -24,13 +24,11 @@ import java.util.BitSet;
 import antlr.CommonASTWithHiddenTokens;
 import antlr.Token;
 import antlr.collections.AST;
-import com.puppycrawl.tools.checkstyle.utils.TokenUtils;
+import com.puppycrawl.tools.checkstyle.utils.TokenUtil;
 
 /**
  * An extension of the CommonAST that records the line and column number.
  *
- * @author Oliver Burn
- * @author lkuehne
  * @see <a href="http://www.antlr.org/">ANTLR Website</a>
  * @noinspection FieldNotUsedInToString, SerializableHasSerializationMethods
  */
@@ -306,7 +304,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
         DetailAST node = ast;
         while (node != null) {
             // comment node can't be start of any java statement/definition
-            if (TokenUtils.isCommentType(node.getType())) {
+            if (TokenUtil.isCommentType(node.getType())) {
                 node = node.getNextSibling();
             }
             else {
@@ -328,7 +326,7 @@ public final class DetailAST extends CommonASTWithHiddenTokens {
         DetailAST node = ast;
         while (node != null) {
             // comment node can't be start of any java statement/definition
-            if (TokenUtils.isCommentType(node.getType())) {
+            if (TokenUtil.isCommentType(node.getType())) {
                 node = node.getNextSibling();
             }
             else {

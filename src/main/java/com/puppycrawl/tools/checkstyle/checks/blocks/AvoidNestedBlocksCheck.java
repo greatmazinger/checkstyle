@@ -83,7 +83,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * }
  * </pre>
  *
- * @author lkuehne
  */
 @StatelessCheck
 public class AvoidNestedBlocksCheck extends AbstractCheck {
@@ -122,7 +121,7 @@ public class AvoidNestedBlocksCheck extends AbstractCheck {
                 && (!allowInSwitchCase
                     || parent.getParent().getType() != TokenTypes.CASE_GROUP
                     || parent.getNumberOfChildren() != 1)) {
-            log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY_BLOCK_NESTED);
+            log(ast, MSG_KEY_BLOCK_NESTED);
         }
     }
 

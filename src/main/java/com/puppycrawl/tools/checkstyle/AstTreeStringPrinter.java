@@ -28,12 +28,11 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
-import com.puppycrawl.tools.checkstyle.utils.TokenUtils;
+import com.puppycrawl.tools.checkstyle.utils.JavadocUtil;
+import com.puppycrawl.tools.checkstyle.utils.TokenUtil;
 
 /**
  * Class for printing AST to String.
- * @author Vladislav Lisetskii
  */
 public final class AstTreeStringPrinter {
 
@@ -91,7 +90,7 @@ public final class AstTreeStringPrinter {
                 .append(getNodeInfo(node))
                 .append(LINE_SEPARATOR);
             if (node.getType() == TokenTypes.COMMENT_CONTENT
-                    && JavadocUtils.isJavadocComment(node.getParent())) {
+                    && JavadocUtil.isJavadocComment(node.getParent())) {
                 final String javadocTree = parseAndPrintJavadocTree(node);
                 messageBuilder.append(javadocTree);
             }
@@ -157,7 +156,7 @@ public final class AstTreeStringPrinter {
      * @return node info
      */
     private static String getNodeInfo(DetailAST node) {
-        return TokenUtils.getTokenName(node.getType())
+        return TokenUtil.getTokenName(node.getType())
                 + " -> " + escapeAllControlChars(node.getText())
                 + " [" + node.getLineNo() + ':' + node.getColumnNo() + ']';
     }

@@ -30,7 +30,6 @@ import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
  * [SEVERITY LEVEL] filePath:lineNo:columnNo: message. [CheckName]
  * When the module id of the message has been set, the format is:
  * [SEVERITY LEVEL] filePath:lineNo:columnNo: message. [ModuleId]
- * @author Andrei Selkin
  */
 public class AuditEventDefaultFormatter implements AuditEventFormatter {
 
@@ -106,7 +105,7 @@ public class AuditEventDefaultFormatter implements AuditEventFormatter {
                 checkShortName = checkFullName.substring(0, checkFullName.lastIndexOf(SUFFIX));
             }
             else {
-                checkShortName = checkFullName.substring(0, checkFullName.length());
+                checkShortName = checkFullName;
             }
         }
         else {

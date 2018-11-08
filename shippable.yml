@@ -1,37 +1,15 @@
 language: java
 
-
 jdk:
   - oraclejdk8
 
 env:
   matrix:
-    - PROFILE="pitest-xpath"
-    - PROFILE="pitest-filters"
-    - PROFILE="pitest-javadoc"
-    - PROFILE="pitest-imports"
-    - PROFILE="pitest-metrics"
-    - PROFILE="pitest-regexp"
-    - PROFILE="pitest-sizes"
-    - PROFILE="pitest-whitespace"
-    - PROFILE="pitest-misc"
-    - PROFILE="pitest-blocks"
-    - PROFILE="pitest-coding"
-    - PROFILE="pitest-design"
-    - PROFILE="pitest-annotation"
-    - PROFILE="pitest-header"
-    - PROFILE="pitest-modifier"
-    - PROFILE="pitest-naming"
-    - PROFILE="pitest-indentation"
-    - PROFILE="pitest-tree-walker"
-    - PROFILE="pitest-ant"
-    - PROFILE="pitest-packagenamesloader"
-    - PROFILE="pitest-common"
-    - PROFILE="pitest-main"
-    - PROFILE="pitest-api"
-    - PROFILE="pitest-utils"
-    # we do not do thorough testing of gui part
-    #- PROFILE="pitest-gui"
+    # we skip openjdk till we find way to install "hg" to shippable image
+    #- CMD="./.ci/shippable.sh no-exception-openjdk7-openjdk8"
+    - CMD="./.ci/shippable.sh no-exception-openjdk9-lucene-and-others"
+    - CMD="./.ci/shippable.sh no-exception-cassandra-storm-tapestry"
+    - CMD="./.ci/shippable.sh no-exception-hadoop-apache-groovy-scouter"
 
 branches:
   only:
@@ -41,8 +19,10 @@ build:
   cache: true
   cache_dir_list:
     - /root/.m2
+    - /root/groovy-2.4.7
 
-  # default is drydock/u14javall with jdk 1.8.0.25 that make pitest make different results with latest jdk builds,
+  # default is drydock/u14javall with jdk 1.8.0.25
+  # that make pitest make different results with latest jdk builds,
   # "v5.9.4" is latest jdk8_144, versions above 5.9.4 use jdk9
   pre_ci_boot:
     image_name: drydock/u16javall
@@ -52,12 +32,31 @@ build:
     # we skip PRs and commits that are not for Issues, as pitest is too time consuming
     - |
       set -e
-      SKIP_FILES="appveyor.yml|circleci|distelli-manifest.yml|.travis.yml|wercker.yml|wercker.sh|fast-forward-merge.sh|LICENSE|LICENSE.apache20|README.md|release.sh|RIGHTS.antlr|intellij-idea-inspections.xml|org.eclipse.jdt.core.prefs"
-      SKIP_CI=$(if [[ $(git diff --name-only HEAD HEAD~1 | grep -vE "$SKIP_FILES" | cat | wc -c) > 0 ]]; then echo false; else echo true; fi;)
+      pwd
+      ls -la
+      if [ ! -d /root/groovy-2.4.7 ]; then
+        wget https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.7.zip
+        unzip apache-groovy-binary-2.4.7.zip -d /root/
+      fi
+      # load custom PATH
+      export PATH=/root/groovy-2.4.7/bin:$PATH
+      SKIP_FILES1="appveyor.yml|codeship-*|buddy.yml|circleci|distelli-manifest.yml|.travis.yml"
+      SKIP_FILES2="|wercker.yml|wercker.sh|fast-forward-merge.sh|LICENSE|LICENSE.apache20|README.md"
+      SKIP_FILES3="|release.sh|RIGHTS.antlr|intellij-idea-inspections.xml"
+      SKIP_FILES4="|org.eclipse.jdt.core.prefs"
+      SKIP_FILES5="|Jenkinsfile"
+      SKIP_FILES=$SKIP_FILES1$SKIP_FILES2$SKIP_FILES3$SKIP_FILES4$SKIP_FILES5
+      SKIP_CI=false
+      if [[ $(git diff --name-only HEAD HEAD~1 | grep -vE "$SKIP_FILES" | cat | wc -c) > 0 ]]; then
+        SKIP_CI=false;
+      else
+        SKIP_CI=true;
+      fi
       echo "SKIP_CI="$SKIP_CI
       if [[ $SKIP_CI == 'false' ]];
       then
-        ./.ci/shippable.sh $PROFILE
+        echo "Command: $CMD"
+        eval $CMD
       else
         echo "Build is skipped, changed files:"
         git diff --name-only HEAD HEAD~1

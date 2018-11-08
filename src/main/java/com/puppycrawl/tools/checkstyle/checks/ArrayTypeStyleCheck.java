@@ -30,7 +30,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * and some like C-style: public static void main(String args[])
  *
  * <p>By default the Check enforces Java style.
- * @author lkuehne
  */
 @StatelessCheck
 public class ArrayTypeStyleCheck extends AbstractCheck {
@@ -73,7 +72,7 @@ public class ArrayTypeStyleCheck extends AbstractCheck {
                     || variableAST.getColumnNo() - ast.getColumnNo() > -1;
 
                 if (isJavaStyle != javaStyle) {
-                    log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY);
+                    log(ast, MSG_KEY);
                 }
             }
         }

@@ -34,7 +34,7 @@ import com.puppycrawl.tools.checkstyle.TreeWalkerFilter;
 import com.puppycrawl.tools.checkstyle.api.AutomaticBean;
 import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.TextBlock;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -49,8 +49,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * This is sometimes superior to a separate suppressions file, which
  * must be kept up-to-date as the source file is edited.
  * </p>
- * @author Mike McMahon
- * @author Rick Giles
  */
 public class SuppressionCommentFilter
     extends AutomaticBean
@@ -68,7 +66,7 @@ public class SuppressionCommentFilter
         /**
          * Switch reporting off.
          */
-        OFF
+        OFF,
 
     }
 
@@ -294,7 +292,6 @@ public class SuppressionCommentFilter
     /**
      * A Tag holds a suppression comment and its location, and determines
      * whether the suppression turns checkstyle reporting on or off.
-     * @author Rick Giles
      */
     public static class Tag
         implements Comparable<Tag> {
@@ -338,27 +335,27 @@ public class SuppressionCommentFilter
             String format = "";
             try {
                 if (this.tagType == TagType.ON) {
-                    format = CommonUtils.fillTemplateWithStringsByRegexp(
+                    format = CommonUtil.fillTemplateWithStringsByRegexp(
                             filter.checkFormat, text, filter.onCommentFormat);
                     tagCheckRegexp = Pattern.compile(format);
                     if (filter.messageFormat == null) {
                         tagMessageRegexp = null;
                     }
                     else {
-                        format = CommonUtils.fillTemplateWithStringsByRegexp(
+                        format = CommonUtil.fillTemplateWithStringsByRegexp(
                                 filter.messageFormat, text, filter.onCommentFormat);
                         tagMessageRegexp = Pattern.compile(format);
                     }
                 }
                 else {
-                    format = CommonUtils.fillTemplateWithStringsByRegexp(
+                    format = CommonUtil.fillTemplateWithStringsByRegexp(
                             filter.checkFormat, text, filter.offCommentFormat);
                     tagCheckRegexp = Pattern.compile(format);
                     if (filter.messageFormat == null) {
                         tagMessageRegexp = null;
                     }
                     else {
-                        format = CommonUtils.fillTemplateWithStringsByRegexp(
+                        format = CommonUtil.fillTemplateWithStringsByRegexp(
                                 filter.messageFormat, text, filter.offCommentFormat);
                         tagMessageRegexp = Pattern.compile(format);
                     }

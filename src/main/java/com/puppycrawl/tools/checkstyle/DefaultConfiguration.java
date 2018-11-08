@@ -25,18 +25,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableMap;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Default implementation of the Configuration interface.
- * @author lkuehne
  * @noinspection SerializableHasSerializationMethods
  */
 public final class DefaultConfiguration implements Configuration {
 
     private static final long serialVersionUID = 1157875385356127169L;
+
+    /** Constant for optimization. */
+    private static final Configuration[] EMPTY_CONFIGURATION_ARRAY = new Configuration[0];
 
     /** The name of this configuration. */
     private final String name;
@@ -75,7 +77,7 @@ public final class DefaultConfiguration implements Configuration {
     @Override
     public String[] getAttributeNames() {
         final Set<String> keySet = attributeMap.keySet();
-        return keySet.toArray(new String[keySet.size()]);
+        return keySet.toArray(CommonUtil.EMPTY_STRING_ARRAY);
     }
 
     @Override
@@ -90,7 +92,7 @@ public final class DefaultConfiguration implements Configuration {
     @Override
     public Configuration[] getChildren() {
         return children.toArray(
-            new Configuration[children.size()]);
+                EMPTY_CONFIGURATION_ARRAY);
     }
 
     @Override
@@ -144,8 +146,8 @@ public final class DefaultConfiguration implements Configuration {
      * @return unmodifiable map containing custom messages
      */
     @Override
-    public ImmutableMap<String, String> getMessages() {
-        return ImmutableMap.copyOf(messages);
+    public Map<String, String> getMessages() {
+        return new HashMap<>(messages);
     }
 
     /**

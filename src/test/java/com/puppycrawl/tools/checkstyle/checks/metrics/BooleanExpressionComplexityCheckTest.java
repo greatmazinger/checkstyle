@@ -30,7 +30,7 @@ import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 public class BooleanExpressionComplexityCheckTest extends AbstractModuleTestSupport {
 
@@ -46,7 +46,7 @@ public class BooleanExpressionComplexityCheckTest extends AbstractModuleTestSupp
 
         final String[] expected = {
             "13:9: " + getCheckMessage(MSG_KEY, 4, 3),
-            "29:99: " + getCheckMessage(MSG_KEY, 4, 3),
+            "29:87: " + getCheckMessage(MSG_KEY, 4, 3),
             "39:9: " + getCheckMessage(MSG_KEY, 6, 3),
             "45:34: " + getCheckMessage(MSG_KEY, 4, 3),
             "47:34: " + getCheckMessage(MSG_KEY, 4, 3),
@@ -62,7 +62,7 @@ public class BooleanExpressionComplexityCheckTest extends AbstractModuleTestSupp
         checkConfig.addAttribute("max", "5");
         checkConfig.addAttribute("tokens", "BXOR,LAND,LOR");
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checkConfig, getPath("InputBooleanExpressionComplexity.java"), expected);
     }
@@ -72,7 +72,7 @@ public class BooleanExpressionComplexityCheckTest extends AbstractModuleTestSupp
         final DefaultConfiguration checkConfig =
             createModuleConfig(BooleanExpressionComplexityCheck.class);
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checkConfig, getPath("InputBooleanExpressionComplexityNPE.java"), expected);
     }

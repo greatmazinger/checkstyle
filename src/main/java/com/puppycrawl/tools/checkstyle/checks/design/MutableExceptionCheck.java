@@ -39,7 +39,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * thereby leading to code catching the exception to draw incorrect
  * conclusions based on the state.</p>
  *
- * @author <a href="mailto:simon@redhillconsulting.com.au">Simon Harris</a>
  */
 @FileStatefulCheck
 public final class MutableExceptionCheck extends AbstractCheck {
@@ -137,8 +136,7 @@ public final class MutableExceptionCheck extends AbstractCheck {
                 ast.findFirstToken(TokenTypes.MODIFIERS);
 
             if (modifiersAST.findFirstToken(TokenTypes.FINAL) == null) {
-                log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY,
-                        ast.findFirstToken(TokenTypes.IDENT).getText());
+                log(ast, MSG_KEY, ast.findFirstToken(TokenTypes.IDENT).getText());
             }
         }
     }

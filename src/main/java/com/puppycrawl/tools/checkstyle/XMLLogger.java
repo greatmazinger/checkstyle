@@ -27,16 +27,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.AuditListener;
 import com.puppycrawl.tools.checkstyle.api.AutomaticBean;
 import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Simple XML logger.
@@ -44,7 +42,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * we want to localize error messages or simply that file names are
  * localized and takes care about escaping as well.
 
- * @author <a href="mailto:stephane.bailliez@wanadoo.fr">Stephane Bailliez</a>
  */
 // -@cs[AbbreviationAsWordInName] We can not change it as,
 // check's name is part of API (used in configurations).
@@ -99,6 +96,9 @@ public class XMLLogger
      */
     public XMLLogger(OutputStream outputStream, OutputStreamOptions outputStreamOptions) {
         writer = new PrintWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
+        if (outputStreamOptions == null) {
+            throw new IllegalArgumentException("Parameter outputStreamOptions can not be null");
+        }
         closeStream = outputStreamOptions == OutputStreamOptions.CLOSE;
     }
 
@@ -111,10 +111,7 @@ public class XMLLogger
     public void auditStarted(AuditEvent event) {
         writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 
-        final ResourceBundle compilationProperties =
-            ResourceBundle.getBundle("checkstylecompilation", Locale.ROOT);
-        final String version =
-            compilationProperties.getString("checkstyle.compile.version");
+        final String version = XMLLogger.class.getPackage().getImplementationVersion();
 
         writer.println("<checkstyle version=\"" + version + "\">");
     }
@@ -307,7 +304,7 @@ public class XMLLogger
     public static boolean isReference(String ent) {
         boolean reference = false;
 
-        if (ent.charAt(0) != '&' || !CommonUtils.endsWithChar(ent, ';')) {
+        if (ent.charAt(0) != '&' || !CommonUtil.endsWithChar(ent, ';')) {
             reference = false;
         }
         else if (ent.charAt(1) == '#') {

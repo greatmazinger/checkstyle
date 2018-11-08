@@ -28,12 +28,11 @@ import java.util.SortedSet;
 import org.junit.Test;
 
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Tests to ensure that default message bundle is determined correctly.
  *
- * @author lkuehne
  */
 public class AbstractViolationReporterTest {
 
@@ -78,7 +77,7 @@ public class AbstractViolationReporterTest {
         config.addMessage("msgKey", "This is a custom message.");
         emptyCheck.configure(config);
 
-        emptyCheck.log(0, "msgKey");
+        emptyCheck.log(1, "msgKey");
 
         final SortedSet<LocalizedMessage> messages = emptyCheck.getMessages();
 
@@ -95,7 +94,7 @@ public class AbstractViolationReporterTest {
         config.addMessage("msgKey", "This is a custom message with {0}.");
         emptyCheck.configure(config);
 
-        emptyCheck.log(0, "msgKey", "TestParam");
+        emptyCheck.log(1, "msgKey", "TestParam");
         final SortedSet<LocalizedMessage> messages = emptyCheck.getMessages();
 
         assertEquals("Amount of messages differs from expected",
@@ -113,7 +112,7 @@ public class AbstractViolationReporterTest {
         emptyCheck.configure(config);
 
         try {
-            emptyCheck.log(0, "msgKey", "TestParam");
+            emptyCheck.log(1, "msgKey", "TestParam");
             fail("exception expected");
         }
         catch (IllegalArgumentException ex) {
@@ -126,17 +125,17 @@ public class AbstractViolationReporterTest {
 
         @Override
         public int[] getDefaultTokens() {
-            return CommonUtils.EMPTY_INT_ARRAY;
+            return CommonUtil.EMPTY_INT_ARRAY;
         }
 
         @Override
         public int[] getAcceptableTokens() {
-            return CommonUtils.EMPTY_INT_ARRAY;
+            return CommonUtil.EMPTY_INT_ARRAY;
         }
 
         @Override
         public int[] getRequiredTokens() {
-            return CommonUtils.EMPTY_INT_ARRAY;
+            return CommonUtil.EMPTY_INT_ARRAY;
         }
 
     }

@@ -19,8 +19,7 @@
 
 package com.puppycrawl.tools.checkstyle.api;
 
-import static com.puppycrawl.tools.checkstyle.utils.CommonUtils.EMPTY_BYTE_ARRAY;
-import static com.puppycrawl.tools.checkstyle.utils.CommonUtils.EMPTY_OBJECT_ARRAY;
+import static com.puppycrawl.tools.checkstyle.utils.CommonUtil.EMPTY_OBJECT_ARRAY;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -31,7 +30,6 @@ import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -43,10 +41,10 @@ import java.util.ResourceBundle;
 
 import org.junit.After;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.powermock.reflect.Whitebox;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.EqualsVerifierReport;
 
 public class LocalizedMessageTest {
 
@@ -54,7 +52,9 @@ public class LocalizedMessageTest {
 
     @Test
     public void testEqualsAndHashCode() {
-        EqualsVerifier.forClass(LocalizedMessage.class).usingGetClass().verify();
+        final EqualsVerifierReport ev = EqualsVerifier.forClass(LocalizedMessage.class)
+                .usingGetClass().report();
+        assertEquals("Error: " + ev.getMessage(), EqualsVerifierReport.SUCCESS, ev);
     }
 
     @Test
@@ -163,26 +163,6 @@ public class LocalizedMessageTest {
     }
 
     @Test
-    public void testBundleWithoutReload() throws IOException {
-        final ClassLoader classloader = mock(ClassLoader.class);
-        final URLConnection mockConnection = Mockito.mock(URLConnection.class);
-        when(mockConnection.getInputStream()).thenReturn(
-                new ByteArrayInputStream(EMPTY_BYTE_ARRAY));
-
-        final URL url = getMockUrl(mockConnection);
-        final String resource =
-                "com/puppycrawl/tools/checkstyle/checks/coding/messages_en.properties";
-        when(classloader.getResource(resource)).thenReturn(url);
-
-        final LocalizedMessage.Utf8Control control = new LocalizedMessage.Utf8Control();
-        final ResourceBundle resourceBundle = control.newBundle(
-                "com.puppycrawl.tools.checkstyle.checks.coding.messages",
-                Locale.ENGLISH, "java.class", classloader, false);
-
-        assertNull("Resource bundle should not be null", resourceBundle);
-    }
-
-    @Test
     public void testGetKey() {
         Locale.setDefault(Locale.FRENCH);
         LocalizedMessage.setLocale(Locale.US);
@@ -247,7 +227,7 @@ public class LocalizedMessageTest {
     }
 
     private static LocalizedMessage createSampleLocalizedMessageWithId(String id) {
-        return new LocalizedMessage(0, "com.puppycrawl.tools.checkstyle.checks.coding.messages",
+        return new LocalizedMessage(1, "com.puppycrawl.tools.checkstyle.checks.coding.messages",
                 "empty.statement", EMPTY_OBJECT_ARRAY, id, LocalizedMessage.class, null);
     }
 

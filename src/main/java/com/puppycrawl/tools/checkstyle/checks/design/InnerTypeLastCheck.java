@@ -23,7 +23,7 @@ import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.ScopeUtils;
+import com.puppycrawl.tools.checkstyle.utils.ScopeUtil;
 
 /**
  * <p>
@@ -31,7 +31,6 @@ import com.puppycrawl.tools.checkstyle.utils.ScopeUtils;
  * class after all method and field declarations.
  * </p>
  *
- * @author <a href="mailto:ryly@mail.ru">Ruslan Dyachenko</a>
  */
 @FileStatefulCheck
 public class InnerTypeLastCheck extends AbstractCheck {
@@ -69,11 +68,10 @@ public class InnerTypeLastCheck extends AbstractCheck {
         else {
             DetailAST nextSibling = ast.getNextSibling();
             while (nextSibling != null) {
-                if (!ScopeUtils.isInCodeBlock(ast)
+                if (!ScopeUtil.isInCodeBlock(ast)
                     && (nextSibling.getType() == TokenTypes.VARIABLE_DEF
                         || nextSibling.getType() == TokenTypes.METHOD_DEF)) {
-                    log(nextSibling.getLineNo(), nextSibling.getColumnNo(),
-                        MSG_KEY);
+                    log(nextSibling, MSG_KEY);
                 }
                 nextSibling = nextSibling.getNextSibling();
             }

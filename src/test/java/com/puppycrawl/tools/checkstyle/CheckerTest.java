@@ -89,7 +89,7 @@ import com.puppycrawl.tools.checkstyle.internal.testmodules.DebugFilter;
 import com.puppycrawl.tools.checkstyle.internal.testmodules.TestBeforeExecutionFileFilter;
 import com.puppycrawl.tools.checkstyle.internal.testmodules.TestFileSetCheck;
 import com.puppycrawl.tools.checkstyle.internal.utils.CloseAndFlushTestByteArrayOutputStream;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 public class CheckerTest extends AbstractModuleTestSupport {
 
@@ -132,7 +132,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
         checker.process(Collections.singletonList(temporaryFolder.newFile()));
         final SortedSet<LocalizedMessage> messages = new TreeSet<>();
-        messages.add(new LocalizedMessage(0, 0, "a Bundle", "message.key",
+        messages.add(new LocalizedMessage(1, 0, "a Bundle", "message.key",
                 new Object[] {"arg"}, null, getClass(), null));
         checker.fireErrors("Some File Name", messages);
 
@@ -166,7 +166,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
         auditAdapter.resetListener();
         final SortedSet<LocalizedMessage> messages = new TreeSet<>();
-        messages.add(new LocalizedMessage(0, 0, "a Bundle", "message.key",
+        messages.add(new LocalizedMessage(1, 0, "a Bundle", "message.key",
                 new Object[] {"arg"}, null, getClass(), null));
         checker.fireErrors("Some File Name", messages);
         assertTrue("Checker.fireErrors() doesn't call listener", auditAdapter.wasCalled());
@@ -207,7 +207,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
         aa2.resetListener();
         final SortedSet<LocalizedMessage> messages = new TreeSet<>();
-        messages.add(new LocalizedMessage(0, 0, "a Bundle", "message.key",
+        messages.add(new LocalizedMessage(1, 0, "a Bundle", "message.key",
                 new Object[] {"arg"}, null, getClass(), null));
         checker.fireErrors("Some File Name", messages);
         assertTrue("Checker.fireErrors() doesn't call listener", aa2.wasCalled());
@@ -250,7 +250,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
         filter.resetFilter();
         final SortedSet<LocalizedMessage> messages = new TreeSet<>();
-        messages.add(new LocalizedMessage(0, 0, "a Bundle", "message.key",
+        messages.add(new LocalizedMessage(1, 0, "a Bundle", "message.key",
                 new Object[] {"arg"}, null, getClass(), null));
         checker.fireErrors("Some File Name", messages);
         assertTrue("Checker.fireErrors() doesn't call filter", filter.wasCalled());
@@ -267,7 +267,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
         f2.resetFilter();
         final SortedSet<LocalizedMessage> messages = new TreeSet<>();
-        messages.add(new LocalizedMessage(0, 0, "a Bundle", "message.key",
+        messages.add(new LocalizedMessage(1, 0, "a Bundle", "message.key",
                 new Object[] {"arg"}, null, getClass(), null));
         checker.fireErrors("Some File Name", messages);
         assertTrue("Checker.fireErrors() doesn't call filter", f2.wasCalled());
@@ -498,7 +498,6 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
     /**
      * It is OK to have long test method name here as it describes the test purpose.
-     * @noinspection InstanceMethodNamingConvention
      */
     @Test
     public void testCacheAndCheckWhichDoesNotImplementExternalResourceHolderInterface()
@@ -517,7 +516,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
         checkerConfig.addAttribute("cacheFile", cacheFile.getPath());
 
         final File tmpFile = temporaryFolder.newFile("file.java");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checkerConfig, tmpFile.getPath(), expected);
         final Properties cacheAfterFirstRun = new Properties();
@@ -593,7 +592,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
                 cacheAfterClear.getProperty(PropertyCacheFile.CONFIG_HASH_KEY));
 
         final String pathToEmptyFile = temporaryFolder.newFile("file.java").getPath();
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         // file that should be audited is not in cache
         verify(checker, pathToEmptyFile, pathToEmptyFile, expected);
@@ -690,7 +689,6 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
     /**
      * It is OK to have long test method name here as it describes the test purpose.
-     * @noinspection InstanceMethodNamingConvention
      */
     @Test
     public void testCacheAndFilterWhichDoesNotImplementExternalResourceHolderInterface()
@@ -703,7 +701,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
         final File cacheFile = temporaryFolder.newFile();
         checkerConfig.addAttribute("cacheFile", cacheFile.getPath());
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         final String pathToEmptyFile = temporaryFolder.newFile("file.java").getPath();
 
         verify(checkerConfig, pathToEmptyFile, expected);
@@ -734,7 +732,6 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
     /**
      * It is OK to have long test method name here as it describes the test purpose.
-     * @noinspection InstanceMethodNamingConvention
      */
     // -@cs[ExecutableStatementCount] This test needs to verify many things.
     @Test
@@ -764,7 +761,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
         checker.addListener(getBriefUtLogger());
 
         final String pathToEmptyFile = temporaryFolder.newFile("file.java").getPath();
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checker, pathToEmptyFile, expected);
         final Properties cacheAfterFirstRun = new Properties();
@@ -825,7 +822,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
         final DefaultConfiguration checkerConfig = createRootConfig(treeWalkerConfig);
 
         final String filePath = getPath("InputCheckerClearDetailAstLazyLoadCache.java");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checkerConfig, filePath, expected);
     }
@@ -844,7 +841,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
         checkerConfig.addChild(filterConfig);
 
         final String fileViolationPath = temporaryFolder.newFile("ViolationFile.java").getPath();
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checkerConfig, fileViolationPath, expected);
 
@@ -887,7 +884,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
         final String filePath = getPath("InputChecker.java");
         final String[] expected = {
-            "0: " + getCheckMessage(EXCEPTION_MSG, "java.lang.IndexOutOfBoundsException: test"),
+            "1: " + getCheckMessage(EXCEPTION_MSG, "java.lang.IndexOutOfBoundsException: test"),
         };
 
         verify(checkerConfig, filePath, expected);
@@ -982,47 +979,49 @@ public class CheckerTest extends AbstractModuleTestSupport {
     @Test
     public void testDefaultLoggerClosesItStreams() throws Exception {
         final Checker checker = new Checker();
-        final CloseAndFlushTestByteArrayOutputStream testInfoOutputStream =
-            new CloseAndFlushTestByteArrayOutputStream();
-        final CloseAndFlushTestByteArrayOutputStream testErrorOutputStream =
-            new CloseAndFlushTestByteArrayOutputStream();
-        checker.setModuleClassLoader(Thread.currentThread().getContextClassLoader());
-        checker.addListener(new DefaultLogger(testInfoOutputStream,
-            true, testErrorOutputStream, true));
+        try (CloseAndFlushTestByteArrayOutputStream testInfoOutputStream =
+                new CloseAndFlushTestByteArrayOutputStream();
+            CloseAndFlushTestByteArrayOutputStream testErrorOutputStream =
+                new CloseAndFlushTestByteArrayOutputStream()) {
+            checker.setModuleClassLoader(Thread.currentThread().getContextClassLoader());
+            checker.addListener(new DefaultLogger(testInfoOutputStream,
+                true, testErrorOutputStream, true));
 
-        final File tmpFile = temporaryFolder.newFile("file.java");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+            final File tmpFile = temporaryFolder.newFile("file.java");
+            final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
-        verify(checker, tmpFile.getPath(), expected);
+            verify(checker, tmpFile.getPath(), expected);
 
-        assertEquals("Close count was not expected",
-                1, testInfoOutputStream.getCloseCount());
-        assertEquals("Flush count was not expected",
-                3, testInfoOutputStream.getFlushCount());
-        assertEquals("Close count was not expected",
-                1, testErrorOutputStream.getCloseCount());
-        assertEquals("Flush count was not expected",
-                1, testErrorOutputStream.getFlushCount());
+            assertEquals("Close count was not expected",
+                    1, testInfoOutputStream.getCloseCount());
+            assertEquals("Flush count was not expected",
+                    3, testInfoOutputStream.getFlushCount());
+            assertEquals("Close count was not expected",
+                    1, testErrorOutputStream.getCloseCount());
+            assertEquals("Flush count was not expected",
+                    1, testErrorOutputStream.getFlushCount());
+        }
     }
 
     // -@cs[CheckstyleTestMakeup] must use raw class to directly initialize DefaultLogger
     @Test
     public void testXmlLoggerClosesItStreams() throws Exception {
         final Checker checker = new Checker();
-        final CloseAndFlushTestByteArrayOutputStream testInfoOutputStream =
-            new CloseAndFlushTestByteArrayOutputStream();
-        checker.setModuleClassLoader(Thread.currentThread().getContextClassLoader());
-        checker.addListener(new XMLLogger(testInfoOutputStream, true));
+        try (CloseAndFlushTestByteArrayOutputStream testInfoOutputStream =
+                new CloseAndFlushTestByteArrayOutputStream()) {
+            checker.setModuleClassLoader(Thread.currentThread().getContextClassLoader());
+            checker.addListener(new XMLLogger(testInfoOutputStream, true));
 
-        final File tmpFile = temporaryFolder.newFile("file.java");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+            final File tmpFile = temporaryFolder.newFile("file.java");
+            final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
-        verify(checker, tmpFile.getPath(), tmpFile.getPath(), expected);
+            verify(checker, tmpFile.getPath(), tmpFile.getPath(), expected);
 
-        assertEquals("Close count was not expected",
-                1, testInfoOutputStream.getCloseCount());
-        assertEquals("Flush count was not expected",
-                0, testInfoOutputStream.getFlushCount());
+            assertEquals("Close count was not expected",
+                    1, testInfoOutputStream.getCloseCount());
+            assertEquals("Flush count was not expected",
+                    0, testInfoOutputStream.getFlushCount());
+        }
     }
 
     @Test
@@ -1050,16 +1049,16 @@ public class CheckerTest extends AbstractModuleTestSupport {
         final String errorMessage =
                 getCheckMessage(NewlineAtEndOfFileCheck.class, MSG_KEY_NO_NEWLINE_EOF);
         final String[] expected = {
-            "0: " + errorMessage + " [NewlineAtEndOfFile]",
-            "0: " + errorMessage + " [ModuleId]",
+            "1: " + errorMessage + " [NewlineAtEndOfFile]",
+            "1: " + errorMessage + " [ModuleId]",
         };
 
         // super.verify does not work here, for we change the logger
         out.flush();
         final int errs = checker.process(Collections.singletonList(new File(path)));
-        final ByteArrayInputStream inputStream =
+        try (ByteArrayInputStream inputStream =
                 new ByteArrayInputStream(out.toByteArray());
-        try (LineNumberReader lnr = new LineNumberReader(
+            LineNumberReader lnr = new LineNumberReader(
                 new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
             // we need to ignore the unrelated lines
             final List<String> actual = lnr.lines()
@@ -1095,7 +1094,7 @@ public class CheckerTest extends AbstractModuleTestSupport {
 
         @Override
         protected void processFiltered(File file, FileText fileText) {
-            log(0, "test");
+            log(1, "test");
         }
 
         @Override

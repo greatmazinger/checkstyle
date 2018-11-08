@@ -23,8 +23,8 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.AnnotationUtility;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.AnnotationUtil;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -62,7 +62,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *  }
  * }
  * </pre>
- * @author Oliver Burn
  */
 @StatelessCheck
 public class ParameterNumberCheck
@@ -118,7 +117,7 @@ public class ParameterNumberCheck
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -127,7 +126,7 @@ public class ParameterNumberCheck
         final int count = params.getChildCount(TokenTypes.PARAMETER_DEF);
         if (count > max && !shouldIgnoreNumberOfParameters(ast)) {
             final DetailAST name = ast.findFirstToken(TokenTypes.IDENT);
-            log(name.getLineNo(), name.getColumnNo(), MSG_KEY, max, count);
+            log(name, MSG_KEY, max, count);
         }
     }
 
@@ -140,8 +139,8 @@ public class ParameterNumberCheck
     private boolean shouldIgnoreNumberOfParameters(DetailAST ast) {
         //if you override a method, you have no power over the number of parameters
         return ignoreOverriddenMethods
-                && (AnnotationUtility.containsAnnotation(ast, OVERRIDE)
-                || AnnotationUtility.containsAnnotation(ast, CANONICAL_OVERRIDE));
+                && (AnnotationUtil.containsAnnotation(ast, OVERRIDE)
+                || AnnotationUtil.containsAnnotation(ast, CANONICAL_OVERRIDE));
     }
 
 }

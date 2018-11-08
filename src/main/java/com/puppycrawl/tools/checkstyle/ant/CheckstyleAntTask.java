@@ -29,8 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import org.apache.tools.ant.AntClassLoader;
@@ -44,7 +44,6 @@ import org.apache.tools.ant.types.FileSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
 
-import com.google.common.io.Closeables;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.ConfigurationLoader;
 import com.puppycrawl.tools.checkstyle.DefaultLogger;
@@ -64,7 +63,6 @@ import com.puppycrawl.tools.checkstyle.api.SeverityLevelCounter;
 /**
  * An implementation of a ANT task for calling checkstyle. See the documentation
  * of the task for usage.
- * @author Oliver Burn
  * @noinspection ClassLoaderInstantiation
  */
 public class CheckstyleAntTask extends Task {
@@ -272,15 +270,9 @@ public class CheckstyleAntTask extends Task {
         final long startTime = System.currentTimeMillis();
 
         try {
-            // output version info in debug mode
-            final ResourceBundle compilationProperties = ResourceBundle
-                    .getBundle("checkstylecompilation", Locale.ROOT);
-            final String version = compilationProperties
-                    .getString("checkstyle.compile.version");
-            final String compileTimestamp = compilationProperties
-                    .getString("checkstyle.compile.timestamp");
+            final String version = CheckstyleAntTask.class.getPackage().getImplementationVersion();
+
             log("checkstyle version " + version, Project.MSG_VERBOSE);
-            log("compiled on " + compileTimestamp, Project.MSG_VERBOSE);
 
             // Check for no arguments
             if (fileName == null
@@ -324,18 +316,9 @@ public class CheckstyleAntTask extends Task {
             processFiles(rootModule, warningCounter, checkstyleVersion);
         }
         finally {
-            destroyRootModule(rootModule);
-        }
-    }
-
-    /**
-     * Destroy root module. This method exists only due to bug in cobertura library
-     * https://github.com/cobertura/cobertura/issues/170
-     * @param rootModule Root module that was used to process files
-     */
-    private static void destroyRootModule(RootModule rootModule) {
-        if (rootModule != null) {
-            rootModule.destroy();
+            if (rootModule != null) {
+                rootModule.destroy();
+            }
         }
     }
 
@@ -353,7 +336,9 @@ public class CheckstyleAntTask extends Task {
         log("To locate the files took " + (endTime - startTime) + TIME_SUFFIX,
             Project.MSG_VERBOSE);
 
-        log("Running Checkstyle " + checkstyleVersion + " on " + files.size()
+        log("Running Checkstyle "
+                + Objects.toString(checkstyleVersion, "")
+                + " on " + files.size()
                 + " files", Project.MSG_INFO);
         log("Using configuration " + config, Project.MSG_VERBOSE);
 
@@ -444,17 +429,12 @@ public class CheckstyleAntTask extends Task {
 
         // Load the properties file if specified
         if (properties != null) {
-            InputStream inStream = null;
-            try {
-                inStream = Files.newInputStream(properties.toPath());
+            try (InputStream inStream = Files.newInputStream(properties.toPath())) {
                 returnValue.load(inStream);
             }
             catch (final IOException ex) {
                 throw new BuildException("Error loading Properties file '"
                         + properties + "'", ex, getLocation());
-            }
-            finally {
-                Closeables.closeQuietly(inStream);
             }
         }
 
@@ -616,7 +596,6 @@ public class CheckstyleAntTask extends Task {
 
     /**
      * Poor mans enumeration for the formatter types.
-     * @author Oliver Burn
      */
     public static class FormatterType extends EnumeratedAttribute {
 
@@ -632,7 +611,6 @@ public class CheckstyleAntTask extends Task {
 
     /**
      * Details about a formatter to be used.
-     * @author Oliver Burn
      */
     public static class Formatter {
 

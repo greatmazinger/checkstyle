@@ -23,7 +23,7 @@ import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -66,7 +66,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * List&lt;T&gt; list = ImmutableList.Builder&lt;T&gt;::new;     // Method reference
  * sort(list, Comparable::&lt;String&gt;compareTo);              // Method reference
  * </pre>
- * @author Oliver Burn
  */
 @FileStatefulCheck
 public class GenericWhitespaceCheck extends AbstractCheck {
@@ -312,7 +311,7 @@ public class GenericWhitespaceCheck extends AbstractCheck {
      *     false if there is nothing before or some other characters
      */
     private static boolean containsWhitespaceBefore(int before, String line) {
-        return before != 0 && CommonUtils.hasWhitespaceBefore(before, line);
+        return before != 0 && CommonUtil.hasWhitespaceBefore(before, line);
     }
 
     /**

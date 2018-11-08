@@ -33,13 +33,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import com.google.common.io.Closeables;
 import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
 
 public class SuppressionFilterTest extends AbstractModuleTestSupport {
@@ -54,12 +54,12 @@ public class SuppressionFilterTest extends AbstractModuleTestSupport {
 
     @Test
     public void testEqualsAndHashCode() {
-        EqualsVerifier
-                .forClass(SuppressionFilter.class)
+        final EqualsVerifierReport ev = EqualsVerifier.forClass(SuppressionFilter.class)
                 .usingGetClass()
                 .withIgnoredFields("file", "optional", "configuration")
                 .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
+                .report();
+        assertEquals("Error: " + ev.getMessage(), EqualsVerifierReport.SUCCESS, ev);
     }
 
     @Test
@@ -140,7 +140,7 @@ public class SuppressionFilterTest extends AbstractModuleTestSupport {
     @Test
     public void testNonExistentSuppressionUrlWithTrueOptional() throws Exception {
         final String fileName =
-                "http://checkstyle.sourceforge.net/non_existent_suppression.xml";
+                "https://checkstyle.org/non_existent_suppression.xml";
         final boolean optional = true;
         final SuppressionFilter filter = createSuppressionFilter(fileName, optional);
 
@@ -160,7 +160,7 @@ public class SuppressionFilterTest extends AbstractModuleTestSupport {
         checkerConfig.addAttribute("cacheFile", cacheFile.getPath());
 
         final String filePath = temporaryFolder.newFile("file.java").getPath();
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checkerConfig, filePath, expected);
         // One more time to use cache.
@@ -170,7 +170,7 @@ public class SuppressionFilterTest extends AbstractModuleTestSupport {
     @Test
     public void testRemoteFileExternalResourceContentDoesNotChange() throws Exception {
         final String[] urlCandidates = {
-            "http://checkstyle.sourceforge.net/files/suppressions_none.xml",
+            "https://checkstyle.org/files/suppressions_none.xml",
             "https://raw.githubusercontent.com/checkstyle/checkstyle/master/src/site/resources/"
                 + "files/suppressions_none.xml",
         };
@@ -198,7 +198,7 @@ public class SuppressionFilterTest extends AbstractModuleTestSupport {
             firstCheckerConfig.addAttribute("cacheFile", cacheFile.getPath());
 
             final String pathToEmptyFile = temporaryFolder.newFile("file.java").getPath();
-            final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+            final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
             verify(firstCheckerConfig, pathToEmptyFile, expected);
 
@@ -223,10 +223,7 @@ public class SuppressionFilterTest extends AbstractModuleTestSupport {
             int attemptCount = 0;
 
             while (attemptCount <= attemptLimit) {
-                InputStream stream = null;
-                try {
-                    final URL address = new URL(url);
-                    stream = address.openStream();
+                try (InputStream stream = new URL(url).openStream()) {
                     // Attempt to read a byte in order to check whether file content is available
                     available = stream.read() != -1;
                     break;
@@ -240,12 +237,8 @@ public class SuppressionFilterTest extends AbstractModuleTestSupport {
                         Thread.sleep(1000);
                     }
                     else {
-                        Closeables.closeQuietly(stream);
                         throw ex;
                     }
-                }
-                finally {
-                    Closeables.closeQuietly(stream);
                 }
             }
         }

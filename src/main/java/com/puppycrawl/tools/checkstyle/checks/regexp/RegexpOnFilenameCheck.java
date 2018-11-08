@@ -27,7 +27,7 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractFileSetCheck;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.FileText;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -182,7 +182,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * &lt;/module&gt;
  * </pre>
  *
- * @author Richard Veach
  */
 @StatelessCheck
 public class RegexpOnFilenameCheck extends AbstractFileSetCheck {
@@ -246,7 +245,7 @@ public class RegexpOnFilenameCheck extends AbstractFileSetCheck {
     @Override
     public void init() {
         if (fileNamePattern == null && folderPattern == null) {
-            fileNamePattern = CommonUtils.createPattern("\\s");
+            fileNamePattern = CommonUtil.createPattern("\\s");
         }
     }
 
@@ -270,7 +269,7 @@ public class RegexpOnFilenameCheck extends AbstractFileSetCheck {
         String fileName = file.getName();
 
         if (ignoreFileNameExtensions) {
-            fileName = CommonUtils.getFileNameWithoutExtension(fileName);
+            fileName = CommonUtil.getFileNameWithoutExtension(fileName);
         }
 
         return fileName;
@@ -335,10 +334,10 @@ public class RegexpOnFilenameCheck extends AbstractFileSetCheck {
         final String fileName = getStringOrDefault(fileNamePattern, "");
 
         if (match) {
-            log(0, MSG_MATCH, folder, fileName);
+            log(1, MSG_MATCH, folder, fileName);
         }
         else {
-            log(0, MSG_MISMATCH, folder, fileName);
+            log(1, MSG_MISMATCH, folder, fileName);
         }
     }
 

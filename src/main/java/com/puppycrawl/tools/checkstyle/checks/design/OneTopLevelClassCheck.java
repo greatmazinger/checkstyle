@@ -27,7 +27,7 @@ import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Checks that each top-level class, interface
@@ -82,7 +82,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *  so do not use the "tokens" property.
  * </p>
  *
- * @author maxvetrenko
  */
 @FileStatefulCheck
 public class OneTopLevelClassCheck extends AbstractCheck {
@@ -115,7 +114,7 @@ public class OneTopLevelClassCheck extends AbstractCheck {
     // ZERO tokens as Check do Traverse of Tree himself, he does not need to subscribed to Tokens
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override

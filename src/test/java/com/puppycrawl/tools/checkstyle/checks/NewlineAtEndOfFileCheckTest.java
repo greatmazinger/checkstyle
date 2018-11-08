@@ -25,13 +25,7 @@ import static java.util.Locale.ENGLISH;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.times;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import java.io.File;
@@ -45,20 +39,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
-import com.google.common.io.Closeables;
 import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Closeables.class)
 public class NewlineAtEndOfFileCheckTest
     extends AbstractModuleTestSupport {
 
@@ -72,36 +60,11 @@ public class NewlineAtEndOfFileCheckTest
         final DefaultConfiguration checkConfig =
             createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.LF.toString());
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(
             createChecker(checkConfig),
             getPath("InputNewlineAtEndOfFileLf.java"),
             expected);
-    }
-
-    /**
-     * Pitest requires all closes of streams and readers to be verified. Using PowerMock
-     * is almost only possibility to check it without rewriting production code.
-     *
-     * @throws Exception when code tested throws some exception
-     */
-    @Test
-    public void testCloseRandomAccessFile() throws Exception {
-        mockStatic(Closeables.class);
-        doNothing().when(Closeables.class);
-        Closeables.close(any(RandomAccessFile.class), anyBoolean());
-
-        final DefaultConfiguration checkConfig =
-                createModuleConfig(NewlineAtEndOfFileCheck.class);
-        checkConfig.addAttribute("lineSeparator", LineSeparatorOption.LF.toString());
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
-        verify(
-                createChecker(checkConfig),
-                getPath("InputNewlineAtEndOfFileLf.java"),
-                expected);
-
-        verifyStatic(Closeables.class, times(1));
-        Closeables.close(any(RandomAccessFile.class), anyBoolean());
     }
 
     @Test
@@ -109,7 +72,7 @@ public class NewlineAtEndOfFileCheckTest
         final DefaultConfiguration checkConfig =
             createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.CRLF.toString());
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(
             createChecker(checkConfig),
             getPath("InputNewlineAtEndOfFileCrlf.java"),
@@ -121,7 +84,7 @@ public class NewlineAtEndOfFileCheckTest
         final DefaultConfiguration checkConfig =
             createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.CR.toString());
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(
             createChecker(checkConfig),
             getPath("InputNewlineAtEndOfFileCr.java"),
@@ -133,7 +96,7 @@ public class NewlineAtEndOfFileCheckTest
         final DefaultConfiguration checkConfig =
             createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.LF_CR_CRLF.toString());
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(
             createChecker(checkConfig),
             getPath("InputNewlineAtEndOfFileCrlf.java"),
@@ -154,7 +117,7 @@ public class NewlineAtEndOfFileCheckTest
             createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.LF.toString());
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_NO_NEWLINE_EOF),
+            "1: " + getCheckMessage(MSG_KEY_NO_NEWLINE_EOF),
         };
         verify(
             createChecker(checkConfig),
@@ -168,7 +131,7 @@ public class NewlineAtEndOfFileCheckTest
             createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.LF_CR_CRLF.toString());
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_NO_NEWLINE_EOF),
+            "1: " + getCheckMessage(MSG_KEY_NO_NEWLINE_EOF),
         };
         verify(
             createChecker(checkConfig),
@@ -201,7 +164,7 @@ public class NewlineAtEndOfFileCheckTest
             createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.LF.toString());
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_NO_NEWLINE_EOF),
+            "1: " + getCheckMessage(MSG_KEY_NO_NEWLINE_EOF),
         };
         verify(
             createChecker(checkConfig),
@@ -214,7 +177,7 @@ public class NewlineAtEndOfFileCheckTest
         final DefaultConfiguration checkConfig =
                 createModuleConfig(NewlineAtEndOfFileCheck.class);
         checkConfig.addAttribute("lineSeparator", LineSeparatorOption.LF.toString());
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(
                 createChecker(checkConfig),
                 getPath("InputNewlineAtEndOfFileNewlineAtEnd.txt"),

@@ -23,7 +23,7 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
+import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
 
 /**
  * <p>
@@ -32,7 +32,7 @@ import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
  * </p>
  * <p>
  * Rationale: <a
- * href="http://www.oracle.com/technetwork/java/javase/documentation/codeconventions-141270.html">
+ * href="https://www.oracle.com/technetwork/java/javase/documentation/codeconventions-141270.html">
  * the SUN Code conventions chapter 6.1</a> recommends that
  * declarations should be one per line.
  * </p>
@@ -42,7 +42,6 @@ import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
  * <pre>
  * &lt;module name="MultipleVariableDeclarations"/&gt;
  * </pre>
- * @author o_sukhodolsky
  */
 @StatelessCheck
 public class MultipleVariableDeclarationsCheck extends AbstractCheck {
@@ -88,7 +87,7 @@ public class MultipleVariableDeclarationsCheck extends AbstractCheck {
 
             if (nextNode != null
                     && nextNode.getType() == TokenTypes.VARIABLE_DEF) {
-                final DetailAST firstNode = CheckUtils.getFirstNode(ast);
+                final DetailAST firstNode = CheckUtil.getFirstNode(ast);
                 if (isCommaSeparated) {
                     // Check if the multiple variable declarations are in a
                     // for loop initializer. If they are, then no warning
@@ -102,7 +101,7 @@ public class MultipleVariableDeclarationsCheck extends AbstractCheck {
                 }
                 else {
                     final DetailAST lastNode = getLastNode(ast);
-                    final DetailAST firstNextNode = CheckUtils.getFirstNode(nextNode);
+                    final DetailAST firstNextNode = CheckUtil.getFirstNode(nextNode);
 
                     if (firstNextNode.getLineNo() == lastNode.getLineNo()) {
                         log(firstNode, MSG_MULTIPLE);

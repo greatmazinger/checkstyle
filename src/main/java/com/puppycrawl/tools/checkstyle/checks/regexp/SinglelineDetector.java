@@ -25,7 +25,6 @@ import com.puppycrawl.tools.checkstyle.api.FileText;
 
 /**
  * A detector that matches individual lines.
- * @author oliver
  */
 class SinglelineDetector {
 
@@ -73,11 +72,11 @@ class SinglelineDetector {
     private void finish() {
         if (currentMatches < options.getMinimum()) {
             if (options.getMessage().isEmpty()) {
-                options.getReporter().log(0, MSG_REGEXP_MINIMUM,
+                options.getReporter().log(1, MSG_REGEXP_MINIMUM,
                         options.getMinimum(), options.getFormat());
             }
             else {
-                options.getReporter().log(0, options.getMessage());
+                options.getReporter().log(1, options.getMessage());
             }
         }
     }

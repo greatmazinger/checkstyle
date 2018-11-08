@@ -31,7 +31,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 public abstract class AbstractIndentationTestSupport extends AbstractModuleTestSupport {
 
@@ -106,7 +106,7 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
                 lineNumber++;
             }
         }
-        return result.toArray(new Integer[result.size()]);
+        return result.toArray(new Integer[0]);
     }
 
     private static int getIndentFromComment(String comment) {
@@ -205,7 +205,7 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
         int lineStart = 0;
         for (int index = 0; index < line.length(); ++index) {
             if (!Character.isWhitespace(line.charAt(index))) {
-                lineStart = CommonUtils.lengthExpandedTabs(line, index, tabWidth);
+                lineStart = CommonUtil.lengthExpandedTabs(line, index, tabWidth);
                 break;
             }
         }
@@ -214,7 +214,10 @@ public abstract class AbstractIndentationTestSupport extends AbstractModuleTestS
 
     private enum CommentType {
 
-        MULTILEVEL, SINGLE_LEVEL, NON_STRICT_LEVEL, UNKNOWN
+        MULTILEVEL,
+        SINGLE_LEVEL,
+        NON_STRICT_LEVEL,
+        UNKNOWN,
 
     }
 

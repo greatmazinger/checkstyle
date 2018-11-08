@@ -22,7 +22,6 @@ package com.puppycrawl.tools.checkstyle.checks.imports;
 /**
  * Represents the result of an access check.
  *
- * @author Oliver Burn
  */
 enum AccessResult {
 
@@ -31,6 +30,6 @@ enum AccessResult {
     /** Represents that access is disallowed. */
     DISALLOWED,
     /** Represents that access is unknown. */
-    UNKNOWN
+    UNKNOWN,
 
 }

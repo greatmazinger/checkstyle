@@ -23,6 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,11 +38,15 @@ import com.puppycrawl.tools.checkstyle.internal.utils.CloseAndFlushTestByteArray
 
 /**
  * Enter a description of class XMLLoggerTest.java.
- * @author Rick Giles
  */
 // -@cs[AbbreviationAsWordInName] Test should be named as its main class.
 public class XMLLoggerTest extends AbstractXmlTestSupport {
 
+    /**
+     * Output stream to hold the test results. The IntelliJ IDEA issues the AutoCloseableResource
+     * warning here, so it need to be suppressed. The {@code ByteArrayOutputStream} does not hold
+     * any resources that need to be released.
+     */
     private final CloseAndFlushTestByteArrayOutputStream outStream =
         new CloseAndFlushTestByteArrayOutputStream();
 
@@ -342,6 +347,20 @@ public class XMLLoggerTest extends AbstractXmlTestSupport {
         logger.fileFinished(errorEvent);
         logger.auditFinished(null);
         verifyXml(getPath("ExpectedXMLLoggerError.xml"), outStream, message.getMessage());
+    }
+
+    @Test
+    public void testNullOutputStreamOptions() {
+        try {
+            final XMLLogger logger = new XMLLogger(outStream, null);
+            // assert required to calm down eclipse's 'The allocated object is never used' violation
+            assertNotNull("Null instance", logger);
+            fail("Exception was expected");
+        }
+        catch (IllegalArgumentException exception) {
+            assertEquals("Invalid error message", "Parameter outputStreamOptions can not be null",
+                    exception.getMessage());
+        }
     }
 
     @Test

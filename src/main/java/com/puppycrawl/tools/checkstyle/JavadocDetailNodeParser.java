@@ -23,10 +23,10 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 
-import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.BufferedTokenStream;
+import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonToken;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.FailedPredicateException;
@@ -47,13 +47,12 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
 import com.puppycrawl.tools.checkstyle.api.JavadocTokenTypes;
 import com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocNodeImpl;
-import com.puppycrawl.tools.checkstyle.grammars.javadoc.JavadocLexer;
-import com.puppycrawl.tools.checkstyle.grammars.javadoc.JavadocParser;
-import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
+import com.puppycrawl.tools.checkstyle.grammar.javadoc.JavadocLexer;
+import com.puppycrawl.tools.checkstyle.grammar.javadoc.JavadocParser;
+import com.puppycrawl.tools.checkstyle.utils.JavadocUtil;
 
 /**
  * Used for parsing Javadoc comment as DetailNode tree.
- * @author bizmailov
  *
  */
 public class JavadocDetailNodeParser {
@@ -105,7 +104,7 @@ public class JavadocDetailNodeParser {
     public ParseStatus parseJavadocAsDetailNode(DetailAST javadocCommentAst) {
         blockCommentLineNumber = javadocCommentAst.getLineNo();
 
-        final String javadocComment = JavadocUtils.getJavadocCommentContent(javadocCommentAst);
+        final String javadocComment = JavadocUtil.getJavadocCommentContent(javadocCommentAst);
 
         // Use a new error listener each time to be able to use
         // one check instance for multiple files to be checked
@@ -166,12 +165,9 @@ public class JavadocDetailNodeParser {
      * @param blockComment
      *        block comment content.
      * @return parse tree
-     * @noinspection deprecation
      */
     private JavadocParser createJavadocParser(String blockComment) {
-        final ANTLRInputStream input = new ANTLRInputStream(blockComment);
-
-        final JavadocLexer lexer = new JavadocLexer(input);
+        final JavadocLexer lexer = new JavadocLexer(CharStreams.fromString(blockComment));
 
         final CommonTokenStream tokens = new CommonTokenStream(lexer);
 
@@ -220,7 +216,7 @@ public class JavadocDetailNodeParser {
                 parseTreeParent = parseTreeParent.getChild(0);
             }
             else {
-                JavadocNodeImpl nextJavadocSibling = (JavadocNodeImpl) JavadocUtils
+                JavadocNodeImpl nextJavadocSibling = (JavadocNodeImpl) JavadocUtil
                         .getNextSibling(currentJavadocParent);
 
                 ParseTree nextParseTreeSibling = getNextSibling(parseTreeParent);
@@ -232,7 +228,7 @@ public class JavadocDetailNodeParser {
                     ParseTree tempParseTreeParent = parseTreeParent.getParent();
 
                     while (nextJavadocSibling == null && tempJavadocParent != null) {
-                        nextJavadocSibling = (JavadocNodeImpl) JavadocUtils
+                        nextJavadocSibling = (JavadocNodeImpl) JavadocUtil
                                 .getNextSibling(tempJavadocParent);
 
                         nextParseTreeSibling = getNextSibling(tempParseTreeParent);
@@ -419,7 +415,7 @@ public class JavadocDetailNodeParser {
             final String className = getNodeClassNameWithoutContext(node);
             final String typeName =
                     CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, className);
-            tokenType = JavadocUtils.getTokenId(typeName);
+            tokenType = JavadocUtil.getTokenId(typeName);
         }
 
         return tokenType;
@@ -625,7 +621,7 @@ public class JavadocDetailNodeParser {
          * Stores the first non-tight HTML tag encountered while parsing javadoc.
          *
          * @see <a
-         *     href="http://checkstyle.sourceforge.net/writingjavadocchecks.html#Tight-HTML_rules">
+         *     href="https://checkstyle.org/writingjavadocchecks.html#Tight-HTML_rules">
          *     Tight HTML rules</a>
          */
         private Token firstNonTightHtmlTag;
@@ -667,7 +663,7 @@ public class JavadocDetailNodeParser {
          *
          * @return returns true if the javadoc has at least one non-tight HTML tag; false otherwise
          * @see <a
-         *     href="http://checkstyle.sourceforge.net/writingjavadocchecks.html#Tight-HTML_rules">
+         *     href="https://checkstyle.org/writingjavadocchecks.html#Tight-HTML_rules">
          *     Tight HTML rules</a>
          */
         public boolean isNonTight() {

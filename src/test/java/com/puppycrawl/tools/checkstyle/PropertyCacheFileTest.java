@@ -37,7 +37,6 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -67,11 +66,11 @@ import com.google.common.io.Closeables;
 import com.google.common.io.Flushables;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ PropertyCacheFile.class, ByteStreams.class,
-        CommonUtils.class, Closeables.class, Flushables.class})
+        CommonUtil.class, Closeables.class, Flushables.class})
 public class PropertyCacheFileTest extends AbstractPathTestSupport {
 
     @Rule
@@ -150,10 +149,6 @@ public class PropertyCacheFileTest extends AbstractPathTestSupport {
 
     @Test
     public void testPopulateDetails() throws IOException {
-        mockStatic(Closeables.class);
-        doNothing().when(Closeables.class);
-        Closeables.closeQuietly(any(InputStream.class));
-
         final Configuration config = new DefaultConfiguration("myName");
         final PropertyCacheFile cache = new PropertyCacheFile(config,
                 getPath("InputPropertyCacheFile"));
@@ -169,9 +164,6 @@ public class PropertyCacheFileTest extends AbstractPathTestSupport {
         assertEquals("Invalid cache value", "value", cache.get("key"));
         assertNotNull("Config hash key should not be null",
                 cache.get(PropertyCacheFile.CONFIG_HASH_KEY));
-
-        verifyStatic(Closeables.class, times(2));
-        Closeables.closeQuietly(any(InputStream.class));
     }
 
     @Test
@@ -229,7 +221,7 @@ public class PropertyCacheFileTest extends AbstractPathTestSupport {
         cache.putExternalResources(resources);
 
         final MessageDigest digest = MessageDigest.getInstance("SHA-1");
-        final URI uri = CommonUtils.getUriByFilename(pathToResource);
+        final URI uri = CommonUtil.getUriByFilename(pathToResource);
         final byte[] input =
                 ByteStreams.toByteArray(new BufferedInputStream(uri.toURL().openStream()));
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -358,12 +350,12 @@ public class PropertyCacheFileTest extends AbstractPathTestSupport {
     public void testPutNonExistentExternalResourceSameExceptionBetweenRuns() throws Exception {
         final File cacheFile = temporaryFolder.newFile();
 
-        // We mock getUriByFilename method of CommonUtils to guarantee that it will
+        // We mock getUriByFilename method of CommonUtil to guarantee that it will
         // throw CheckstyleException with the specific content.
-        mockStatic(CommonUtils.class);
+        mockStatic(CommonUtil.class);
         final CheckstyleException mockException =
             new CheckstyleException("Cannot get URL for cache file " + cacheFile.getAbsolutePath());
-        when(CommonUtils.getUriByFilename(any(String.class)))
+        when(CommonUtil.getUriByFilename(any(String.class)))
             .thenThrow(mockException);
 
         // We invoke 'putExternalResources' twice to invalidate cache
@@ -406,7 +398,6 @@ public class PropertyCacheFileTest extends AbstractPathTestSupport {
 
     /**
      * It is OK to have long test method name here as it describes the test purpose.
-     * @noinspection InstanceMethodNamingConvention
      */
     @Test
     public void testPutNonExistentExternalResourceDifferentExceptionsBetweenRuns()
@@ -422,11 +413,11 @@ public class PropertyCacheFileTest extends AbstractPathTestSupport {
             final Configuration config = new DefaultConfiguration("myConfig");
             final PropertyCacheFile cache = new PropertyCacheFile(config, cacheFile.getPath());
 
-            // We mock getUriByFilename method of CommonUtils to guarantee that it will
+            // We mock getUriByFilename method of CommonUtil to guarantee that it will
             // throw CheckstyleException with the specific content.
-            mockStatic(CommonUtils.class);
+            mockStatic(CommonUtil.class);
             final CheckstyleException mockException = new CheckstyleException("Exception #" + i);
-            when(CommonUtils.getUriByFilename(any(String.class)))
+            when(CommonUtil.getUriByFilename(any(String.class)))
                 .thenThrow(mockException);
 
             cache.load();

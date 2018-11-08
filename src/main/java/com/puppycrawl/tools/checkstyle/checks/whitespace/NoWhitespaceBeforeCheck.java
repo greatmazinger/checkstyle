@@ -23,7 +23,7 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -59,8 +59,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *     &lt;property name="allowLineBreaks" value="true"/&gt;
  * &lt;/module&gt;
  * </pre>
- * @author Rick Giles
- * @author lkuehne
  */
 @StatelessCheck
 public class NoWhitespaceBeforeCheck
@@ -103,7 +101,7 @@ public class NoWhitespaceBeforeCheck
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override

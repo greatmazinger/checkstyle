@@ -24,7 +24,7 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -54,7 +54,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *    &lt;property name="max" value="60"/&gt;
  * &lt;/module&gt;
  * </pre>
- * @author Lars Kühne
  */
 @StatelessCheck
 public class MethodLengthCheck extends AbstractCheck {
@@ -86,7 +85,7 @@ public class MethodLengthCheck extends AbstractCheck {
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -97,8 +96,7 @@ public class MethodLengthCheck extends AbstractCheck {
                 openingBrace.findFirstToken(TokenTypes.RCURLY);
             final int length = getLengthOfBlock(openingBrace, closingBrace);
             if (length > max) {
-                log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY,
-                        length, max);
+                log(ast, MSG_KEY, length, max);
             }
         }
     }

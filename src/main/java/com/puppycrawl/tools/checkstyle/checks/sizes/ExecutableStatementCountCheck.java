@@ -30,7 +30,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 /**
  * Restricts the number of executable statements to a specified limit
  * (default = 30).
- * @author Simon Harris
  */
 @FileStatefulCheck
 public final class ExecutableStatementCountCheck
@@ -151,8 +150,7 @@ public final class ExecutableStatementCountCheck
     private void leaveMemberDef(DetailAST ast) {
         final int count = context.getCount();
         if (count > max) {
-            log(ast.getLineNo(), ast.getColumnNo(),
-                    MSG_KEY, count, max);
+            log(ast, MSG_KEY, count, max);
         }
         context = contextStack.pop();
     }
@@ -183,7 +181,6 @@ public final class ExecutableStatementCountCheck
 
     /**
      * Class to encapsulate counting information about one member.
-     * @author Simon Harris
      */
     private static class Context {
 

@@ -27,7 +27,7 @@ import org.junit.Test;
 import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 public class RedundantModifierCheckTest
     extends AbstractModuleTestSupport {
@@ -79,7 +79,7 @@ public class RedundantModifierCheckTest
             throws Exception {
         final DefaultConfiguration checkConfig =
                 createModuleConfig(RedundantModifierCheck.class);
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(checkConfig, getPath("InputRedundantModifierStaticMethodInInterface.java"),
             expected);
     }
@@ -135,10 +135,10 @@ public class RedundantModifierCheckTest
                 createModuleConfig(RedundantModifierCheck.class);
 
         final String[] expected = {
-            "18:33: " + getCheckMessage(MSG_KEY, "public"),
-            "22:41: " + getCheckMessage(MSG_KEY, "public"),
-            "33:33: " + getCheckMessage(MSG_KEY, "public"),
-            "41:33: " + getCheckMessage(MSG_KEY, "public"),
+            "18:17: " + getCheckMessage(MSG_KEY, "public"),
+            "22:21: " + getCheckMessage(MSG_KEY, "public"),
+            "33:12: " + getCheckMessage(MSG_KEY, "public"),
+            "41:17: " + getCheckMessage(MSG_KEY, "public"),
         };
 
         verify(checkConfig,
@@ -167,7 +167,7 @@ public class RedundantModifierCheckTest
     public void testGetRequiredTokens() {
         final RedundantModifierCheck redundantModifierCheckObj = new RedundantModifierCheck();
         final int[] actual = redundantModifierCheckObj.getRequiredTokens();
-        final int[] expected = CommonUtils.EMPTY_INT_ARRAY;
+        final int[] expected = CommonUtil.EMPTY_INT_ARRAY;
         Assert.assertArrayEquals("Invalid required tokens", expected, actual);
     }
 

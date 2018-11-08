@@ -55,7 +55,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * &lt;/module&gt;
  * </pre>
  *
- * @author Rob Worth
  */
 @StatelessCheck
 public class AnonInnerLengthCheck extends AbstractCheck {
@@ -96,8 +95,7 @@ public class AnonInnerLengthCheck extends AbstractCheck {
             final int length =
                 closingBrace.getLineNo() - openingBrace.getLineNo() + 1;
             if (length > max) {
-                log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY,
-                        length, max);
+                log(ast, MSG_KEY, length, max);
             }
         }
     }

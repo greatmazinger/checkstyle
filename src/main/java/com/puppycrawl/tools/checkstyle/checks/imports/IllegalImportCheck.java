@@ -28,14 +28,14 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FullIdent;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
  * Checks for imports from a set of illegal packages.
  * By default, the check rejects all {@code sun.*} packages
  * since programs that contain direct calls to the {@code sun.*} packages
- * are <a href="http://www.oracle.com/technetwork/java/faq-sun-packages-142232.html">
+ * are <a href="https://www.oracle.com/technetwork/java/faq-sun-packages-142232.html">
  * not 100% Pure Java</a>.
  * </p>
  * <p>
@@ -60,8 +60,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * Compatible with Java 1.5 source.
  *
  * </pre>
- * @author Oliver Burn
- * @author Lars Kühne
  */
 @StatelessCheck
 public class IllegalImportCheck
@@ -107,7 +105,7 @@ public class IllegalImportCheck
         illegalPkgs = from.clone();
         illegalPkgsRegexps.clear();
         for (String illegalPkg : illegalPkgs) {
-            illegalPkgsRegexps.add(CommonUtils.createPattern("^" + illegalPkg + "\\..*"));
+            illegalPkgsRegexps.add(CommonUtil.createPattern("^" + illegalPkg + "\\..*"));
         }
     }
 
@@ -118,7 +116,7 @@ public class IllegalImportCheck
     public void setIllegalClasses(String... from) {
         illegalClasses = from.clone();
         for (String illegalClass : illegalClasses) {
-            illegalClassesRegexps.add(CommonUtils.createPattern(illegalClass));
+            illegalClassesRegexps.add(CommonUtil.createPattern(illegalClass));
         }
     }
 
@@ -157,8 +155,7 @@ public class IllegalImportCheck
                 ast.getFirstChild().getNextSibling());
         }
         if (isIllegalImport(imp.getText())) {
-            log(ast.getLineNo(),
-                ast.getColumnNo(),
+            log(ast,
                 MSG_KEY,
                 imp.getText());
         }

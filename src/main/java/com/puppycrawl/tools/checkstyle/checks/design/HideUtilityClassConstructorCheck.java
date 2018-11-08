@@ -32,7 +32,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * A common mistake is forgetting to hide the default constructor.
  * </p>
  *
- * @author lkuehne
  */
 @StatelessCheck
 public class HideUtilityClassConstructorCheck extends AbstractCheck {
@@ -85,7 +84,7 @@ public class HideUtilityClassConstructorCheck extends AbstractCheck {
                 && !hasNonStaticMethodOrField && hasNonPrivateStaticMethodOrField;
 
             if (isUtilClass && hasAccessibleCtor && !hasStaticModifier) {
-                log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY);
+                log(ast, MSG_KEY);
             }
         }
     }

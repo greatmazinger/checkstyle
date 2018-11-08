@@ -100,14 +100,12 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * &lt;/module&gt;
  * </pre>
  *
- * @author Travis Schneeberger
  */
 @StatelessCheck
 public final class AnnotationUseStyleCheck extends AbstractCheck {
 
     /**
      * Defines the styles for defining elements in an annotation.
-     * @author Travis Schneeberger
      */
     public enum ElementStyle {
 
@@ -145,7 +143,6 @@ public final class AnnotationUseStyleCheck extends AbstractCheck {
      * Defines the two styles for defining
      * elements in an annotation.
      *
-     * @author Travis Schneeberger
      */
     public enum TrailingArrayComma {
 
@@ -174,7 +171,6 @@ public final class AnnotationUseStyleCheck extends AbstractCheck {
      * Defines the two styles for defining
      * elements in an annotation.
      *
-     * @author Travis Schneeberger
      */
     public enum ClosingParens {
 
@@ -470,13 +466,11 @@ public final class AnnotationUseStyleCheck extends AbstractCheck {
 
         if (trailingArrayComma == TrailingArrayComma.ALWAYS
             && (comma == null || comma.getType() != TokenTypes.COMMA)) {
-            log(rCurly.getLineNo(),
-                rCurly.getColumnNo(), MSG_KEY_ANNOTATION_TRAILING_COMMA_MISSING);
+            log(rCurly, MSG_KEY_ANNOTATION_TRAILING_COMMA_MISSING);
         }
         else if (trailingArrayComma == TrailingArrayComma.NEVER
             && comma != null && comma.getType() == TokenTypes.COMMA) {
-            log(comma.getLineNo(),
-                comma.getColumnNo(), MSG_KEY_ANNOTATION_TRAILING_COMMA_PRESENT);
+            log(comma, MSG_KEY_ANNOTATION_TRAILING_COMMA_PRESENT);
         }
     }
 

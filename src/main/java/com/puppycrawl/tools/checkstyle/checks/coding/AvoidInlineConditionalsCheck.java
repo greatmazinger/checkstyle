@@ -35,7 +35,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * Rationale: Some developers find inline conditionals hard to read,
  * so their company's coding standards forbids them.
  *
- * @author lkuehne
  */
 @StatelessCheck
 public class AvoidInlineConditionalsCheck extends AbstractCheck {
@@ -66,7 +65,7 @@ public class AvoidInlineConditionalsCheck extends AbstractCheck {
         // the only place a QUESTION token can occur is in inline conditionals
         // so no need to do any further tricks here - pretty trivial Check!
 
-        log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY);
+        log(ast, MSG_KEY);
     }
 
 }

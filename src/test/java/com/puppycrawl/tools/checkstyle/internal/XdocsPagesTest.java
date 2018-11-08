@@ -81,13 +81,13 @@ import com.puppycrawl.tools.checkstyle.internal.utils.CheckUtil;
 import com.puppycrawl.tools.checkstyle.internal.utils.TestUtil;
 import com.puppycrawl.tools.checkstyle.internal.utils.XdocUtil;
 import com.puppycrawl.tools.checkstyle.internal.utils.XmlUtil;
-import com.puppycrawl.tools.checkstyle.utils.TokenUtils;
+import com.puppycrawl.tools.checkstyle.utils.TokenUtil;
 
 public class XdocsPagesTest {
 
     private static final Path AVAILABLE_CHECKS_PATH = Paths.get("src/xdocs/checks.xml");
     private static final String LINK_TEMPLATE =
-            "(?s).*<a href=\"config_\\w+\\.html#%1$s\">%1$s</a>.*";
+            "(?s).*<a href=\"config_\\w+\\.html#%1$s\">(\\s)*%1$s</a>.*";
 
     private static final Pattern VERSION = Pattern.compile("\\d+\\.\\d+(\\.\\d+)?");
 
@@ -165,6 +165,49 @@ public class XdocsPagesTest {
     }
 
     @Test
+    public void testAllSubSections() throws Exception {
+        for (Path path : XdocUtil.getXdocsFilePaths()) {
+            final String input = new String(Files.readAllBytes(path), UTF_8);
+            final String fileName = path.getFileName().toString();
+
+            final Document document = XmlUtil.getRawXml(fileName, input, input);
+            final NodeList subSections = document.getElementsByTagName("subsection");
+
+            for (int position = 0; position < subSections.getLength(); position++) {
+                final Node subSection = subSections.item(position);
+                final Node name = subSection.getAttributes().getNamedItem("name");
+
+                Assert.assertNotNull("All sub-sections in '" + fileName + "' must have a name",
+                        name);
+
+                final Node id = subSection.getAttributes().getNamedItem("id");
+
+                Assert.assertNotNull("All sub-sections in '" + fileName + "' must have an id", id);
+
+                final String sectionName;
+
+                if ("google_style.xml".equals(fileName)) {
+                    sectionName = "Google";
+                }
+                else if ("sun_style.xml".equals(fileName)) {
+                    sectionName = "Sun";
+                }
+                else {
+                    sectionName = subSection.getParentNode().getAttributes()
+                            .getNamedItem("name").getTextContent();
+                }
+
+                final String nameString = name.getNodeValue();
+                final String idString = id.getNodeValue();
+
+                Assert.assertEquals(fileName + " sub-section " + nameString + " for section "
+                        + sectionName + " must match",
+                        (sectionName + " " + nameString).replace(' ', '_'), idString);
+            }
+        }
+    }
+
+    @Test
     public void testAllXmlExamples() throws Exception {
         for (Path path : XdocUtil.getXdocsFilePaths()) {
             final String input = new String(Files.readAllBytes(path), UTF_8);
@@ -215,8 +258,8 @@ public class XdocsPagesTest {
                     .getCanonicalPath();
 
             code = "<?xml version=\"1.0\"?>\n<!DOCTYPE module PUBLIC "
-                    + "\"-//Puppy Crawl//DTD Check Configuration 1.3//EN\" \"" + dtdPath + "\">\n"
-                    + code;
+                    + "\"-//Checkstyle//DTD Checkstyle Configuration 1.3//EN\" \"" + dtdPath
+                    + "\">\n" + code;
         }
         return code;
     }
@@ -358,12 +401,18 @@ public class XdocsPagesTest {
 
         int subSectionPos = 0;
         for (Node subSection : XmlUtil.getChildrenElements(section)) {
+            if (subSectionPos == 0 && "p".equals(subSection.getNodeName())) {
+                validateSinceDescriptionSection(fileName, sectionName, subSection);
+                continue;
+            }
+
             final String subSectionName = subSection.getAttributes().getNamedItem("name")
                     .getNodeValue();
 
             // can be in different orders, and completely optional
             if ("Notes".equals(subSectionName)
-                    || "Rule Description".equals(subSectionName)) {
+                    || "Rule Description".equals(subSectionName)
+                    || "Metadata".equals(subSectionName)) {
                 continue;
             }
 
@@ -383,7 +432,6 @@ public class XdocsPagesTest {
 
             switch (subSectionPos) {
                 case 0:
-                    validateSinceDescriptionSection(fileName, sectionName, subSection);
                     break;
                 case 1:
                     validatePropertySection(fileName, sectionName, subSection, instance);
@@ -407,6 +455,15 @@ public class XdocsPagesTest {
             }
 
             subSectionPos++;
+        }
+
+        if ("Checker".equals(sectionName)) {
+            Assert.assertTrue(fileName + " section '" + sectionName
+                    + "' should contain up to 'Package' sub-section", subSectionPos >= 6);
+        }
+        else {
+            Assert.assertTrue(fileName + " section '" + sectionName
+                    + "' should contain up to 'Parent' sub-section", subSectionPos >= 7);
         }
     }
 
@@ -879,7 +936,7 @@ public class XdocsPagesTest {
                                     sb.append(", ");
                                 }
 
-                                sb.append(TokenUtils.getTokenName(i));
+                                sb.append(TokenUtil.getTokenName(i));
                             }
                         }
 
@@ -896,7 +953,7 @@ public class XdocsPagesTest {
                                 sb.append(", ");
                             }
 
-                            sb.append(TokenUtils.getTokenName((int) Array.get(value, i)));
+                            sb.append(TokenUtil.getTokenName((int) Array.get(value, i)));
                         }
 
                         result = sb.toString();
@@ -938,7 +995,7 @@ public class XdocsPagesTest {
                         final String[] newArray = new String[Array.getLength(value)];
 
                         for (int i = 0; i < newArray.length; i++) {
-                            newArray[i] = TokenUtils.getTokenName(((Number) Array.get(value, i))
+                            newArray[i] = TokenUtil.getTokenName(((Number) Array.get(value, i))
                                     .intValue());
                         }
 
@@ -971,7 +1028,7 @@ public class XdocsPagesTest {
                     result = '"' + value.toString().replace("\n", "\\n").replace("\t", "\\t")
                             .replace("\r", "\\r").replace("\f", "\\f") + '"';
 
-                    if ("\"$^\"".equals(result)) {
+                    if ("\"^$\"".equals(result)) {
                         result += " (empty)";
                     }
                 }
@@ -1233,7 +1290,7 @@ public class XdocsPagesTest {
             Node subSection) {
         final String expected;
 
-        if (hasParentModule(sectionName)) {
+        if (!"TreeWalker".equals(sectionName) && hasParentModule(sectionName)) {
             expected = "TreeWalker";
         }
         else {

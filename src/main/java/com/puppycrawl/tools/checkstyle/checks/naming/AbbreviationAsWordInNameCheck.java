@@ -30,15 +30,14 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
  * The Check validate abbreviations(consecutive capital letters) length in
  * identifier name, it also allows to enforce camel case naming. Please read more at
- * <a href=
- *  "http://checkstyle.sourceforge.net/reports/google-java-style-20170228.html#s5.3-camel-case">
+ * <a href="styleguides/google-java-style-20170228.html#s5.3-camel-case">
  * Google Style Guide</a> to get to know how to avoid long abbreviations in names.
  * </p>
  * <p>
@@ -51,48 +50,104 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * is what should be used to enforce strict camel casing. The identifier 'MyTest' would
  * be allowed, but 'MyTEst' would not be.
  * </p>
+ * <ul>
+ * <li>
+ * Property {@code allowedAbbreviationLength} - Indicate the number of consecutive capital
+ * letters allowed in targeted identifiers (abbreviations in the classes, interfaces, variables
+ * and methods names, ... ). Default value is {@code 3}.
+ * </li>
+ * <li>
+ * Property {@code allowedAbbreviations} - Specify list of abbreviations that must be skipped for
+ * checking. Abbreviations should be separated by comma. Default value is {@code {}}.
+ * </li>
+ * <li>
+ * Property {@code ignoreFinal} - Allow to skip variables with {@code final} modifier. Default
+ * value is {@code true}.
+ * </li>
+ * <li>
+ * Property {@code ignoreStatic} - Allow to skip variables with {@code static} modifier. Default
+ * value is {@code true}.
+ * </li>
+ * <li>
+ * Property {@code ignoreOverriddenMethods} - Allow to ignore methods tagged with {@code @Override}
+ * annotation (that usually mean inherited name). Default value is {@code true}.
+ * </li>
+ * <li>
+ * Property {@code tokens} - tokens to check Default value is:
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">ANNOTATION_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">ANNOTATION_FIELD_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#PARAMETER_DEF">PARAMETER_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">VARIABLE_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">METHOD_DEF</a>.
+ * </li>
+ * </ul>
  * <p>
- * Option {@code allowedAbbreviationLength} indicates on the allowed amount of capital
- * letters in abbreviations in the classes, interfaces,
- * variables and methods names. Default value is '3'.
- * </p>
- * <p>
- * Option {@code allowedAbbreviations} - list of abbreviations that
- * must be skipped for checking. Abbreviations should be separated by comma,
- * no spaces are allowed.
- * </p>
- * <p>
- * Option {@code ignoreFinal} allow to skip variables with {@code final} modifier.
- * Default value is {@code true}.
- * </p>
- * <p>
- * Option {@code ignoreStatic} allow to skip variables with {@code static} modifier.
- * Default value is {@code true}.
- * </p>
- * <p>
- * Option {@code ignoreOverriddenMethod} - Allows to
- * ignore methods tagged with {@code @Override} annotation
- * (that usually mean inherited name). Default value is {@code true}.
- * </p>
  * Default configuration
+ * </p>
  * <pre>
- * &lt;module name="AbbreviationAsWordInName" /&gt;
+ * &lt;module name="AbbreviationAsWordInName"/&gt;
  * </pre>
  * <p>
- * To configure to check variables and classes identifiers, do not ignore
- * variables with static modifier
- * and allow no abbreviations (enforce camel case phrase) but allow XML and URL abbreviations.
+ * To configure to check all variables and identifiers
+ * (including ones with the static modifier) and enforce
+ * no abbreviations (essentially camel case) except for
+ * words like 'XML' and 'URL'.
  * </p>
+ * <p>Configuration:</p>
  * <pre>
  * &lt;module name="AbbreviationAsWordInName"&gt;
- *     &lt;property name="tokens" value="VARIABLE_DEF,CLASS_DEF"/&gt;
- *     &lt;property name="ignoreStatic" value="false"/&gt;
- *     &lt;property name="allowedAbbreviationLength" value="1"/&gt;
- *     &lt;property name="allowedAbbreviations" value="XML,URL"/&gt;
+ *   &lt;property name="tokens" value="VARIABLE_DEF,CLASS_DEF"/&gt;
+ *   &lt;property name="ignoreStatic" value="false"/&gt;
+ *   &lt;property name="allowedAbbreviationLength" value="0"/&gt;
+ *   &lt;property name="allowedAbbreviations" value="XML,URL"/&gt;
  * &lt;/module&gt;
  * </pre>
+ * <p>Example:</p>
+ * <pre>
+ * public class MyClass { // OK
+ *   int firstNum; // OK
+ *   int secondNUM; // violation, it allowed only 1 consecutive capital letter
+ *   static int thirdNum; // OK, the static modifier would be checked
+ *   static int fourthNUm; // violation, the static modifier would be checked,
+ *                         // and only 1 consecutive capital letter is allowed
+ *   String firstXML; // OK, XML abbreviation is allowed
+ *   String firstURL; // OK, URL abbreviation is allowed
+ * }
+ * </pre>
+ * <p>
+ * To configure to check variables, excluding fields with
+ * the static modifier, and allow abbreviations up to 2
+ * consecutive capital letters ignoring the longer word 'CSV'.
+ * </p>
+ * <p>Configuration:</p>
+ * <pre>
+ * &lt;module name="AbbreviationAsWordInName"&gt;
+ *   &lt;property name="tokens" value="VARIABLE_DEF"/&gt;
+ *   &lt;property name="ignoreStatic" value="true"/&gt;
+ *   &lt;property name="allowedAbbreviationLength" value="1"/&gt;
+ *   &lt;property name="allowedAbbreviations" value="CSV"/&gt;
+ * &lt;/module&gt;
+ * </pre>
+ * <p>Example:</p>
+ * <pre>
+ * public class MyClass { // OK, ignore checking the class name
+ *   int firstNum; // OK, abbreviation "N" is of allowed length 1
+ *   int secondNUm; // OK
+ *   int secondMYNum; // violation, found "MYN" but only
+ *                    // 2 consecutive capital letters are allowed
+ *   int thirdNUM; // violation, found "NUM" but it is allowed
+ *                 // only 2 consecutive capital letters
+ *   static int fourthNUM; // OK, variables with static modifier
+ *                         // would be ignored
+ *   String firstCSV; // OK, CSV abbreviation is allowed
+ *   String firstXML; // violation, XML abbreviation is not allowed
+ * }
+ * </pre>
  *
- * @author Roman Ivanov, Daniil Yaroslavtsev, Baratali Izmailov
+ * @since 5.8
  */
 @StatelessCheck
 public class AbbreviationAsWordInNameCheck extends AbstractCheck {
@@ -108,28 +163,33 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
     private static final int DEFAULT_ALLOWED_ABBREVIATIONS_LENGTH = 3;
 
     /**
-     * Variable indicates on the allowed amount of capital letters in
-     * abbreviations in the classes, interfaces, variables and methods names.
+     * Indicate the number of consecutive capital letters allowed in
+     * targeted identifiers (abbreviations in the classes, interfaces, variables
+     * and methods names, ... ).
      */
     private int allowedAbbreviationLength =
             DEFAULT_ALLOWED_ABBREVIATIONS_LENGTH;
 
     /**
-     * Set of allowed abbreviation to ignore in check.
+     * Specify list of abbreviations that must be skipped for checking. Abbreviations
+     * should be separated by comma.
      */
     private Set<String> allowedAbbreviations = new HashSet<>();
 
-    /** Allows to ignore variables with 'final' modifier. */
+    /** Allow to skip variables with {@code final} modifier. */
     private boolean ignoreFinal = true;
 
-    /** Allows to ignore variables with 'static' modifier. */
+    /** Allow to skip variables with {@code static} modifier. */
     private boolean ignoreStatic = true;
 
-    /** Allows to ignore methods with '@Override' annotation. */
+    /**
+     * Allow to ignore methods tagged with {@code @Override} annotation (that
+     * usually mean inherited name).
+     */
     private boolean ignoreOverriddenMethods = true;
 
     /**
-     * Sets ignore option for variables with 'final' modifier.
+     * Setter to allow to skip variables with {@code final} modifier.
      * @param ignoreFinal
      *        Defines if ignore variables with 'final' modifier or not.
      */
@@ -138,7 +198,7 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
     }
 
     /**
-     * Sets ignore option for variables with 'static' modifier.
+     * Setter to allow to skip variables with {@code static} modifier.
      * @param ignoreStatic
      *        Defines if ignore variables with 'static' modifier or not.
      */
@@ -147,7 +207,8 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
     }
 
     /**
-     * Sets ignore option for methods with "@Override" annotation.
+     * Setter to allow to ignore methods tagged with {@code @Override}
+     * annotation (that usually mean inherited name).
      * @param ignoreOverriddenMethods
      *        Defines if ignore methods with "@Override" annotation or not.
      */
@@ -156,20 +217,21 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
     }
 
     /**
-     * Allowed abbreviation length in names.
-     * @param allowedAbbreviationLength
-     *            amount of allowed capital letters in abbreviation.
+     * Setter to indicate the number of consecutive capital letters allowed
+     * in targeted identifiers (abbreviations in the classes, interfaces,
+     * variables and methods names, ... ).
+     * @param allowedAbbreviationLength amount of allowed capital letters in
+     *        abbreviation.
      */
     public void setAllowedAbbreviationLength(int allowedAbbreviationLength) {
         this.allowedAbbreviationLength = allowedAbbreviationLength;
     }
 
     /**
-     * Set a list of abbreviations that must be skipped for checking.
-     * Abbreviations should be separated by comma, no spaces is allowed.
-     * @param allowedAbbreviations
-     *        an string of abbreviations that must be skipped from checking,
-     *        each abbreviation separated by comma.
+     * Setter to specify list of abbreviations that must be skipped for checking.
+     * Abbreviations should be separated by comma.
+     * @param allowedAbbreviations an string of abbreviations that must be
+     *        skipped from checking, each abbreviation separated by comma.
      */
     public void setAllowedAbbreviations(String... allowedAbbreviations) {
         if (allowedAbbreviations != null) {
@@ -209,7 +271,7 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -253,7 +315,7 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
             result = ignoreOverriddenMethods && hasOverrideAnnotation(modifiers);
         }
         else {
-            result = CheckUtils.isReceiverParameter(ast);
+            result = CheckUtil.isReceiverParameter(ast);
         }
         return result;
     }
@@ -323,7 +385,6 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
                 abbrStarted = false;
 
                 final int endIndex = index - 1;
-                // -1 as a first capital is usually beginning of next word
                 result = getAbbreviationIfIllegal(str, beginIndex, endIndex);
                 if (result != null) {
                     break;
@@ -331,29 +392,59 @@ public class AbbreviationAsWordInNameCheck extends AbstractCheck {
                 beginIndex = -1;
             }
         }
-        // if abbreviation at the end of name and it is not single character (example: scaleX)
-        if (abbrStarted && beginIndex != str.length() - 1) {
-            final int endIndex = str.length();
+        // if abbreviation at the end of name (example: scaleX)
+        if (abbrStarted) {
+            final int endIndex = str.length() - 1;
             result = getAbbreviationIfIllegal(str, beginIndex, endIndex);
         }
         return result;
     }
 
     /**
-     * Get Abbreviation if it is illegal.
+     * Get Abbreviation if it is illegal, where {@code beginIndex} and {@code endIndex} are
+     * inclusive indexes of a sequence of consecutive upper-case characters.
      * @param str name
      * @param beginIndex begin index
      * @param endIndex end index
-     * @return true is abbreviation is bigger that required and not in ignore list
+     * @return the abbreviation if it is bigger than required and not in the
+     *         ignore list, otherwise {@code null}
      */
     private String getAbbreviationIfIllegal(String str, int beginIndex, int endIndex) {
         String result = null;
         final int abbrLength = endIndex - beginIndex;
         if (abbrLength > allowedAbbreviationLength) {
-            final String abbr = str.substring(beginIndex, endIndex);
+            final String abbr = getAbbreviation(str, beginIndex, endIndex);
             if (!allowedAbbreviations.contains(abbr)) {
                 result = abbr;
             }
+        }
+        return result;
+    }
+
+    /**
+     * Gets the abbreviation, where {@code beginIndex} and {@code endIndex} are
+     * inclusive indexes of a sequence of consecutive upper-case characters.
+     * <p>
+     * The character at {@code endIndex} is only included in the abbreviation if
+     * it is the last character in the string; otherwise it is usually the first
+     * capital in the next word.
+     * </p>
+     * <p>
+     * For example, {@code getAbbreviation("getXMLParser", 3, 6)} returns "XML"
+     * (not "XMLP"), and so does {@code getAbbreviation("parseXML", 5, 7)}.
+     * </p>
+     * @param str name
+     * @param beginIndex begin index
+     * @param endIndex end index
+     * @return the specified abbreviation
+     */
+    private static String getAbbreviation(String str, int beginIndex, int endIndex) {
+        final String result;
+        if (endIndex == str.length() - 1) {
+            result = str.substring(beginIndex);
+        }
+        else {
+            result = str.substring(beginIndex, endIndex);
         }
         return result;
     }

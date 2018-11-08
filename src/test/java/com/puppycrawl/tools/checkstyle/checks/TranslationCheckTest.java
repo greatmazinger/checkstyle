@@ -30,14 +30,10 @@ import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
-import static org.powermock.api.mockito.PowerMockito.doNothing;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
@@ -51,11 +47,9 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Closeables;
 import com.puppycrawl.tools.checkstyle.AbstractXmlTestSupport;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
@@ -68,10 +62,9 @@ import com.puppycrawl.tools.checkstyle.api.MessageDispatcher;
 import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
 import com.puppycrawl.tools.checkstyle.api.SeverityLevelCounter;
 import com.puppycrawl.tools.checkstyle.internal.utils.XmlUtil;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(Closeables.class)
 public class TranslationCheckTest extends AbstractXmlTestSupport {
 
     @Captor
@@ -86,7 +79,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
     public void testTranslation() throws Exception {
         final Configuration checkConfig = createModuleConfig(TranslationCheck.class);
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY, "only.english"),
+            "1: " + getCheckMessage(MSG_KEY, "only.english"),
         };
         final File[] propertyFiles = {
             new File(getPath("messages_test_de.properties")),
@@ -129,7 +122,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
     public void testFileExtension() throws Exception {
         final DefaultConfiguration checkConfig = createModuleConfig(TranslationCheck.class);
         checkConfig.addAttribute("baseName", "^InputTranslation.*$");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         final File[] propertyFiles = {
             new File(getPath("InputTranslation_de.txt")),
         };
@@ -158,13 +151,13 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
             new File(translationProps),
         };
 
-        final String line = "0: ";
+        final String line = "1: ";
         final String firstErrorMessage = getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                 "InputTranslationCheckFireErrors_ja.properties");
         final String secondErrorMessage = getCheckMessage(MSG_KEY, "anotherKey");
 
         verify(checker, propertyFiles, ImmutableMap.of(
-            ":0", Collections.singletonList(" " + firstErrorMessage),
+            ":1", Collections.singletonList(" " + firstErrorMessage),
             "InputTranslationCheckFireErrors_de.properties",
                 Collections.singletonList(line + secondErrorMessage)));
 
@@ -184,7 +177,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
     @Test
     public void testOnePropertyFileSet() throws Exception {
         final DefaultConfiguration checkConfig = createModuleConfig(TranslationCheck.class);
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         final File[] propertyFiles = {
             new File(getPath("app-dev.properties")),
         };
@@ -251,7 +244,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "messages_translation.properties"),
         };
         verify(
@@ -272,7 +265,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "messages_translation_de.properties"),
         };
         verify(
@@ -292,7 +285,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "messages-translation.properties"),
         };
         verify(
@@ -313,7 +306,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "messages-translation_tr.properties"),
         };
         verify(
@@ -333,7 +326,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
             new File(getPath("app-stage.properties")),
         };
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(
             createChecker(checkConfig),
             propertyFiles,
@@ -353,7 +346,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
             };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "messages_home_de.properties"),
         };
         verify(
@@ -374,42 +367,12 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
             new File(getPath("messages_home_fr_CA_UNIX.properties")),
             };
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(
             createChecker(checkConfig),
             propertyFiles,
             getPath(""),
             expected);
-    }
-
-    /**
-     * Pitest requires all closes of streams and readers to be verified. Using PowerMock
-     * is almost only possibility to check it without rewriting production code.
-     *
-     * @throws Exception when code tested throws some exception
-     */
-    @Test
-    public void testResourcesAreClosed() throws Exception {
-        mockStatic(Closeables.class);
-        doNothing().when(Closeables.class);
-        Closeables.closeQuietly(any(InputStream.class));
-
-        final DefaultConfiguration checkConfig = createModuleConfig(TranslationCheck.class);
-        checkConfig.addAttribute("requiredTranslations", "es");
-
-        final File[] propertyFiles = {
-            new File(getPath("messages_home.properties")),
-            new File(getPath("messages_home_es_US.properties")),
-            };
-
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
-        verify(
-            createChecker(checkConfig),
-            propertyFiles,
-            getPath(""),
-            expected);
-        verifyStatic(Closeables.class, times(2));
-        Closeables.closeQuietly(any(InputStream.class));
     }
 
     @Test
@@ -429,7 +392,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "ButtonLabels_ja.properties"),
         };
         verify(
@@ -459,7 +422,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "ButtonLabels_ja.properties"),
         };
 
@@ -490,7 +453,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE,
                     "ButtonLabels_ja.properties"),
         };
 
@@ -515,8 +478,8 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
         };
 
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE, "MyLabelsI18_fr.properties"),
-            "0: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE, "MyLabelsI18_ja.properties"),
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE, "MyLabelsI18_fr.properties"),
+            "1: " + getCheckMessage(MSG_KEY_MISSING_TRANSLATION_FILE, "MyLabelsI18_ja.properties"),
         };
 
         verify(
@@ -540,7 +503,7 @@ public class TranslationCheckTest extends AbstractXmlTestSupport {
             new File(getNonCompilablePath("MyLabelsI18_de.properties")),
         };
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(
             createChecker(checkConfig),

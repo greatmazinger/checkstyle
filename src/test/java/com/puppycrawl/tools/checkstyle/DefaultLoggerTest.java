@@ -19,8 +19,10 @@
 
 package com.puppycrawl.tools.checkstyle;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,7 +37,7 @@ import org.junit.Test;
 import com.puppycrawl.tools.checkstyle.api.AuditEvent;
 import com.puppycrawl.tools.checkstyle.api.AutomaticBean;
 import com.puppycrawl.tools.checkstyle.api.LocalizedMessage;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 public class DefaultLoggerTest {
 
@@ -47,7 +49,7 @@ public class DefaultLoggerTest {
         dl.addException(new AuditEvent(5000, "myfile"), new IllegalStateException("upsss"));
         dl.auditFinished(new AuditEvent(6000, "myfile"));
         final String output = errorStream.toString(StandardCharsets.UTF_8.name());
-        final LocalizedMessage addExceptionMessage = new LocalizedMessage(0,
+        final LocalizedMessage addExceptionMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, DefaultLogger.ADD_EXCEPTION_MESSAGE,
                 new String[] {"myfile"}, null,
                 getClass(), null);
@@ -79,17 +81,17 @@ public class DefaultLoggerTest {
         dl.addException(new AuditEvent(5000, "myfile"), new IllegalStateException("upsss"));
         dl.auditFinished(new AuditEvent(6000, "myfile"));
         final String output = errorStream.toString(StandardCharsets.UTF_8.name());
-        final LocalizedMessage addExceptionMessage = new LocalizedMessage(0,
+        final LocalizedMessage addExceptionMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, DefaultLogger.ADD_EXCEPTION_MESSAGE,
                 new String[] {"myfile"}, null,
                 getClass(), null);
-        final LocalizedMessage startMessage = new LocalizedMessage(0,
+        final LocalizedMessage startMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, DefaultLogger.AUDIT_STARTED_MESSAGE,
-                CommonUtils.EMPTY_STRING_ARRAY, null,
+                CommonUtil.EMPTY_STRING_ARRAY, null,
                 getClass(), null);
-        final LocalizedMessage finishMessage = new LocalizedMessage(0,
+        final LocalizedMessage finishMessage = new LocalizedMessage(1,
                 Definitions.CHECKSTYLE_BUNDLE, DefaultLogger.AUDIT_FINISHED_MESSAGE,
-                CommonUtils.EMPTY_STRING_ARRAY, null,
+                CommonUtil.EMPTY_STRING_ARRAY, null,
                 getClass(), null);
 
         verify(infoStream, times(1)).close();
@@ -114,6 +116,35 @@ public class DefaultLoggerTest {
         dl.auditFinished(new AuditEvent(6000, "myfile"));
         assertTrue("Message should contain exception info, but was " + infoStream,
                 infoStream.toString().contains("java.lang.IllegalStateException: upsss"));
+    }
+
+    @Test
+    public void testNullInfoStreamOptions() {
+        try {
+            final DefaultLogger logger = new DefaultLogger(new ByteArrayOutputStream(), null);
+            // assert required to calm down eclipse's 'The allocated object is never used' violation
+            assertNotNull("Null instance", logger);
+            fail("Exception was expected");
+        }
+        catch (IllegalArgumentException exception) {
+            assertEquals("Invalid error message", "Parameter infoStreamOptions can not be null",
+                    exception.getMessage());
+        }
+    }
+
+    @Test
+    public void testNullErrorStreamOptions() {
+        try {
+            final DefaultLogger logger = new DefaultLogger(new ByteArrayOutputStream(),
+                AutomaticBean.OutputStreamOptions.CLOSE, new ByteArrayOutputStream(), null);
+            // assert required to calm down eclipse's 'The allocated object is never used' violation
+            assertNotNull("Null instance", logger);
+            fail("Exception was expected");
+        }
+        catch (IllegalArgumentException exception) {
+            assertEquals("Invalid error message", "Parameter errorStreamOptions can not be null",
+                    exception.getMessage());
+        }
     }
 
     @Test

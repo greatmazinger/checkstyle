@@ -26,8 +26,8 @@ import antlr.collections.AST;
 import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
-import com.puppycrawl.tools.checkstyle.utils.TokenUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
+import com.puppycrawl.tools.checkstyle.utils.TokenUtil;
 
 /**
  * <p>
@@ -163,8 +163,6 @@ import com.puppycrawl.tools.checkstyle.utils.TokenUtils;
  * &lt;/module&gt;
  * </pre>
  *
- * @author Tim Tyler &lt;tim@tt1.org&gt;
- * @author Rick Giles
  */
 @FileStatefulCheck
 public class DescendantTokenCheck extends AbstractCheck {
@@ -204,7 +202,7 @@ public class DescendantTokenCheck extends AbstractCheck {
     /** Whether to sum the number of tokens found. */
     private boolean sumTokenCounts;
     /** Limited tokens. */
-    private int[] limitedTokens = CommonUtils.EMPTY_INT_ARRAY;
+    private int[] limitedTokens = CommonUtil.EMPTY_INT_ARRAY;
     /** Error message when minimum count not reached. */
     private String minimumMessage;
     /** Error message when maximum count exceeded. */
@@ -214,7 +212,7 @@ public class DescendantTokenCheck extends AbstractCheck {
      * Counts of descendant tokens.
      * Indexed by (token ID - 1) for performance.
      */
-    private int[] counts = CommonUtils.EMPTY_INT_ARRAY;
+    private int[] counts = CommonUtil.EMPTY_INT_ARRAY;
 
     @Override
     public int[] getDefaultTokens() {
@@ -223,7 +221,7 @@ public class DescendantTokenCheck extends AbstractCheck {
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -246,17 +244,17 @@ public class DescendantTokenCheck extends AbstractCheck {
      */
     private void logAsSeparated(DetailAST ast) {
         // name of this token
-        final String name = TokenUtils.getTokenName(ast.getType());
+        final String name = TokenUtil.getTokenName(ast.getType());
 
         for (int element : limitedTokens) {
             final int tokenCount = counts[element - 1];
             if (tokenCount < minimumNumber) {
-                final String descendantName = TokenUtils.getTokenName(element);
+                final String descendantName = TokenUtil.getTokenName(element);
 
                 if (minimumMessage == null) {
                     minimumMessage = MSG_KEY_MIN;
                 }
-                log(ast.getLineNo(), ast.getColumnNo(),
+                log(ast,
                         minimumMessage,
                         String.valueOf(tokenCount),
                         String.valueOf(minimumNumber),
@@ -264,12 +262,12 @@ public class DescendantTokenCheck extends AbstractCheck {
                         descendantName);
             }
             if (tokenCount > maximumNumber) {
-                final String descendantName = TokenUtils.getTokenName(element);
+                final String descendantName = TokenUtil.getTokenName(element);
 
                 if (maximumMessage == null) {
                     maximumMessage = MSG_KEY_MAX;
                 }
-                log(ast.getLineNo(), ast.getColumnNo(),
+                log(ast,
                         maximumMessage,
                         String.valueOf(tokenCount),
                         String.valueOf(maximumNumber),
@@ -285,7 +283,7 @@ public class DescendantTokenCheck extends AbstractCheck {
      */
     private void logAsTotal(DetailAST ast) {
         // name of this token
-        final String name = TokenUtils.getTokenName(ast.getType());
+        final String name = TokenUtil.getTokenName(ast.getType());
 
         int total = 0;
         for (int element : limitedTokens) {
@@ -295,7 +293,7 @@ public class DescendantTokenCheck extends AbstractCheck {
             if (minimumMessage == null) {
                 minimumMessage = MSG_KEY_SUM_MIN;
             }
-            log(ast.getLineNo(), ast.getColumnNo(),
+            log(ast,
                     minimumMessage,
                     String.valueOf(total),
                     String.valueOf(minimumNumber), name);
@@ -304,7 +302,7 @@ public class DescendantTokenCheck extends AbstractCheck {
             if (maximumMessage == null) {
                 maximumMessage = MSG_KEY_SUM_MAX;
             }
-            log(ast.getLineNo(), ast.getColumnNo(),
+            log(ast,
                     maximumMessage,
                     String.valueOf(total),
                     String.valueOf(maximumNumber), name);
@@ -341,7 +339,7 @@ public class DescendantTokenCheck extends AbstractCheck {
         final int[] result = new int[tokenNames.size()];
         int index = 0;
         for (String name : tokenNames) {
-            result[index] = TokenUtils.getTokenId(name);
+            result[index] = TokenUtil.getTokenId(name);
             index++;
         }
         return result;
@@ -356,7 +354,7 @@ public class DescendantTokenCheck extends AbstractCheck {
 
         int maxToken = 0;
         for (int i = 0; i < limitedTokensParam.length; i++) {
-            limitedTokens[i] = TokenUtils.getTokenId(limitedTokensParam[i]);
+            limitedTokens[i] = TokenUtil.getTokenId(limitedTokensParam[i]);
             if (limitedTokens[i] >= maxToken + 1) {
                 maxToken = limitedTokens[i];
             }

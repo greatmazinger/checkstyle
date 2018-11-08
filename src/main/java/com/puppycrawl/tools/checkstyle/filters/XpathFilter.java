@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 import com.puppycrawl.tools.checkstyle.TreeWalkerAuditEvent;
 import com.puppycrawl.tools.checkstyle.TreeWalkerFilter;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 import com.puppycrawl.tools.checkstyle.xpath.AbstractNode;
 import com.puppycrawl.tools.checkstyle.xpath.RootNode;
 import net.sf.saxon.om.Item;
@@ -38,7 +38,6 @@ import net.sf.saxon.trans.XPathException;
  * This filter processes {@link TreeWalkerAuditEvent}
  * objects based on the criteria of file, check, module id, xpathQuery.
  *
- * @author Timur Tibeyev.
  */
 public class XpathFilter implements TreeWalkerFilter {
 
@@ -91,7 +90,7 @@ public class XpathFilter implements TreeWalkerFilter {
             checkRegexp = null;
         }
         else {
-            checkRegexp = CommonUtils.createPattern(checks);
+            checkRegexp = CommonUtil.createPattern(checks);
         }
         messagePattern = message;
         if (message == null) {

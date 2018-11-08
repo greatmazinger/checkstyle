@@ -21,8 +21,7 @@ package com.puppycrawl.tools.checkstyle.checks.imports;
 
 /**
  * Represents the strategy when none of the rules (allow/disallow tags) match
- * inside subpackage and import-control tag of ImportControl config.
- * @author Timur Tibeyev
+ * inside subpackage and import-control tag of ImportControlCheck config.
  * @see ImportControlCheck
  */
 public enum MismatchStrategy {
@@ -43,6 +42,6 @@ public enum MismatchStrategy {
      * In a case if matching allow/disallow rule was not found,
      * import will be disallowed by default.
      */
-    DISALLOWED
+    DISALLOWED,
 
 }

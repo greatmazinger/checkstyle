@@ -39,11 +39,10 @@ import org.junit.Test;
 import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.Checker;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Unit test for WriteTagCheck.
- * @author Daniel Grenner
  */
 public class WriteTagCheckTest extends AbstractModuleTestSupport {
 
@@ -55,7 +54,7 @@ public class WriteTagCheckTest extends AbstractModuleTestSupport {
     @Test
     public void testDefaultSettings() throws Exception {
         final DefaultConfiguration checkConfig = createModuleConfig(WriteTagCheck.class);
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(checkConfig, getPath("InputWriteTag.java"), expected);
     }
 
@@ -158,7 +157,7 @@ public class WriteTagCheckTest extends AbstractModuleTestSupport {
         checkConfig.addAttribute("tag", "@todo2");
         checkConfig.addAttribute("tagFormat", "\\S");
         checkConfig.addAttribute("severity", "ignore");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(checkConfig, getPath("InputWriteTag.java"), expected);
     }
 
@@ -168,7 +167,7 @@ public class WriteTagCheckTest extends AbstractModuleTestSupport {
         final DefaultConfiguration checkConfig = createModuleConfig(WriteTagCheck.class);
         checkConfig.addAttribute("tag", "@author");
         checkConfig.addAttribute("tagFormat", "0*");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(checkConfig, getPath("InputWriteTag.java"), expected);
     }
 
@@ -217,9 +216,9 @@ public class WriteTagCheckTest extends AbstractModuleTestSupport {
         final int errs = checker.process(theFiles);
 
         // process each of the lines
-        final ByteArrayInputStream localStream =
-            new ByteArrayInputStream(getStream().toByteArray());
-        try (LineNumberReader lnr = new LineNumberReader(
+        try (ByteArrayInputStream localStream =
+                new ByteArrayInputStream(getStream().toByteArray());
+            LineNumberReader lnr = new LineNumberReader(
                 new InputStreamReader(localStream, StandardCharsets.UTF_8))) {
             for (int i = 0; i < expected.length; i++) {
                 final String expectedResult = messageFileName + ":" + expected[i];

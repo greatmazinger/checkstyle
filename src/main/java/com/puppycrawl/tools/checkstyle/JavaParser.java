@@ -36,15 +36,13 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.grammars.GeneratedJavaLexer;
-import com.puppycrawl.tools.checkstyle.grammars.GeneratedJavaRecognizer;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.grammar.GeneratedJavaLexer;
+import com.puppycrawl.tools.checkstyle.grammar.GeneratedJavaRecognizer;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Helper methods to parse java source files.
  *
- * @author Oliver Burn
- * @author Pavel Bludov
  */
 public final class JavaParser {
 
@@ -61,7 +59,7 @@ public final class JavaParser {
         /**
          * Comments nodes should be ignored.
          */
-        WITHOUT_COMMENTS
+        WITHOUT_COMMENTS,
 
     }
 
@@ -220,7 +218,7 @@ public final class JavaParser {
             commentAst = createSlCommentNode(token);
         }
         else {
-            commentAst = CommonUtils.createBlockCommentNode(token);
+            commentAst = CommonUtil.createBlockCommentNode(token);
         }
         return commentAst;
     }

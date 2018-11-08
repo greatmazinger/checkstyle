@@ -43,12 +43,11 @@ import org.xml.sax.SAXParseException;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
 import com.puppycrawl.tools.checkstyle.api.SeverityLevel;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Loads a configuration from a standard configuration XML file.
  *
- * @author Oliver Burn
  */
 public final class ConfigurationLoader {
 
@@ -65,7 +64,7 @@ public final class ConfigurationLoader {
         /**
          * Execute ignored modules.
          */
-        EXECUTE
+        EXECUTE,
 
     }
 
@@ -76,6 +75,10 @@ public final class ConfigurationLoader {
     private static final String DTD_PUBLIC_ID_1_0 =
         "-//Puppy Crawl//DTD Check Configuration 1.0//EN";
 
+    /** The new public ID for version 1_0 of the configuration dtd. */
+    private static final String DTD_PUBLIC_CS_ID_1_0 =
+        "-//Checkstyle//DTD Checkstyle Configuration 1.0//EN";
+
     /** The resource for version 1_0 of the configuration dtd. */
     private static final String DTD_CONFIGURATION_NAME_1_0 =
         "com/puppycrawl/tools/checkstyle/configuration_1_0.dtd";
@@ -83,6 +86,10 @@ public final class ConfigurationLoader {
     /** The public ID for version 1_1 of the configuration dtd. */
     private static final String DTD_PUBLIC_ID_1_1 =
         "-//Puppy Crawl//DTD Check Configuration 1.1//EN";
+
+    /** The new public ID for version 1_1 of the configuration dtd. */
+    private static final String DTD_PUBLIC_CS_ID_1_1 =
+        "-//Checkstyle//DTD Checkstyle Configuration 1.1//EN";
 
     /** The resource for version 1_1 of the configuration dtd. */
     private static final String DTD_CONFIGURATION_NAME_1_1 =
@@ -92,6 +99,10 @@ public final class ConfigurationLoader {
     private static final String DTD_PUBLIC_ID_1_2 =
         "-//Puppy Crawl//DTD Check Configuration 1.2//EN";
 
+    /** The new public ID for version 1_2 of the configuration dtd. */
+    private static final String DTD_PUBLIC_CS_ID_1_2 =
+        "-//Checkstyle//DTD Checkstyle Configuration 1.2//EN";
+
     /** The resource for version 1_2 of the configuration dtd. */
     private static final String DTD_CONFIGURATION_NAME_1_2 =
         "com/puppycrawl/tools/checkstyle/configuration_1_2.dtd";
@@ -99,6 +110,10 @@ public final class ConfigurationLoader {
     /** The public ID for version 1_3 of the configuration dtd. */
     private static final String DTD_PUBLIC_ID_1_3 =
         "-//Puppy Crawl//DTD Check Configuration 1.3//EN";
+
+    /** The new public ID for version 1_3 of the configuration dtd. */
+    private static final String DTD_PUBLIC_CS_ID_1_3 =
+        "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN";
 
     /** The resource for version 1_3 of the configuration dtd. */
     private static final String DTD_CONFIGURATION_NAME_1_3 =
@@ -157,6 +172,10 @@ public final class ConfigurationLoader {
         map.put(DTD_PUBLIC_ID_1_1, DTD_CONFIGURATION_NAME_1_1);
         map.put(DTD_PUBLIC_ID_1_2, DTD_CONFIGURATION_NAME_1_2);
         map.put(DTD_PUBLIC_ID_1_3, DTD_CONFIGURATION_NAME_1_3);
+        map.put(DTD_PUBLIC_CS_ID_1_0, DTD_CONFIGURATION_NAME_1_0);
+        map.put(DTD_PUBLIC_CS_ID_1_1, DTD_CONFIGURATION_NAME_1_1);
+        map.put(DTD_PUBLIC_CS_ID_1_2, DTD_CONFIGURATION_NAME_1_2);
+        map.put(DTD_PUBLIC_CS_ID_1_3, DTD_CONFIGURATION_NAME_1_3);
         return map;
     }
 
@@ -241,7 +260,7 @@ public final class ConfigurationLoader {
             boolean omitIgnoredModules, ThreadModeSettings threadModeSettings)
             throws CheckstyleException {
         // figure out if this is a File or a URL
-        final URI uri = CommonUtils.getUriByFilename(config);
+        final URI uri = CommonUtil.getUriByFilename(config);
         final InputSource source = new InputSource(uri.toString());
         return loadConfiguration(source, overridePropsResolver,
                 omitIgnoredModules, threadModeSettings);
@@ -368,7 +387,7 @@ public final class ConfigurationLoader {
                                                   ThreadModeSettings threadModeSettings)
             throws CheckstyleException {
         // figure out if this is a File or a URL
-        final URI uri = CommonUtils.getUriByFilename(config);
+        final URI uri = CommonUtil.getUriByFilename(config);
         final InputSource source = new InputSource(uri.toString());
         return loadConfiguration(source, overridePropsResolver,
                 ignoredModulesOptions, threadModeSettings);
@@ -542,13 +561,12 @@ public final class ConfigurationLoader {
                 if (value.charAt(pos + 1) == DOLLAR_SIGN) {
                     //backwards compatibility two $ map to one mode
                     fragments.add(String.valueOf(DOLLAR_SIGN));
-                    prev = pos + 2;
                 }
                 else {
                     //new behaviour: $X maps to $X for all values of X!='$'
                     fragments.add(value.substring(pos, pos + 2));
-                    prev = pos + 2;
                 }
+                prev = pos + 2;
             }
 
             //search for the next instance of $ from the 'prev' position

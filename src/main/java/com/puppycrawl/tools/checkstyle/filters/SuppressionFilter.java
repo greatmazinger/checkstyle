@@ -29,15 +29,13 @@ import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.ExternalResourceHolder;
 import com.puppycrawl.tools.checkstyle.api.Filter;
 import com.puppycrawl.tools.checkstyle.api.FilterSet;
-import com.puppycrawl.tools.checkstyle.utils.FilterUtils;
+import com.puppycrawl.tools.checkstyle.utils.FilterUtil;
 
 /**
  * <p>
  * This filter accepts AuditEvents according to file, check, line, and
  * column, as specified in a suppression file.
  * </p>
- * @author Rick Giles
- * @author <a href="mailto:piotr.listkiewicz@gmail.com">liscju</a>
  * @noinspection NonFinalFieldReferenceInEquals, NonFinalFieldReferencedInHashCode
  */
 public class SuppressionFilter extends AutomaticBean implements Filter, ExternalResourceHolder {
@@ -91,7 +89,7 @@ public class SuppressionFilter extends AutomaticBean implements Filter, External
     protected void finishLocalSetup() throws CheckstyleException {
         if (file != null) {
             if (optional) {
-                if (FilterUtils.isFileExists(file)) {
+                if (FilterUtil.isFileExists(file)) {
                     filters = SuppressionsLoader.loadSuppressions(file);
                 }
                 else {

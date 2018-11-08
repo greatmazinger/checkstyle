@@ -25,8 +25,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 /**
  * <p>
  * Checks that {@code catch} parameter names conform to a format specified by the format property.
- * The format is a {@link java.util.regex.Pattern regular expression} and defaults to
- * <strong>^(e|t|ex|[a-z][a-z][a-zA-Z]+)$</strong>.
  * </p>
  * <p>
  * Default pattern has the following characteristic:
@@ -42,6 +40,12 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * <li>prohibits two letter abbreviations like {@code ie} or {@code ee}</li>
  * <li>prohibits any other characters than letters</li>
  * </ul>
+ * <ul>
+ * <li>
+ * Property {@code format} - Specifies valid identifiers. Default value is
+ * {@code "^(e|t|ex|[a-z][a-z][a-zA-Z]+)$"}.
+ * </li>
+ * </ul>
  * <p>
  * An example of how to configure the check is:
  * </p>
@@ -52,13 +56,32 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * An example of how to configure the check for names that begin with a lower case letter,
  * followed by any letters or digits is:
  * </p>
+ * <p>Configuration:</p>
  * <pre>
  * &lt;module name="CatchParameterName"&gt;
- *    &lt;property name="format" value="^[a-z][a-zA-Z0-9]+$"/&gt;
+ *   &lt;property name="format" value="^[a-z][a-zA-Z0-9]+$"/&gt;
  * &lt;/module&gt;
  * </pre>
- *
- * @author Michal Kordas
+ * <p>Example:</p>
+ * <pre>
+ * public class MyTest {
+ *   public void myTest() {
+ *     try {
+ *       // ...
+ *     } catch (ArithmeticException ex) { //OK
+ *       // ...
+ *     } catch (ArrayIndexOutOfBoundsException ex2) { //OK
+ *       // ...
+ *     } catch (IOException thirdException) { //OK
+ *       // ...
+ *     } catch (Exception FourthException) { // violation, the initial letter
+ *                                           // should be lowercase
+ *       // ...
+ *     }
+ *   }
+ * }
+ * </pre>
+ * @since 6.14
  */
 public class CatchParameterNameCheck extends AbstractNameCheck {
 

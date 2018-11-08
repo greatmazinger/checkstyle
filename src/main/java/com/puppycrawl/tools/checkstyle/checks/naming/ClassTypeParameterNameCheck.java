@@ -25,10 +25,13 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 /**
  * <p>
  * Checks that class type parameter names conform to a format specified
- * by the format property.  The format is a
- * {@link java.util.regex.Pattern regular expression} and defaults to
- * <strong>^[A-Z]$</strong>.
+ * by the format property.
  * </p>
+ * <ul>
+ * <li>
+ * Property {@code format} - Specifies valid identifiers. Default value is {@code "^[A-Z]$"}.
+ * </li>
+ * </ul>
  * <p>
  * An example of how to configure the check is:
  * </p>
@@ -37,15 +40,22 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * </pre>
  * <p>
  * An example of how to configure the check for names that are only a single
- * letter is
+ * letter is:
  * </p>
+ * <p>Configuration:</p>
  * <pre>
  * &lt;module name="ClassTypeParameterName"&gt;
- *    &lt;property name="format" value="^[a-zA-Z]$"/&gt;
+ *   &lt;property name="format" value="^[a-zA-Z]$"/&gt;
  * &lt;/module&gt;
  * </pre>
- *
- * @author Travis Schneeberger
+ * <p>Example:</p>
+ * <pre>
+ * class MyClass1&lt;T&gt; {} // OK
+ * class MyClass2&lt;t&gt; {} // OK
+ * class MyClass3&lt;abc&gt; {} // violation, the class type parameter
+ *                              // name should match the regular expression "^[a-zA-Z]$"
+ * </pre>
+ * @since 5.0
  */
 public class ClassTypeParameterNameCheck
     extends AbstractNameCheck {

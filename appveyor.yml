@@ -4,20 +4,29 @@ skip_tags: true
 skip_commits:
   files:
     - .ci/
-    - .github/
-    - travis.yml
     - .circleci/
+    - .github/
+    - .gitattributes
+    - .gitignore
+    - .travis.yml
+    - buddy.yml
+    - codeship-services.yml
+    - codeship-steps.yml
     - distelli-manifest.yml
-    - fast-forward-merge.sh
     - LICENSE
     - LICENSE.apache20
     - README.md
     - release.sh
     - RIGHTS.antlr
     - shippable.yml
-    - shippable.sh
     - wercker.yml
-    - wercker.sh
+    - Jenkinsfile
+    - config/default_sonar_profile.xml
+    - config/intellij-idea-inspection-scope.xml
+    - config/intellij-idea-inspections.properties
+    - config/intellij-idea-inspections.xml
+    - config/org.eclipse.jdt.core.prefs
+    - config/version-number-rules.xml
 
 clone_depth: 10
 branches:
@@ -68,7 +77,8 @@ environment:
     # checkstyle and sevntu.checkstyle
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
       DESC: "checkstyle and sevntu.checkstyle"
-      CMD1: "mvn -e verify -DskipTests -DskipITs -Dpmd.skip=true -Dspotbugs.skip=true -Djacoco.skip=true -Dxml.skip=true"
+      CMD1: "mvn -e verify -DskipTests -DskipITs"
+      CMD2: " -Dpmd.skip=true -Dspotbugs.skip=true -Djacoco.skip=true -Dxml.skip=true"
     # verify without checkstyle (JDK8)
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
       DESC: "verify without checkstyle (JDK8)"
@@ -102,3 +112,6 @@ build_script:
   - ps: get-content appveyor.cmd
   # We need to use cmd there as ps1 is failing each time error output appear from any command line
   - appveyor.cmd
+  - ps: echo "Size of caches (bytes):"
+  - ps: Get-ChildItem -Recurse 'C:\maven\apache-maven-3.2.5' | Measure-Object -Property Length -Sum
+  - ps: Get-ChildItem -Recurse 'C:\Users\appveyor\.m2' | Measure-Object -Property Length -Sum

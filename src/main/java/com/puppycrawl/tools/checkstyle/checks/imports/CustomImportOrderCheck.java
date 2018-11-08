@@ -30,7 +30,7 @@ import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.FullIdent;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -300,8 +300,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * &lt;/module&gt;
  * </pre>
  *
- * @author maxvetrenko
- * @author <a href="mailto:nesterenko-aleksey@list.ru">Aleksey Nesterenko</a>
  */
 @FileStatefulCheck
 public class CustomImportOrderCheck extends AbstractCheck {
@@ -716,7 +714,7 @@ public class CustomImportOrderCheck extends AbstractCheck {
         //  because the numbering starts from zero.
         int lineBeforeIndex = lineNo - 2;
         while (lineBeforeIndex >= 0
-                && CommonUtils.isBlank(lines[lineBeforeIndex])) {
+                && CommonUtil.isBlank(lines[lineBeforeIndex])) {
             lineBeforeIndex--;
             result++;
         }
@@ -803,7 +801,6 @@ public class CustomImportOrderCheck extends AbstractCheck {
     /**
      * Contains import attributes as line number, import full path, import
      * group.
-     * @author max
      */
     private static class ImportDetails {
 
@@ -875,7 +872,6 @@ public class CustomImportOrderCheck extends AbstractCheck {
     /**
      * Contains matching attributes assisting in definition of "best matching"
      * group for import.
-     * @author ivanov-alex
      */
     private static class RuleMatchForImport {
 

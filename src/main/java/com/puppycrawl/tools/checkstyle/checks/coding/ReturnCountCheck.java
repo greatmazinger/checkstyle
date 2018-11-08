@@ -50,7 +50,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * attempting to do too much or may be difficult to understand.
  * </p>
  *
- * @author <a href="mailto:simon@redhillconsulting.com.au">Simon Harris</a>
  */
 @FileStatefulCheck
 public final class ReturnCountCheck extends AbstractCheck {
@@ -213,7 +212,6 @@ public final class ReturnCountCheck extends AbstractCheck {
 
     /**
      * Class to encapsulate information about one method.
-     * @author <a href="mailto:simon@redhillconsulting.com.au">Simon Harris</a>
      */
     private class Context {
 
@@ -256,10 +254,10 @@ public final class ReturnCountCheck extends AbstractCheck {
         public void checkCount(DetailAST ast) {
             if (checking && maxAllowed != null && count > maxAllowed) {
                 if (isVoidContext) {
-                    log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY_VOID, count, maxAllowed);
+                    log(ast, MSG_KEY_VOID, count, maxAllowed);
                 }
                 else {
-                    log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY, count, maxAllowed);
+                    log(ast, MSG_KEY, count, maxAllowed);
                 }
             }
         }

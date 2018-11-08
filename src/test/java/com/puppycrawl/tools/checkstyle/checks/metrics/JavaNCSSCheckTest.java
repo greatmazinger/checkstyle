@@ -29,12 +29,11 @@ import org.junit.Test;
 import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Test case for the JavaNCSS-Check.
  *
- * @author Lars Ködderitzsch
  */
 // -@cs[AbbreviationAsWordInName] Test should be named as its main class.
 public class JavaNCSSCheckTest extends AbstractModuleTestSupport {
@@ -79,7 +78,7 @@ public class JavaNCSSCheckTest extends AbstractModuleTestSupport {
         checkConfig.addAttribute("classMaximum", "22");
         checkConfig.addAttribute("fileMaximum", "39");
 
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
 
         verify(checkConfig, getPath("InputJavaNCSS.java"), expected);
     }
@@ -89,7 +88,7 @@ public class JavaNCSSCheckTest extends AbstractModuleTestSupport {
         final DefaultConfiguration checkConfig = createModuleConfig(JavaNCSSCheck.class);
 
         createChecker(checkConfig);
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(checkConfig, getPath("InputJavaNCSS.java"), expected);
     }
 

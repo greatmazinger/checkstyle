@@ -26,15 +26,13 @@ import java.util.TreeMap;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * This class checks line-wrapping into definitions and expressions. The
  * line-wrapping indentation should be not less then value of the
  * lineWrappingIndentation parameter.
  *
- * @author maxvetrenko
- * @author <a href="mailto:piotr.listkiewicz@gmail.com">liscju</a>
  */
 public class LineWrappingHandler {
 
@@ -314,7 +312,7 @@ public class LineWrappingHandler {
         final String line =
             indentCheck.getLine(ast.getLineNo() - 1);
 
-        return CommonUtils.lengthExpandedTabs(line, ast.getColumnNo(),
+        return CommonUtil.lengthExpandedTabs(line, ast.getColumnNo(),
             indentCheck.getIndentationTabWidth());
     }
 
@@ -341,7 +339,7 @@ public class LineWrappingHandler {
         while (Character.isWhitespace(line.charAt(index))) {
             index++;
         }
-        return CommonUtils.lengthExpandedTabs(line, index, indentCheck.getIndentationTabWidth());
+        return CommonUtil.lengthExpandedTabs(line, index, indentCheck.getIndentationTabWidth());
     }
 
     /**

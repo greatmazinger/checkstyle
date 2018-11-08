@@ -29,7 +29,7 @@ import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
+import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
 
 /**
  * <p>
@@ -43,7 +43,6 @@ import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
  * ensure that parameters are never assigned would give
  * the best of both worlds.
  * </p>
- * @author <a href="mailto:simon@redhillconsulting.com.au">Simon Harris</a>
  */
 @FileStatefulCheck
 public final class ParameterAssignmentCheck extends AbstractCheck {
@@ -189,8 +188,7 @@ public final class ParameterAssignmentCheck extends AbstractCheck {
             if (identAST != null
                 && identAST.getType() == TokenTypes.IDENT
                 && parameterNames.contains(identAST.getText())) {
-                log(ast.getLineNo(), ast.getColumnNo(),
-                    MSG_KEY, identAST.getText());
+                log(ast, MSG_KEY, identAST.getText());
             }
         }
     }
@@ -221,7 +219,7 @@ public final class ParameterAssignmentCheck extends AbstractCheck {
 
         while (parameterDefAST != null) {
             if (parameterDefAST.getType() == TokenTypes.PARAMETER_DEF
-                    && !CheckUtils.isReceiverParameter(parameterDefAST)) {
+                    && !CheckUtil.isReceiverParameter(parameterDefAST)) {
                 final DetailAST param =
                     parameterDefAST.findFirstToken(TokenTypes.IDENT);
                 parameterNames.add(param.getText());

@@ -32,7 +32,7 @@ import com.puppycrawl.tools.checkstyle.AbstractModuleTestSupport;
 import com.puppycrawl.tools.checkstyle.DefaultConfiguration;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.internal.testmodules.TestLoggingReporter;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 public class RegexpSinglelineCheckTest extends AbstractModuleTestSupport {
 
@@ -83,7 +83,7 @@ public class RegexpSinglelineCheckTest extends AbstractModuleTestSupport {
         final DefaultConfiguration checkConfig = createModuleConfig(RegexpSinglelineCheck.class);
         checkConfig.addAttribute("format", "SYSTEM\\.(OUT)|(ERR)\\.PRINT(LN)?\\(");
         checkConfig.addAttribute("ignoreCase", "false");
-        final String[] expected = CommonUtils.EMPTY_STRING_ARRAY;
+        final String[] expected = CommonUtil.EMPTY_STRING_ARRAY;
         verify(checkConfig, getPath("InputRegexpSinglelineSemantic.java"), expected);
     }
 
@@ -93,7 +93,7 @@ public class RegexpSinglelineCheckTest extends AbstractModuleTestSupport {
         checkConfig.addAttribute("format", "\\r");
         checkConfig.addAttribute("minimum", "500");
         final String[] expected = {
-            "0: " + getCheckMessage(MSG_REGEXP_MINIMUM, "500", "\\r"),
+            "1: " + getCheckMessage(MSG_REGEXP_MINIMUM, "500", "\\r"),
         };
 
         verify(checkConfig, getPath("InputRegexpSinglelineSemantic.java"), expected);
@@ -106,7 +106,7 @@ public class RegexpSinglelineCheckTest extends AbstractModuleTestSupport {
         checkConfig.addAttribute("minimum", "500");
         checkConfig.addAttribute("message", "someMessage");
         final String[] expected = {
-            "0: someMessage",
+            "1: someMessage",
         };
 
         verify(checkConfig, getPath("InputRegexpSinglelineSemantic.java"), expected);

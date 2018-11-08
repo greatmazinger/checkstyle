@@ -35,9 +35,9 @@ import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
-import com.puppycrawl.tools.checkstyle.utils.ScopeUtils;
-import com.puppycrawl.tools.checkstyle.utils.TokenUtils;
+import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
+import com.puppycrawl.tools.checkstyle.utils.ScopeUtil;
+import com.puppycrawl.tools.checkstyle.utils.TokenUtil;
 
 /**
  * <p>Checks that code doesn't rely on the &quot;this&quot; default.
@@ -87,9 +87,6 @@ import com.puppycrawl.tools.checkstyle.utils.TokenUtils;
  * Non-static methods invoked on either this or a variable name seem to be
  * OK, likewise.</p>
  *
- * @author Stephen Bloch
- * @author o_sukhodolsky
- * @author Andrei Selkin
  */
 // -@cs[ClassDataAbstractionCoupling] This check requires to work with and identify many frames.
 @FileStatefulCheck
@@ -330,7 +327,7 @@ public class RequireThisCheck extends AbstractCheck {
      *         'this' and null otherwise.
      */
     private AbstractFrame getFieldWithoutThis(DetailAST ast, int parentType) {
-        final boolean importOrPackage = ScopeUtils.getSurroundingScope(ast) == null;
+        final boolean importOrPackage = ScopeUtil.getSurroundingScope(ast) == null;
         final boolean methodNameInMethodCall = parentType == TokenTypes.DOT
                 && ast.getPreviousSibling() != null;
         final boolean typeName = parentType == TokenTypes.TYPE
@@ -364,7 +361,7 @@ public class RequireThisCheck extends AbstractCheck {
                 collectVariableDeclarations(ast, frame);
                 break;
             case TokenTypes.PARAMETER_DEF :
-                if (!CheckUtils.isReceiverParameter(ast)
+                if (!CheckUtil.isReceiverParameter(ast)
                         && !isLambdaParameter(ast)
                         && ast.getParent().getType() != TokenTypes.LITERAL_CATCH) {
                     final DetailAST parameterIdent = ast.findFirstToken(TokenTypes.IDENT);
@@ -431,7 +428,7 @@ public class RequireThisCheck extends AbstractCheck {
         if (frame.getType() == FrameType.CLASS_FRAME) {
             final DetailAST mods =
                     ast.findFirstToken(TokenTypes.MODIFIERS);
-            if (ScopeUtils.isInInterfaceBlock(ast)
+            if (ScopeUtil.isInInterfaceBlock(ast)
                     || mods.findFirstToken(TokenTypes.LITERAL_STATIC) != null) {
                 ((ClassFrame) frame).addStaticMember(ident);
             }
@@ -488,7 +485,6 @@ public class RequireThisCheck extends AbstractCheck {
      * or null otherwise.
      * @param ast IDENT ast to check.
      * @return the class frame where violation is found or null otherwise.
-     * @noinspection IfStatementWithIdenticalBranches
      */
     // -@cs[CyclomaticComplexity] Method already invokes too many methods that fully explain
     // a logic, additional abstraction will not make logic/algorithm more readable.
@@ -971,7 +967,7 @@ public class RequireThisCheck extends AbstractCheck {
                 isLambdaParameter = parent.getFirstChild().getText().equals(ast.getText());
             }
             else {
-                isLambdaParameter = TokenUtils.findFirstTokenByPredicate(lambdaParameters,
+                isLambdaParameter = TokenUtil.findFirstTokenByPredicate(lambdaParameters,
                     paramDef -> {
                         final DetailAST param = paramDef.findFirstToken(TokenTypes.IDENT);
                         return param != null && param.getText().equals(ast.getText());
@@ -1001,8 +997,6 @@ public class RequireThisCheck extends AbstractCheck {
 
     /**
      * A declaration frame.
-     * @author Stephen Bloch
-     * @author Andrei Selkin
      */
     private abstract static class AbstractFrame {
 
@@ -1131,8 +1125,6 @@ public class RequireThisCheck extends AbstractCheck {
 
     /**
      * A frame initiated at method definition; holds a method definition token.
-     * @author Stephen Bloch
-     * @author Andrei Selkin
      */
     private static class MethodFrame extends AbstractFrame {
 
@@ -1154,7 +1146,6 @@ public class RequireThisCheck extends AbstractCheck {
 
     /**
      * A frame initiated at constructor definition.
-     * @author Andrei Selkin
      */
     private static class ConstructorFrame extends AbstractFrame {
 
@@ -1176,8 +1167,6 @@ public class RequireThisCheck extends AbstractCheck {
 
     /**
      * A frame initiated at class, enum or interface definition; holds instance variable names.
-     * @author Stephen Bloch
-     * @author Andrei Selkin
      */
     private static class ClassFrame extends AbstractFrame {
 
@@ -1391,7 +1380,6 @@ public class RequireThisCheck extends AbstractCheck {
 
     /**
      * A frame initiated on entering a statement list; holds local variable names.
-     * @author Stephen Bloch
      */
     private static class BlockFrame extends AbstractFrame {
 
@@ -1413,7 +1401,6 @@ public class RequireThisCheck extends AbstractCheck {
 
     /**
      * A frame initiated on entering a catch block; holds local catch variable names.
-     * @author Richard Veach
      */
     public static class CatchFrame extends AbstractFrame {
 
@@ -1435,7 +1422,6 @@ public class RequireThisCheck extends AbstractCheck {
 
     /**
      * A frame initiated on entering a for block; holds local for variable names.
-     * @author Richard Veach
      */
     public static class ForFrame extends AbstractFrame {
 

@@ -23,7 +23,7 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
@@ -57,8 +57,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  *     &lt;property name="tokens" value="COMMA, SEMI"/&gt;
  * &lt;/module&gt;
  * </pre>
- * @author Oliver Burn
- * @author Rick Giles
  */
 @StatelessCheck
 public class WhitespaceAfterCheck
@@ -98,7 +96,7 @@ public class WhitespaceAfterCheck
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override

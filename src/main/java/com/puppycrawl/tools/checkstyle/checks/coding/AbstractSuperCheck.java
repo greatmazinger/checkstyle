@@ -27,14 +27,13 @@ import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.ScopeUtils;
+import com.puppycrawl.tools.checkstyle.utils.ScopeUtil;
 
 /**
  * <p>
  * Abstract class for checking that an overriding method with no parameters
  * invokes the super method.
  * </p>
- * @author Rick Giles
  */
 @FileStatefulCheck
 public abstract class AbstractSuperCheck
@@ -165,8 +164,7 @@ public abstract class AbstractSuperCheck
                 final DetailAST methodAST = methodNode.getMethod();
                 final DetailAST nameAST =
                     methodAST.findFirstToken(TokenTypes.IDENT);
-                log(nameAST.getLineNo(), nameAST.getColumnNo(),
-                    MSG_KEY, nameAST.getText());
+                log(nameAST, MSG_KEY, nameAST.getText());
             }
         }
     }
@@ -181,7 +179,7 @@ public abstract class AbstractSuperCheck
         boolean overridingMethod = false;
 
         if (ast.getType() == TokenTypes.METHOD_DEF
-                && !ScopeUtils.isInInterfaceOrAnnotationBlock(ast)) {
+                && !ScopeUtil.isInInterfaceOrAnnotationBlock(ast)) {
             final DetailAST nameAST = ast.findFirstToken(TokenTypes.IDENT);
             final String name = nameAST.getText();
             final DetailAST modifiersAST = ast.findFirstToken(TokenTypes.MODIFIERS);
@@ -198,7 +196,6 @@ public abstract class AbstractSuperCheck
     /**
      * Stack node for a method definition and a record of
      * whether the method has a call to the super method.
-     * @author Rick Giles
      */
     private static class MethodNode {
 

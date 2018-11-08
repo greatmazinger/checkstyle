@@ -19,7 +19,7 @@
 
 package com.puppycrawl.tools.checkstyle.api;
 
-import com.puppycrawl.tools.checkstyle.grammars.GeneratedJavaTokenTypes;
+import com.puppycrawl.tools.checkstyle.grammar.GeneratedJavaTokenTypes;
 
 /**
  * Contains the constants for all the tokens contained in the Abstract
@@ -28,8 +28,6 @@ import com.puppycrawl.tools.checkstyle.grammars.GeneratedJavaTokenTypes;
  * <p>Implementation detail: This class has been introduced to break
  * the circular dependency between packages.</p>
  *
- * @author Oliver Burn
- * @author <a href="mailto:dobratzp@ele.uri.edu">Peter Dobratz</a>
  * @noinspection ClassWithTooManyDependents
  */
 public final class TokenTypes {

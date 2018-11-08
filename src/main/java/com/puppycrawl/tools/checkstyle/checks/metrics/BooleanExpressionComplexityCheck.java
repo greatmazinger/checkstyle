@@ -26,7 +26,7 @@ import com.puppycrawl.tools.checkstyle.FileStatefulCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
+import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
 
 /**
  * Restricts nested boolean operators (&amp;&amp;, ||, &amp;, | and ^) to
@@ -35,8 +35,6 @@ import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
  * method call because they can be applied to non boolean variables and
  * Checkstyle does not know types of methods from different classes.
  *
- * @author <a href="mailto:simon@redhillconsulting.com.au">Simon Harris</a>
- * @author o_sukhodolsky
  */
 @FileStatefulCheck
 public final class BooleanExpressionComplexityCheck extends AbstractCheck {
@@ -180,7 +178,7 @@ public final class BooleanExpressionComplexityCheck extends AbstractCheck {
      */
     private void visitMethodDef(DetailAST ast) {
         contextStack.push(context);
-        final boolean check = !CheckUtils.isEqualsMethod(ast);
+        final boolean check = !CheckUtil.isEqualsMethod(ast);
         context = new Context(check);
     }
 
@@ -207,8 +205,6 @@ public final class BooleanExpressionComplexityCheck extends AbstractCheck {
     /**
      * Represents context (method/expression) in which we check complexity.
      *
-     * @author <a href="mailto:simon@redhillconsulting.com.au">Simon Harris</a>
-     * @author o_sukhodolsky
      */
     private class Context {
 
@@ -250,8 +246,7 @@ public final class BooleanExpressionComplexityCheck extends AbstractCheck {
             if (checking && count > max) {
                 final DetailAST parentAST = ast.getParent();
 
-                log(parentAST.getLineNo(), parentAST.getColumnNo(),
-                    MSG_KEY, count, max);
+                log(parentAST, MSG_KEY, count, max);
             }
         }
 

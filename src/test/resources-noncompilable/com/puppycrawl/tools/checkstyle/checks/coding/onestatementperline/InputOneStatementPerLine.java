@@ -1,9 +1,9 @@
+//non-compiled with eclipse: extra semicolumn in imports
 package com.puppycrawl.tools.checkstyle.checks.coding.onestatementperline;
 
 /**
  * This file contains test inputs for InputOneStatementPerLine
- * which cause compilation problem in Eclipse 4.2.2 but still
- * must be tested.
+ * which cause compilation problem in Eclipse 4.2.2 but still must be tested.
  */
 
 /**
@@ -40,7 +40,7 @@ public class InputOneStatementPerLine {
         ints.stream().map( t -> t * 2);
         List<Integer> ints2 = new LinkedList<Integer>();
         ints.stream().map( t -> { return ints2.stream().map(w -> { return w * 2; });});
-        ints.stream().map( t -> { return ints2.stream().map(w -> { int m = w * 2; return m; });}); //warn
+        ints.stream().map( t -> { return ints2.stream().map(w -> { int m=w; return m; });}); //warn
         ints.stream().map( t -> {
             return ints2.stream().map(
                     w -> {

@@ -21,17 +21,27 @@ package com.puppycrawl.tools.checkstyle.checks.naming;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
-import com.puppycrawl.tools.checkstyle.utils.ScopeUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
+import com.puppycrawl.tools.checkstyle.utils.ScopeUtil;
 
 /**
  * <p>
  * Checks that local final variable names conform to a format specified
  * by the format property. A catch parameter and resources in try statements
- * are considered to be a local variables.The format is a
- * {@link java.util.regex.Pattern regular expression} and defaults to
- * <strong>^[a-z][a-zA-Z0-9]*$</strong>.
+ * are considered to be a local, final variables.
  * </p>
+ * <ul>
+ * <li>
+ * Property {@code format} - Specifies valid identifiers. Default value is
+ * {@code "^[a-z][a-zA-Z0-9]*$"}.
+ * </li>
+ * <li>
+ * Property {@code tokens} - tokens to check Default value is:
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">VARIABLE_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#PARAMETER_DEF">PARAMETER_DEF</a>,
+ * <a href="https://checkstyle.org/apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#RESOURCE">RESOURCE</a>.
+ * </li>
+ * </ul>
  * <p>
  * An example of how to configure the check is:
  * </p>
@@ -44,11 +54,11 @@ import com.puppycrawl.tools.checkstyle.utils.ScopeUtils;
  * </p>
  * <pre>
  * &lt;module name="LocalFinalVariableName"&gt;
- *    &lt;property name="format" value="^[A-Z][A-Z0-9]*$"/&gt;
+ *   &lt;property name="format" value="^[A-Z][A-Z0-9]*$"/&gt;
  * &lt;/module&gt;
  * </pre>
  *
- * @author Rick Giles
+ * @since 3.0
  */
 public class LocalFinalVariableNameCheck
     extends AbstractNameCheck {
@@ -74,7 +84,7 @@ public class LocalFinalVariableNameCheck
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -83,7 +93,7 @@ public class LocalFinalVariableNameCheck
             ast.findFirstToken(TokenTypes.MODIFIERS);
         final boolean isFinal = ast.getType() == TokenTypes.RESOURCE
             || modifiersAST.findFirstToken(TokenTypes.FINAL) != null;
-        return isFinal && ScopeUtils.isLocalVariableDef(ast);
+        return isFinal && ScopeUtil.isLocalVariableDef(ast);
     }
 
 }

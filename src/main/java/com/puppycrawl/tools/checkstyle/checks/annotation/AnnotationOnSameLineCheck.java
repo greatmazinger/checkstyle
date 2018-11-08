@@ -19,16 +19,17 @@
 
 package com.puppycrawl.tools.checkstyle.checks.annotation;
 
+import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * The check does verifying that annotations are located on the same line with their targets.
  * Verifying with this check is not good practice, but it is using by some style guides.
- * @author zenigata
  */
+@StatelessCheck
 public class AnnotationOnSameLineCheck extends AbstractCheck {
 
     /** A key is pointing to the warning message text in "messages.properties" file. */
@@ -69,7 +70,7 @@ public class AnnotationOnSameLineCheck extends AbstractCheck {
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override

@@ -39,7 +39,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * <pre>
  * &lt;module name="SimplifyBooleanExpression"/&gt;
  * </pre>
- * @author lkuehne
  */
 @StatelessCheck
 public class SimplifyBooleanExpressionCheck
@@ -75,8 +74,7 @@ public class SimplifyBooleanExpressionCheck
             case TokenTypes.LNOT:
             case TokenTypes.LOR:
             case TokenTypes.LAND:
-                log(parent.getLineNo(), parent.getColumnNo(),
-                    MSG_KEY);
+                log(parent, MSG_KEY);
                 break;
             default:
                 break;

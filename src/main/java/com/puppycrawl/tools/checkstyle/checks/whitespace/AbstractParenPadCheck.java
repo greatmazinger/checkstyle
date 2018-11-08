@@ -24,14 +24,13 @@ import java.util.Locale;
 import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>Abstract class for checking the padding of parentheses. That is whether a
  * space is required after a left parenthesis and before a right parenthesis,
  * or such spaces are forbidden.
  * </p>
- * @author Oliver Burn
  */
 @StatelessCheck
 public abstract class AbstractParenPadCheck
@@ -114,14 +113,13 @@ public abstract class AbstractParenPadCheck
             final String line = getLines()[ast.getLineNo() - 1];
             if (option == PadOption.NOSPACE
                 && Character.isWhitespace(line.charAt(before))
-                && !CommonUtils.hasWhitespaceBefore(before, line)) {
+                && !CommonUtil.hasWhitespaceBefore(before, line)) {
                 log(ast.getLineNo(), before, MSG_WS_PRECEDED, CLOSE_PARENTHESIS);
             }
             else if (option == PadOption.SPACE
                 && !Character.isWhitespace(line.charAt(before))
                 && line.charAt(before) != OPEN_PARENTHESIS) {
-                log(ast.getLineNo(), ast.getColumnNo(),
-                    MSG_WS_NOT_PRECEDED, CLOSE_PARENTHESIS);
+                log(ast, MSG_WS_NOT_PRECEDED, CLOSE_PARENTHESIS);
             }
         }
     }

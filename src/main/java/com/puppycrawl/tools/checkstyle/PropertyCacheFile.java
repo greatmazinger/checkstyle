@@ -44,7 +44,7 @@ import com.google.common.io.Closeables;
 import com.google.common.io.Flushables;
 import com.puppycrawl.tools.checkstyle.api.CheckstyleException;
 import com.puppycrawl.tools.checkstyle.api.Configuration;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * This class maintains a persistent(on file-system) store of the files
@@ -56,8 +56,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * cache file to ensure the cache is invalidated when the
  * configuration has changed.
  *
- * @author Oliver Burn
- * @author Andrei Selkin
  */
 final class PropertyCacheFile {
 
@@ -116,18 +114,13 @@ final class PropertyCacheFile {
         configHash = getHashCodeBasedOnObjectContent(config);
         final File file = new File(fileName);
         if (file.exists()) {
-            InputStream inStream = null;
-            try {
-                inStream = Files.newInputStream(file.toPath());
+            try (InputStream inStream = Files.newInputStream(file.toPath())) {
                 details.load(inStream);
                 final String cachedConfigHash = details.getProperty(CONFIG_HASH_KEY);
                 if (!configHash.equals(cachedConfigHash)) {
                     // Detected configuration change - clear cache
                     reset();
                 }
-            }
-            finally {
-                Closeables.closeQuietly(inStream);
             }
         }
         else {
@@ -304,7 +297,7 @@ final class PropertyCacheFile {
      */
     private static byte[] loadExternalResource(String location) throws CheckstyleException {
         final byte[] content;
-        final URI uri = CommonUtils.getUriByFilename(location);
+        final URI uri = CommonUtil.getUriByFilename(location);
 
         try {
             content = ByteStreams.toByteArray(new BufferedInputStream(uri.toURL().openStream()));
@@ -361,7 +354,6 @@ final class PropertyCacheFile {
 
     /**
      * Class which represents external resource.
-     * @author Andrei Selkin
      */
     private static class ExternalResource {
 

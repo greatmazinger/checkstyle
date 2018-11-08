@@ -34,12 +34,11 @@ import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.DetailNode;
 import com.puppycrawl.tools.checkstyle.api.JavadocTokenTypes;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
-import com.puppycrawl.tools.checkstyle.utils.JavadocUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
+import com.puppycrawl.tools.checkstyle.utils.JavadocUtil;
 
 /**
  * Base class for Checks that process Javadoc comments.
- * @author Baratali Izmailov
  * @noinspection NoopMethodInAbstractClass
  */
 public abstract class AbstractJavadocCheck extends AbstractCheck {
@@ -90,7 +89,7 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
      *
      * @see ParseStatus#firstNonTightHtmlTag
      * @see ParseStatus#isNonTight()
-     * @see <a href="http://checkstyle.sourceforge.net/writingjavadocchecks.html#Tight-HTML_rules">
+     * @see <a href="https://checkstyle.org/writingjavadocchecks.html#Tight-HTML_rules">
      *     Tight HTML rules</a>
      */
     private boolean violateExecutionOnNonTightHtml;
@@ -130,7 +129,7 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
      * @see JavadocTokenTypes
      */
     public int[] getRequiredJavadocTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     /**
@@ -141,7 +140,7 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
      * @return true if the check should or can process javadoc containing non-tight html tags;
      *     false otherwise
      * @see ParseStatus#isNonTight()
-     * @see <a href="http://checkstyle.sourceforge.net/writingjavadocchecks.html#Tight-HTML_rules">
+     * @see <a href="https://checkstyle.org/writingjavadocchecks.html#Tight-HTML_rules">
      *     Tight HTML rules</a>
      */
     public boolean acceptJavadocWithNonTightHtml() {
@@ -151,7 +150,7 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
     /**
      * Setter for {@link #violateExecutionOnNonTightHtml}.
      * @param shouldReportViolation value to which the field shall be set to
-     * @see <a href="http://checkstyle.sourceforge.net/writingjavadocchecks.html#Tight-HTML_rules">
+     * @see <a href="https://checkstyle.org/writingjavadocchecks.html#Tight-HTML_rules">
      *     Tight HTML rules</a>
      */
     public final void setViolateExecutionOnNonTightHtml(boolean shouldReportViolation) {
@@ -165,7 +164,7 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
     public final void setJavadocTokens(String... strRep) {
         javadocTokens.clear();
         for (String str : strRep) {
-            javadocTokens.add(JavadocUtils.getTokenId(str));
+            javadocTokens.add(JavadocUtil.getTokenId(str));
         }
     }
 
@@ -184,7 +183,7 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
                 if (Arrays.binarySearch(acceptableJavadocTokens, javadocTokenId) < 0) {
                     final String message = String.format(Locale.ROOT, "Javadoc Token \"%s\" was "
                             + "not found in Acceptable javadoc tokens list in check %s",
-                            JavadocUtils.getTokenName(javadocTokenId), getClass().getName());
+                            JavadocUtil.getTokenName(javadocTokenId), getClass().getName());
                     throw new IllegalStateException(message);
                 }
             }
@@ -281,7 +280,7 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
 
     @Override
     public final void visitToken(DetailAST blockCommentNode) {
-        if (JavadocUtils.isJavadocComment(blockCommentNode)) {
+        if (JavadocUtil.isJavadocComment(blockCommentNode)) {
             // store as field, to share with child Checks
             context.get().blockCommentAst = blockCommentNode;
 
@@ -351,13 +350,13 @@ public abstract class AbstractJavadocCheck extends AbstractCheck {
             if (waitsForProcessing) {
                 visitJavadocToken(curNode);
             }
-            DetailNode toVisit = JavadocUtils.getFirstChild(curNode);
+            DetailNode toVisit = JavadocUtil.getFirstChild(curNode);
             while (curNode != null && toVisit == null) {
                 if (waitsForProcessing) {
                     leaveJavadocToken(curNode);
                 }
 
-                toVisit = JavadocUtils.getNextSibling(curNode);
+                toVisit = JavadocUtil.getNextSibling(curNode);
                 if (toVisit == null) {
                     curNode = curNode.getParent();
                     if (curNode != null) {

@@ -51,7 +51,6 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
  * <b>ignorePrivateMethods</b> - allows to skip private methods as they do
  * not cause problems for other classes.
  * </p>
- * @author <a href="mailto:simon@redhillconsulting.com.au">Simon Harris</a>
  */
 @StatelessCheck
 public final class ThrowsCountCheck extends AbstractCheck {
@@ -129,8 +128,7 @@ public final class ThrowsCountCheck extends AbstractCheck {
             // Account for all the commas!
             final int count = (ast.getChildCount() + 1) / 2;
             if (count > max) {
-                log(ast.getLineNo(), ast.getColumnNo(), MSG_KEY,
-                    count, max);
+                log(ast, MSG_KEY, count, max);
             }
         }
     }

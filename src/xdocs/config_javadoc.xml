@@ -6,7 +6,8 @@
 
   <head>
     <title>Javadoc Comments</title>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"/>
+    <script type="text/javascript"
+            src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"/>
     <script type="text/javascript" src="js/anchors.js"/>
     <script type="text/javascript" src="js/google-analytics.js"/>
     <link rel="icon" href="images/favicon.png" type="image/x-icon" />
@@ -22,16 +23,19 @@
     </section>
 
     <section name="AtclauseOrder">
-      <subsection name="Description">
-        <p>Since Checkstyle 6.0</p>
+      <p>Since Checkstyle 6.0</p>
+      <subsection name="Description" id="AtclauseOrder_Description">
         <p>
-          Checks the order of <a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html#CHDBEFIF">javadoc block-tags or javadoc tags</a>.
-          <br/>
-          Note: Google used term "at-clauses" for block tags in his guide till 2017-02-28.
+          Checks the order of
+          <a href="https://docs.oracle.com/javase/8/docs/technotes/tools/windows/javadoc.html#CHDBEFIF">
+            javadoc block-tags or javadoc tags</a>.
+        </p>
+        <p>
+          Note: Google used the term "at-clauses" for block tags in their guide till 2017-02-28.
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="AtclauseOrder_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -52,23 +56,29 @@
           </tr>
           <tr>
             <td>target</td>
-            <td>allows to specify targets to check at-clauses.</td>
+            <td>Specify the list of targets to check at-clauses.</td>
             <td>subset of tokens
               <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html">TokenTypes</a>
             </td>
             <td>
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">METHOD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">CTOR_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">VARIABLE_DEF</a>
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">
+                CLASS_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">
+                INTERFACE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">
+                ENUM_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">
+                METHOD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">
+                CTOR_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">
+                VARIABLE_DEF</a>
             </td>
             <td>6.0</td>
           </tr>
           <tr>
             <td>tagOrder</td>
-            <td>allows to specify the order by tags.</td>
+            <td>Specify the order by tags.</td>
             <td><a href="property_types.html#stringSet">String Set</a></td>
             <td><code>&#64;author, &#64;version, &#64;param,
                   &#64;return, &#64;throws, &#64;exception, &#64;see, &#64;since, &#64;serial,
@@ -78,7 +88,7 @@
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="AtclauseOrder_Examples">
         <p>
           Default configuration
         </p>
@@ -93,7 +103,7 @@
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="AtclauseOrder_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Agoogle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+AtclauseOrder">
@@ -106,7 +116,7 @@
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="AtclauseOrder_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22at.clause.order%22">
@@ -131,13 +141,13 @@
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="AtclauseOrder_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="AtclauseOrder_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -145,7 +155,7 @@
     </section>
 
     <section name="JavadocMethod">
-      <subsection name="Description">
+      <subsection name="Description" id="JavadocMethod_Description">
         <p>Since Checkstyle 3.0</p>
         <p>
           Checks the Javadoc of a method or constructor. By default,
@@ -207,7 +217,7 @@ public int checkReturnTag(final int aTagIndex,
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="JavadocMethod_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -369,21 +379,27 @@ public boolean isSomething()
 
             <td>
               subset of tokens
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">METHOD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">CTOR_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">ANNOTATION_FIELD_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">
+                METHOD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">
+                CTOR_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">
+                ANNOTATION_FIELD_DEF</a>.
             </td>
             <td>
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">METHOD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">CTOR_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">ANNOTATION_FIELD_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">
+                METHOD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">
+                CTOR_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">
+                ANNOTATION_FIELD_DEF</a>.
             </td>
             <td>3.0</td>
           </tr>
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="JavadocMethod_Examples">
         <p>
           To configure the default check:
         </p>
@@ -437,7 +453,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="JavadocMethod_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Agoogle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+JavadocMethod">
@@ -454,7 +470,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="JavadocMethod_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.classInfo%22">
@@ -495,13 +511,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="JavadocMethod_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="JavadocMethod_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -509,7 +525,7 @@ public boolean isSomething()
     </section>
 
     <section name="JavadocPackage">
-      <subsection name="Description">
+      <subsection name="Description" id="JavadocPackage_Description">
         <p>Since Checkstyle 5.0</p>
         <p>
           Checks that each Java package has a Javadoc file used for
@@ -523,7 +539,7 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="JavadocPackage_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -552,7 +568,7 @@ public boolean isSomething()
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="JavadocPackage_Examples">
         <p>
           To configure the check:
         </p>
@@ -561,7 +577,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="JavadocPackage_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Asun_checks.xml+repo%3Acheckstyle%2Fcheckstyle+JavadocPackage">
@@ -574,7 +590,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="JavadocPackage_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.legacyPackageHtml%22">
@@ -591,13 +607,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="JavadocPackage_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="JavadocPackage_Parent_Module">
         <p>
           <a href="config.html#Checker">Checker</a>
         </p>
@@ -605,7 +621,7 @@ public boolean isSomething()
     </section>
 
     <section name="JavadocParagraph">
-      <subsection name="Description">
+      <subsection name="Description" id="JavadocParagraph_Description">
         <p>Since Checkstyle 6.0</p>
         <p>
           Checks that:
@@ -622,7 +638,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="JavadocParagraph_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -651,7 +667,7 @@ public boolean isSomething()
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="JavadocParagraph_Examples">
         <p>
           Default configuration:
         </p>
@@ -688,7 +704,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="JavadocParagraph_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Agoogle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+JavadocParagraph">
@@ -701,7 +717,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="JavadocParagraph_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.missed.html.close%22">
@@ -738,13 +754,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="JavadocParagraph_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="JavadocParagraph_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -752,7 +768,7 @@ public boolean isSomething()
     </section>
 
     <section name="JavadocStyle">
-      <subsection name="Description">
+      <subsection name="Description" id="JavadocStyle_Description">
         <p>Since Checkstyle 3.2</p>
         <p>
           Validates Javadoc comments to help ensure they are well
@@ -806,7 +822,7 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="JavadocStyle_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -867,35 +883,55 @@ public boolean isSomething()
             <td>tokens</td>
             <td>tokens to check</td>
             <td>subset of tokens
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">ANNOTATION_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">ANNOTATION_FIELD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">CTOR_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_CONSTANT_DEF">ENUM_CONSTANT_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">METHOD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#PACKAGE_DEF">PACKAGE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">VARIABLE_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">
+                ANNOTATION_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">
+                ANNOTATION_FIELD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">
+                CLASS_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">
+                CTOR_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_CONSTANT_DEF">
+                ENUM_CONSTANT_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">
+                ENUM_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">
+                INTERFACE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">
+                METHOD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#PACKAGE_DEF">
+                PACKAGE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">
+                VARIABLE_DEF</a>.
             </td>
             <td>
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">ANNOTATION_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">ANNOTATION_FIELD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">CTOR_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_CONSTANT_DEF">ENUM_CONSTANT_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">METHOD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#PACKAGE_DEF">PACKAGE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">VARIABLE_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">
+                ANNOTATION_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">
+                ANNOTATION_FIELD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">
+                CLASS_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">
+                CTOR_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_CONSTANT_DEF">
+                ENUM_CONSTANT_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">
+                ENUM_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">
+                INTERFACE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">
+                METHOD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#PACKAGE_DEF">
+                PACKAGE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#VARIABLE_DEF">
+                VARIABLE_DEF</a>.
             </td>
             <td>3.2</td>
           </tr>
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="JavadocStyle_Examples">
         <p>
           To configure the default check:
         </p>
@@ -938,7 +974,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="JavadocStyle_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Asun_checks.xml+repo%3Acheckstyle%2Fcheckstyle+JavadocStyle">
@@ -951,7 +987,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="JavadocStyle_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.empty%22">
@@ -984,13 +1020,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="JavadocStyle_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="JavadocStyle_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -998,14 +1034,14 @@ public boolean isSomething()
     </section>
 
     <section name="JavadocTagContinuationIndentation">
-      <subsection name="Description">
+      <subsection name="Description" id="JavadocTagContinuationIndentation_Description">
         <p>Since Checkstyle 6.0</p>
         <p>
           Checks the indentation of the continuation lines in at-clauses.
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="JavadocTagContinuationIndentation_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -1034,7 +1070,7 @@ public boolean isSomething()
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="JavadocTagContinuationIndentation_Examples">
         <p>
           Default configuration
         </p>
@@ -1045,7 +1081,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="JavadocTagContinuationIndentation_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Agoogle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+JavadocTagContinuationIndentation">
@@ -1058,7 +1094,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="JavadocTagContinuationIndentation_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.missed.html.close%22">
@@ -1083,13 +1119,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="JavadocTagContinuationIndentation_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="JavadocTagContinuationIndentation_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -1097,7 +1133,7 @@ public boolean isSomething()
     </section>
 
     <section name="JavadocType">
-      <subsection name="Description">
+      <subsection name="Description" id="JavadocType_Description">
         <p>Since Checkstyle 3.0</p>
         <p>
           Checks Javadoc comments for class and interface definitions.
@@ -1122,7 +1158,7 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="JavadocType_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -1179,23 +1215,31 @@ public boolean isSomething()
             <td>tokens to check</td>
             <td>
               subset of tokens
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">ANNOTATION_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">
+                INTERFACE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">
+                CLASS_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">
+                ENUM_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">
+                ANNOTATION_DEF</a>.
             </td>
             <td>
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">ANNOTATION_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">
+                INTERFACE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">
+                CLASS_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">
+                ENUM_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">
+                ANNOTATION_DEF</a>.
             </td>
             <td>3.0</td>
           </tr>
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="JavadocType_Examples">
         <p>
           To configure the default check:
         </p>
@@ -1241,7 +1285,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="JavadocType_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Asun_checks.xml+repo%3Acheckstyle%2Fcheckstyle+JavadocType">
@@ -1254,7 +1298,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="JavadocType_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.missing%22">
@@ -1287,13 +1331,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="JavadocType_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="JavadocType_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -1301,7 +1345,7 @@ public boolean isSomething()
     </section>
 
     <section name="JavadocVariable">
-      <subsection name="Description">
+      <subsection name="Description" id="JavadocVariable_Description">
         <p>Since Checkstyle 3.0</p>
         <p>
           Checks that variables have Javadoc comments. Ignores <code>serialVersionUID</code>
@@ -1309,7 +1353,7 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="JavadocVariable_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -1353,7 +1397,7 @@ public boolean isSomething()
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="JavadocVariable_Examples">
         <p>
           To configure the default check:
         </p>
@@ -1396,7 +1440,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="JavadocVariable_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Asun_checks.xml+repo%3Acheckstyle%2Fcheckstyle+JavadocVariable">
@@ -1409,7 +1453,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="JavadocVariable_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.missing%22">
@@ -1422,13 +1466,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="JavadocVariable_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="JavadocVariable_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -1436,14 +1480,14 @@ public boolean isSomething()
     </section>
 
     <section name="NonEmptyAtclauseDescription">
-      <subsection name="Description">
+      <subsection name="Description" id="NonEmptyAtclauseDescription_Description">
         <p>Since Checkstyle 6.0</p>
         <p>
           Checks that the at-clause tag is followed by description.
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="NonEmptyAtclauseDescription_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -1466,25 +1510,35 @@ public boolean isSomething()
             <td>javadocTokens</td>
             <td>javadoc tokens to check</td>
             <td>subset of javadoc tokens
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#PARAM_LITERAL">PARAM_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#RETURN_LITERAL">RETURN_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#THROWS_LITERAL">THROWS_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#TEXCEPTION_LITERAL">EXCEPTION_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#DEPRECATED_LITERAL">DEPRECATED_LITERAL</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#PARAM_LITERAL">
+                PARAM_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#RETURN_LITERAL">
+                RETURN_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#THROWS_LITERAL">
+                THROWS_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#TEXCEPTION_LITERAL">
+                EXCEPTION_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#DEPRECATED_LITERAL">
+                DEPRECATED_LITERAL</a>.
             </td>
             <td>
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#PARAM_LITERAL">PARAM_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#RETURN_LITERAL">RETURN_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#THROWS_LITERAL">THROWS_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#TEXCEPTION_LITERAL">EXCEPTION_LITERAL</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#DEPRECATED_LITERAL">DEPRECATED_LITERAL</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#PARAM_LITERAL">
+                PARAM_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#RETURN_LITERAL">
+                RETURN_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#THROWS_LITERAL">
+                THROWS_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#TEXCEPTION_LITERAL">
+                EXCEPTION_LITERAL</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/JavadocTokenTypes.html#DEPRECATED_LITERAL">
+                DEPRECATED_LITERAL</a>.
             </td>
             <td>7.3</td>
           </tr>
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="NonEmptyAtclauseDescription_Examples">
         <p>
           Default configuration that will check <code>@param</code>, <code>@return</code>,
           <code>@throws</code>, <code>@deprecated</code>:
@@ -1494,7 +1548,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="NonEmptyAtclauseDescription_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Agoogle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+NonEmptyAtclauseDescription">
@@ -1507,7 +1561,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="NonEmptyAtclauseDescription_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.missed.html.close%22">
@@ -1532,13 +1586,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="NonEmptyAtclauseDescription_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="NonEmptyAtclauseDescription_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -1546,7 +1600,7 @@ public boolean isSomething()
     </section>
 
     <section name="SingleLineJavadoc">
-      <subsection name="Description">
+      <subsection name="Description" id="SingleLineJavadoc_Description">
         <p>Since Checkstyle 6.0</p>
         <p>
            Checks that a JavaDoc block can fit in a single line and doesn't
@@ -1555,7 +1609,7 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="SingleLineJavadoc_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -1591,7 +1645,7 @@ public boolean isSomething()
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="SingleLineJavadoc_Examples">
         <p>
           Default configuration:
         </p>
@@ -1609,7 +1663,7 @@ public boolean isSomething()
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="SingleLineJavadoc_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Agoogle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+SingleLineJavadoc">
@@ -1622,7 +1676,7 @@ public boolean isSomething()
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="SingleLineJavadoc_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.missed.html.close%22">
@@ -1647,13 +1701,13 @@ public boolean isSomething()
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="SingleLineJavadoc_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="SingleLineJavadoc_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -1661,18 +1715,18 @@ public boolean isSomething()
     </section>
 
    <section name="SummaryJavadoc">
-      <subsection name="Description">
+      <subsection name="Description" id="SummaryJavadoc_Description">
         <p>Since Checkstyle 6.0</p>
         <p>
           Checks that <a
-          href="http://www.oracle.com/technetwork/java/javase/documentation/index-137868.html#firstsentence">
+          href="https://www.oracle.com/technetwork/java/javase/documentation/index-137868.html#firstsentence">
           Javadoc summary sentence</a> does not contain phrases that are not recommended to use.
           Summaries that contain only the <code>{@inheritDoc}</code> tag are skipped. Check also
           violate javadoc that does not contain first sentence.
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="SummaryJavadoc_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -1695,7 +1749,7 @@ public boolean isSomething()
             <td>forbiddenSummaryFragments</td>
             <td>forbidden summary fragments</td>
             <td><a href="property_types.html#regexp">Regular Expression</a></td>
-            <td><code>"^$"</code></td>
+            <td><code>"^$" (empty)</code></td>
             <td>6.0</td>
           </tr>
           <tr>
@@ -1708,9 +1762,10 @@ public boolean isSomething()
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="SummaryJavadoc_Examples">
         <p>
-          By default Check validate that first sentence is not empty and first sentence is not missing:
+          By default Check validate that first sentence is not empty and first sentence is not
+          missing:
         </p>
         <source>
 &lt;module name=&quot;SummaryJavadocCheck&quot;/&gt;
@@ -1739,11 +1794,13 @@ public class Test extends Exception {
       ]]>
         </source>
         <p>
-          To ensure that summary do not contain phrase like "This method returns" , use following config:
+          To ensure that summary do not contain phrase like "This method returns" , use
+          following config:
         </p>
         <source>
 &lt;module name=&quot;SummaryJavadocCheck&quot;&gt;
-  &lt;property name=&quot;forbiddenSummaryFragments&quot; value=&quot;^This method returns.*&quot;/&gt;
+  &lt;property name=&quot;forbiddenSummaryFragments&quot;
+    value=&quot;^This method returns.*&quot;/&gt;
 &lt;/module&gt;
         </source>
         <p>
@@ -1773,7 +1830,7 @@ public class TestClass {
 }
         ]]></source>
      </subsection>
-     <subsection name="Example of Usage">
+     <subsection name="Example of Usage" id="SummaryJavadoc_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources+filename%3Agoogle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+SummaryJavadoc">
@@ -1786,7 +1843,7 @@ public class TestClass {
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="SummaryJavadoc_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.missed.html.close%22">
@@ -1819,13 +1876,13 @@ public class TestClass {
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="SummaryJavadoc_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="SummaryJavadoc_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>
@@ -1833,7 +1890,7 @@ public class TestClass {
     </section>
 
     <section name="WriteTag">
-      <subsection name="Description">
+      <subsection name="Description" id="WriteTag_Description">
         <p>Since Checkstyle 4.2</p>
         <p>
          Requires user defined JavaDoc tag to be present in javadoc comment with
@@ -1842,7 +1899,7 @@ public class TestClass {
         </p>
       </subsection>
 
-      <subsection name="Properties">
+      <subsection name="Properties" id="WriteTag_Properties">
         <table>
           <tr>
             <th>name</th>
@@ -1876,27 +1933,39 @@ public class TestClass {
             <td>tokens</td>
             <td>tokens to check</td>
             <td>subset of tokens
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">ANNOTATION_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">METHOD_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">CTOR_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_CONSTANT_DEF">ENUM_CONSTANT_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">ANNOTATION_FIELD_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">
+                INTERFACE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">
+                CLASS_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">
+                ENUM_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">
+                ANNOTATION_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#METHOD_DEF">
+                METHOD_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CTOR_DEF">
+                CTOR_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_CONSTANT_DEF">
+                ENUM_CONSTANT_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_FIELD_DEF">
+                ANNOTATION_FIELD_DEF</a>.
             </td>
             <td>
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">INTERFACE_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">CLASS_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">ENUM_DEF</a>,
-              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">ANNOTATION_DEF</a>.
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#INTERFACE_DEF">
+                INTERFACE_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#CLASS_DEF">
+                CLASS_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ENUM_DEF">
+                ENUM_DEF</a>,
+              <a href="apidocs/com/puppycrawl/tools/checkstyle/api/TokenTypes.html#ANNOTATION_DEF">
+                ANNOTATION_DEF</a>.
             </td>
             <td>4.2</td>
           </tr>
         </table>
       </subsection>
 
-      <subsection name="Examples">
+      <subsection name="Examples" id="WriteTag_Examples">
         <p>
         An example of how to configure the check for printing author name is:
         </p>
@@ -1923,7 +1992,7 @@ public class TestClass {
         </source>
       </subsection>
 
-      <subsection name="Example of Usage">
+      <subsection name="Example of Usage" id="WriteTag_Example_of_Usage">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Aconfig+filename%3Acheckstyle_checks.xml+repo%3Acheckstyle%2Fcheckstyle+WriteTag">
@@ -1932,7 +2001,7 @@ public class TestClass {
         </ul>
       </subsection>
 
-      <subsection name="Error Messages">
+      <subsection name="Error Messages" id="WriteTag_Error_Messages">
         <ul>
           <li>
             <a href="https://github.com/search?q=path%3Asrc%2Fmain%2Fresources%2Fcom%2Fpuppycrawl%2Ftools%2Fcheckstyle%2Fchecks%2Fjavadoc+filename%3Amessages*.properties+repo%3Acheckstyle%2Fcheckstyle+%22javadoc.writeTag%22">
@@ -1953,13 +2022,13 @@ public class TestClass {
         </p>
       </subsection>
 
-      <subsection name="Package">
+      <subsection name="Package" id="WriteTag_Package">
         <p>
           com.puppycrawl.tools.checkstyle.checks.javadoc
         </p>
       </subsection>
 
-      <subsection name="Parent Module">
+      <subsection name="Parent Module" id="WriteTag_Parent_Module">
         <p>
           <a href="config.html#TreeWalker">TreeWalker</a>
         </p>

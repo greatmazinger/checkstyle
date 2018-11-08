@@ -25,21 +25,30 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * <p>
- * Checks the placement of left curly braces on types, methods and
- * other blocks:
- *  {@link TokenTypes#LITERAL_CATCH LITERAL_CATCH},  {@link
- * TokenTypes#LITERAL_DO LITERAL_DO},  {@link TokenTypes#LITERAL_ELSE
- * LITERAL_ELSE},  {@link TokenTypes#LITERAL_FINALLY LITERAL_FINALLY},  {@link
- * TokenTypes#LITERAL_FOR LITERAL_FOR},  {@link TokenTypes#LITERAL_IF
- * LITERAL_IF},  {@link TokenTypes#LITERAL_SWITCH LITERAL_SWITCH},  {@link
- * TokenTypes#LITERAL_SYNCHRONIZED LITERAL_SYNCHRONIZED},  {@link
- * TokenTypes#LITERAL_TRY LITERAL_TRY},  {@link TokenTypes#LITERAL_WHILE
- * LITERAL_WHILE},  {@link TokenTypes#STATIC_INIT STATIC_INIT},
- * {@link TokenTypes#LAMBDA LAMBDA}.
+ * Checks the placement of left curly braces.
+ * The policy to verify is specified using the {@link LeftCurlyOption} class
+ * and the default one being {@link LeftCurlyOption#EOL}.
+ * </p>
+ * <p>
+ * By default the following tokens are checked:
+ *  {@link TokenTypes#LAMBDA LAMBDA},
+ *  {@link TokenTypes#LITERAL_CASE LITERAL_CASE},
+ *  {@link TokenTypes#LITERAL_CATCH LITERAL_CATCH},
+ *  {@link TokenTypes#LITERAL_DEFAULT LITERAL_DEFAULT},
+ *  {@link TokenTypes#LITERAL_DO LITERAL_DO},
+ *  {@link TokenTypes#LITERAL_ELSE LITERAL_ELSE},
+ *  {@link TokenTypes#LITERAL_FINALLY LITERAL_FINALLY},
+ *  {@link TokenTypes#LITERAL_FOR LITERAL_FOR},
+ *  {@link TokenTypes#LITERAL_IF LITERAL_IF},
+ *  {@link TokenTypes#LITERAL_SWITCH LITERAL_SWITCH},
+ *  {@link TokenTypes#LITERAL_SYNCHRONIZED LITERAL_SYNCHRONIZED},
+ *  {@link TokenTypes#LITERAL_TRY LITERAL_TRY},
+ *  {@link TokenTypes#LITERAL_WHILE LITERAL_WHILE},
+ *  {@link TokenTypes#STATIC_INIT STATIC_INIT}.
  * </p>
  *
  * <p>
@@ -70,9 +79,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * &lt;/module&gt;
  * </pre>
  *
- * @author Oliver Burn
- * @author lkuehne
- * @author maxvetrenko
  */
 @StatelessCheck
 public class LeftCurlyCheck
@@ -135,32 +141,34 @@ public class LeftCurlyCheck
     @Override
     public int[] getAcceptableTokens() {
         return new int[] {
-            TokenTypes.INTERFACE_DEF,
-            TokenTypes.CLASS_DEF,
             TokenTypes.ANNOTATION_DEF,
-            TokenTypes.ENUM_DEF,
+            TokenTypes.CLASS_DEF,
             TokenTypes.CTOR_DEF,
-            TokenTypes.METHOD_DEF,
             TokenTypes.ENUM_CONSTANT_DEF,
-            TokenTypes.LITERAL_WHILE,
-            TokenTypes.LITERAL_TRY,
-            TokenTypes.LITERAL_CATCH,
-            TokenTypes.LITERAL_FINALLY,
-            TokenTypes.LITERAL_SYNCHRONIZED,
-            TokenTypes.LITERAL_SWITCH,
-            TokenTypes.LITERAL_DO,
-            TokenTypes.LITERAL_IF,
-            TokenTypes.LITERAL_ELSE,
-            TokenTypes.LITERAL_FOR,
-            TokenTypes.STATIC_INIT,
-            TokenTypes.OBJBLOCK,
+            TokenTypes.ENUM_DEF,
+            TokenTypes.INTERFACE_DEF,
             TokenTypes.LAMBDA,
+            TokenTypes.LITERAL_CASE,
+            TokenTypes.LITERAL_CATCH,
+            TokenTypes.LITERAL_DEFAULT,
+            TokenTypes.LITERAL_DO,
+            TokenTypes.LITERAL_ELSE,
+            TokenTypes.LITERAL_FINALLY,
+            TokenTypes.LITERAL_FOR,
+            TokenTypes.LITERAL_IF,
+            TokenTypes.LITERAL_SWITCH,
+            TokenTypes.LITERAL_SYNCHRONIZED,
+            TokenTypes.LITERAL_TRY,
+            TokenTypes.LITERAL_WHILE,
+            TokenTypes.METHOD_DEF,
+            TokenTypes.OBJBLOCK,
+            TokenTypes.STATIC_INIT,
         };
     }
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -202,12 +210,12 @@ public class LeftCurlyCheck
                 break;
             case TokenTypes.LITERAL_ELSE:
                 startToken = ast;
-                final DetailAST candidate = ast.getFirstChild();
-                brace = null;
-
-                if (candidate.getType() == TokenTypes.SLIST) {
-                    brace = candidate;
-                }
+                brace = getBraceAsFirstChild(ast);
+                break;
+            case TokenTypes.LITERAL_CASE:
+            case TokenTypes.LITERAL_DEFAULT:
+                startToken = ast;
+                brace = getBraceAsFirstChild(ast.getNextSibling());
                 break;
             default:
                 // ATTENTION! We have default here, but we expect case TokenTypes.METHOD_DEF,
@@ -223,6 +231,23 @@ public class LeftCurlyCheck
         if (brace != null) {
             verifyBrace(brace, startToken);
         }
+    }
+
+    /**
+     * Gets a SLIST if it is the first child of the AST.
+     * @param ast {@code DetailAST}.
+     * @return {@code DetailAST} if the first child is {@code TokenTypes.SLIST},
+     *     {@code null} otherwise.
+     */
+    private static DetailAST getBraceAsFirstChild(DetailAST ast) {
+        DetailAST brace = null;
+        if (ast != null) {
+            final DetailAST candidate = ast.getFirstChild();
+            if (candidate != null && candidate.getType() == TokenTypes.SLIST) {
+                brace = candidate;
+            }
+        }
+        return brace;
     }
 
     /**
@@ -309,7 +334,7 @@ public class LeftCurlyCheck
         if (braceLine.length() <= brace.getColumnNo() + 1
                 || braceLine.charAt(brace.getColumnNo() + 1) != '}') {
             if (option == LeftCurlyOption.NL) {
-                if (!CommonUtils.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
+                if (!CommonUtil.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
                     log(brace, MSG_KEY_LINE_NEW, OPEN_CURLY_BRACE, brace.getColumnNo() + 1);
                 }
             }
@@ -328,7 +353,7 @@ public class LeftCurlyCheck
      * @param braceLine line content
      */
     private void validateEol(DetailAST brace, String braceLine) {
-        if (CommonUtils.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
+        if (CommonUtil.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
             log(brace, MSG_KEY_LINE_PREVIOUS, OPEN_CURLY_BRACE, brace.getColumnNo() + 1);
         }
         if (!hasLineBreakAfter(brace)) {
@@ -345,14 +370,14 @@ public class LeftCurlyCheck
     private void validateNewLinePosition(DetailAST brace, DetailAST startToken, String braceLine) {
         // not on the same line
         if (startToken.getLineNo() + 1 == brace.getLineNo()) {
-            if (CommonUtils.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
+            if (CommonUtil.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
                 log(brace, MSG_KEY_LINE_PREVIOUS, OPEN_CURLY_BRACE, brace.getColumnNo() + 1);
             }
             else {
                 log(brace, MSG_KEY_LINE_NEW, OPEN_CURLY_BRACE, brace.getColumnNo() + 1);
             }
         }
-        else if (!CommonUtils.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
+        else if (!CommonUtil.hasWhitespaceBefore(brace.getColumnNo(), braceLine)) {
             log(brace, MSG_KEY_LINE_NEW, OPEN_CURLY_BRACE, brace.getColumnNo() + 1);
         }
     }

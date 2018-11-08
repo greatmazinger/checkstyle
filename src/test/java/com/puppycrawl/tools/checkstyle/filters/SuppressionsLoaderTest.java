@@ -46,8 +46,6 @@ import com.puppycrawl.tools.checkstyle.api.FilterSet;
 
 /**
  * Tests SuppressionsLoader.
- * @author Rick Giles
- * @author <a href="mailto:andreyselkin@gmail.com">Andrei Selkin</a>
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ SuppressionsLoader.class, SuppressionsLoaderTest.class })
@@ -73,7 +71,7 @@ public class SuppressionsLoaderTest extends AbstractPathTestSupport {
     @Test
     public void testLoadFromUrl() throws Exception {
         final String[] urlCandidates = {
-            "http://checkstyle.sourceforge.net/files/suppressions_none.xml",
+            "https://checkstyle.org/files/suppressions_none.xml",
             "https://raw.githubusercontent.com/checkstyle/checkstyle/master/src/site/resources/"
                 + "files/suppressions_none.xml",
         };

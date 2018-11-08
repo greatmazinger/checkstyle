@@ -23,12 +23,11 @@ import java.util.Arrays;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Abstract base class for all handlers.
  *
- * @author jrichard
  */
 public abstract class AbstractExpressionHandler {
 
@@ -246,7 +245,7 @@ public abstract class AbstractExpressionHandler {
         while (Character.isWhitespace(line.charAt(index))) {
             index++;
         }
-        return CommonUtils.lengthExpandedTabs(
+        return CommonUtil.lengthExpandedTabs(
             line, index, indentCheck.getIndentationTabWidth());
     }
 
@@ -450,7 +449,7 @@ public abstract class AbstractExpressionHandler {
         final String line =
             indentCheck.getLine(ast.getLineNo() - 1);
 
-        return CommonUtils.lengthExpandedTabs(line, ast.getColumnNo(),
+        return CommonUtil.lengthExpandedTabs(line, ast.getColumnNo(),
             indentCheck.getIndentationTabWidth());
     }
 

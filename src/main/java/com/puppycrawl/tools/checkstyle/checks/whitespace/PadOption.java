@@ -22,7 +22,6 @@ package com.puppycrawl.tools.checkstyle.checks.whitespace;
 /**
  * Represents the options for whitespace around parentheses.
  *
- * @author Oliver Burn
  * @see EmptyForIteratorPadCheck
  * @see ParenPadCheck
  */
@@ -38,6 +37,6 @@ public enum PadOption {
      * Represents mandatory spacing following a left parenthesis
      * and preceding a right one.
      */
-    SPACE
+    SPACE,
 
 }

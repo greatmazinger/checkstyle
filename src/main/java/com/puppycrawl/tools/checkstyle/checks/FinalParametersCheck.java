@@ -28,8 +28,8 @@ import com.puppycrawl.tools.checkstyle.StatelessCheck;
 import com.puppycrawl.tools.checkstyle.api.AbstractCheck;
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
-import com.puppycrawl.tools.checkstyle.utils.CheckUtils;
-import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
+import com.puppycrawl.tools.checkstyle.utils.CheckUtil;
+import com.puppycrawl.tools.checkstyle.utils.CommonUtil;
 
 /**
  * Check that method/constructor/catch/foreach parameters are final.
@@ -50,10 +50,6 @@ import com.puppycrawl.tools.checkstyle.utils.CommonUtils;
  * }
  * </p>
  *
- * @author lkuehne
- * @author o_sukhodolsky
- * @author Michael Studman
- * @author <a href="mailto:nesterenko-aleksey@list.ru">Aleksey Nesterenko</a>
  */
 @StatelessCheck
 public class FinalParametersCheck extends AbstractCheck {
@@ -114,7 +110,7 @@ public class FinalParametersCheck extends AbstractCheck {
 
     @Override
     public int[] getRequiredTokens() {
-        return CommonUtils.EMPTY_INT_ARRAY;
+        return CommonUtil.EMPTY_INT_ARRAY;
     }
 
     @Override
@@ -185,10 +181,10 @@ public class FinalParametersCheck extends AbstractCheck {
     private void checkParam(final DetailAST param) {
         if (param.findFirstToken(TokenTypes.MODIFIERS).findFirstToken(TokenTypes.FINAL) == null
                 && !isIgnoredParam(param)
-                && !CheckUtils.isReceiverParameter(param)) {
+                && !CheckUtil.isReceiverParameter(param)) {
             final DetailAST paramName = param.findFirstToken(TokenTypes.IDENT);
-            final DetailAST firstNode = CheckUtils.getFirstNode(param);
-            log(firstNode.getLineNo(), firstNode.getColumnNo(),
+            final DetailAST firstNode = CheckUtil.getFirstNode(param);
+            log(firstNode,
                 MSG_KEY, paramName.getText());
         }
     }
